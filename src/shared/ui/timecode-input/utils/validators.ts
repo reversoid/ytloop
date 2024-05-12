@@ -1,6 +1,6 @@
 export const isValidTimecode = (timecode: string): boolean => {
   // This regex matches two or more digits for minutes, two digits for seconds, and one or more digits for milliseconds
-  const timecodeRegex = /^(\d{2,}):([0-5][0-9])\.([0-9]{2})$/;
+  const timecodeRegex = /^(\d{2,}):([0-5][0-9])\.([0-9]{3})$/;
   if (!timecodeRegex.test(timecode)) {
     return false;
   }
