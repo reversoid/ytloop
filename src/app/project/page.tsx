@@ -66,7 +66,7 @@ export default function Page() {
           <Tabs>
             <Tab title="Loop 1" selected>
               <form
-                className="flex flex-col gap-2"
+                className="flex flex-col gap-2 sm:max-w-md"
                 onSubmit={(e) => {
                   e.preventDefault();
                 }}
