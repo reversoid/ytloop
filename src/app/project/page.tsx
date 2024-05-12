@@ -8,6 +8,7 @@ import { TimecodeInput } from "@/shared/ui/timecode-input";
 
 import dynamic from "next/dynamic";
 import { PlayButton } from "@/features/play-button";
+import { TimecodesForm } from "@/features/timecodes-form";
 
 const Player = dynamic(() => import("../../shared/ui/player"), {
   ssr: false,
@@ -24,22 +25,20 @@ export default function Page() {
   const [startValue, setStartValue] = useState(0);
   const [endValue, setEndValue] = useState<number | null>(null);
 
-  const [leftBound, rightBound] = [startValue, endValue];
-
   const seekTo = (seconds: number) => {
     ref.current?.seekTo(seconds);
   };
 
   const handleProgress = ({ playedSeconds }: OnProgressProps) => {
-    if (!rightBound || !playing) {
+    if (!endValue || !playing) {
       return;
     }
 
-    if (playedSeconds >= leftBound && playedSeconds <= rightBound) {
+    if (playedSeconds >= startValue && playedSeconds <= endValue) {
       return;
     }
 
-    seekTo(leftBound);
+    seekTo(startValue);
     setPlaying(true);
   };
 
@@ -65,49 +64,20 @@ export default function Page() {
         <Collapse label="Loops" defaultOpen={true}>
           <Tabs>
             <Tab title="Loop 1" selected>
-              <form
-                className="flex flex-col gap-2 sm:max-w-md"
-                onSubmit={(e) => {
-                  e.preventDefault();
+              <TimecodesForm
+                endValue={endValue}
+                getCurrentTime={() => {
+                  if (ref.current) {
+                    return ref.current.getCurrentTime();
+                  }
                 }}
-              >
-                <TimecodeInput
-                  label="Start"
-                  value={startValue}
-                  onChange={setStartValue}
-                  stepValue={0.001}
-                  onTakeFromVideo={() => {
-                    if (ref.current) {
-                      const currentTime = ref.current?.getCurrentTime();
-                      setStartValue(currentTime);
-                    }
-                  }}
-                />
-
-                <TimecodeInput
-                  label="End"
-                  value={endValue}
-                  onChange={setEndValue}
-                  stepValue={0.25}
-                  onTakeFromVideo={() => {
-                    if (ref.current) {
-                      const currentTime = ref.current?.getCurrentTime();
-                      setEndValue(currentTime);
-                    }
-                  }}
-                />
-
-                <div className="sm:max-w-md mt-5">
-                  <PlayButton
-                    isPlaying={playing}
-                    onPlay={() => setPlaying(true)}
-                    onStop={() => {
-                      setPlaying(false);
-                      seekTo(leftBound);
-                    }}
-                  />
-                </div>
-              </form>
+                playing={playing}
+                setPlaying={setPlaying}
+                seekTo={seekTo}
+                setEndValue={setEndValue}
+                setStartValue={setStartValue}
+                startValue={startValue}
+              />
             </Tab>
           </Tabs>
         </Collapse>
