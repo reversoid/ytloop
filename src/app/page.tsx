@@ -3,19 +3,24 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <section className="prose flex justify-center items-center max-w-none pt-10">
-      <div className="welcome flex flex-col justify-center items-center w-96 bg-base-200 px-3 py-5 rounded-lg">
-        <h1 className="text-center">Loop any youtube video</h1>
+    <section className="hero min-h-screen bg-base-200">
+      <div className="hero-content text-center">
+        <div className="max-w-md">
+          <h1 className="text-5xl font-bold">Loop any YouTube video</h1>
+          <p className="py-6">
+            Free, beatiful and easy-to-use service for musicians, allowing them
+            to loop specific parts of YouTube video.
+          </p>
 
-        <input
-          type="text"
-          placeholder="Enter url or video ID"
-          className="input input-bordered w-full"
-        />
-
-        <Link className="mt-7 btn btn-neutral w-full" href="/project">
-          Continue
-        </Link>
+          <input
+            type="text"
+            placeholder="URL or video ID"
+            className="input input-bordered w-full"
+          />
+          <Link href="/project" className="mt-6 btn btn-primary w-full">
+            Start
+          </Link>
+        </div>
       </div>
     </section>
   );

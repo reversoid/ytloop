@@ -17,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <header className="h-16 bg-base-100 border-b-2">Some header</header>
+        {/* <header className="h-16 bg-base-100 border-b-2">Some header</header> */}
         <main>{children}</main>
         <footer></footer>
       </body>
