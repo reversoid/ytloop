@@ -31,7 +31,7 @@ export default function Page() {
   };
 
   const handleProgress = ({ playedSeconds }: OnProgressProps) => {
-    if (!rightBound) {
+    if (!rightBound || !playing) {
       return;
     }
 

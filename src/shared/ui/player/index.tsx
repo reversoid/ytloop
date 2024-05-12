@@ -23,10 +23,11 @@ const Player: FC<PlayerProps> = ({
         style={{ borderRadius: "1rem !important" }}
         playing={playing}
         onPlay={() => setPlaying(true)}
+        onPause={() => setPlaying(false)}
         ref={refCallback}
         onProgress={onProgress}
         controls={true}
-        progressInterval={10}
+        progressInterval={1}
         url={url}
       />
     </div>
