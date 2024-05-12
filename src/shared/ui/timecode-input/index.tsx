@@ -37,7 +37,7 @@ export const TimecodeInput: FC<TimecodeInputProps> = ({
           value={timecodeValue}
           onChange={(event) => setTimecodeValue(event.target.value)}
           type="text"
-          placeholder="mm:ss.ms"
+          placeholder="mm:ss.mss"
           className="input input-bordered w-full sm:max-w-sm"
         />
         <div className="flex gap-1">
