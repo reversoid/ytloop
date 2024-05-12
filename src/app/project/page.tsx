@@ -18,6 +18,17 @@ const ProjectWrapper: FC<PropsWithChildren> = ({ children }) => {
   return <div className="flex flex-col gap-3">{children}</div>;
 };
 
+interface ILoop {
+  from: number;
+  to: number;
+}
+
+interface IProject {
+  name: string;
+  videoId: string;
+  loops: ILoop[];
+}
+
 export default function Page() {
   const ref = useRef<ReactPlayer | null>(null);
   const [playing, setPlaying] = useState(false);
@@ -79,6 +90,7 @@ export default function Page() {
                 startValue={startValue}
               />
             </Tab>
+            <Tab title="New"></Tab>
           </Tabs>
         </Collapse>
 
