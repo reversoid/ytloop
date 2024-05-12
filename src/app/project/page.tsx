@@ -7,6 +7,7 @@ import { OnProgressProps } from "react-player/base";
 import { TimecodeInput } from "@/shared/ui/timecode-input";
 
 import dynamic from "next/dynamic";
+import { PlayButton } from "@/features/play-button";
 
 const Player = dynamic(() => import("../../shared/ui/player"), {
   ssr: false,
@@ -27,7 +28,6 @@ export default function Page() {
 
   const seekTo = (seconds: number) => {
     ref.current?.seekTo(seconds);
-    setPlaying(true);
   };
 
   const handleProgress = ({ playedSeconds }: OnProgressProps) => {
@@ -40,10 +40,11 @@ export default function Page() {
     }
 
     seekTo(leftBound);
+    setPlaying(true);
   };
 
   return (
-    <section className="prose max-w-screen-xl mx-auto pt-5">
+    <section className="prose max-w-screen-xl mx-auto pt-5 px-2">
       <h1>Your project</h1>
 
       <ProjectWrapper>
@@ -63,7 +64,7 @@ export default function Page() {
 
         <Collapse label="Loops" defaultOpen={true}>
           <Tabs>
-            <Tab title="Loop 1">
+            <Tab title="Loop 1" selected>
               <form
                 className="flex flex-col gap-2"
                 onSubmit={(e) => {
@@ -82,6 +83,7 @@ export default function Page() {
                     }
                   }}
                 />
+
                 <TimecodeInput
                   label="End"
                   value={endValue}
@@ -94,6 +96,17 @@ export default function Page() {
                     }
                   }}
                 />
+
+                <div className="sm:max-w-md mt-5">
+                  <PlayButton
+                    isPlaying={playing}
+                    onPlay={() => setPlaying(true)}
+                    onStop={() => {
+                      setPlaying(false);
+                      seekTo(leftBound);
+                    }}
+                  />
+                </div>
               </form>
             </Tab>
           </Tabs>

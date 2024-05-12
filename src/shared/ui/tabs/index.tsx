@@ -1,9 +1,8 @@
 import React, { FC, PropsWithChildren } from "react";
 
-export const Tab: FC<PropsWithChildren<{ title: string }>> = ({
-  children,
-  title,
-}) => {
+export const Tab: FC<
+  PropsWithChildren<{ title: string; selected?: boolean }>
+> = ({ children, title, selected }) => {
   return (
     <>
       <input
@@ -12,6 +11,7 @@ export const Tab: FC<PropsWithChildren<{ title: string }>> = ({
         role="tab"
         className="tab"
         aria-label={title}
+        checked={selected}
       />
       <div
         role="tabpanel"
