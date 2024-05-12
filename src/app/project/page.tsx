@@ -1,11 +1,12 @@
 "use client";
-import { Collapse } from "@/shared/Collapse";
-import { Tab, Tabs } from "@/shared/Tabs";
+import { Collapse } from "@/shared/collapse";
+import { Tab, Tabs } from "@/shared/tabs";
 import Player from "@/shared/player";
 import { IconMinus, IconPlus } from "@tabler/icons-react";
 import { FC, PropsWithChildren, useRef, useState } from "react";
 import ReactPlayer from "react-player";
 import { OnProgressProps } from "react-player/base";
+import { TimecodeInput } from "@/shared/timecode-input";
 
 const ProjectWrapper: FC<PropsWithChildren> = ({ children }) => {
   return <div className="flex flex-col gap-3">{children}</div>;
@@ -36,6 +37,10 @@ export default function Page() {
       <h1>Your project</h1>
 
       <ProjectWrapper>
+        <Collapse label="Project settings" defaultOpen={false}>
+          Some content
+        </Collapse>
+
         <Collapse label="Video" defaultOpen={false}>
           <Player
             onProgress={handleProgress}
@@ -46,54 +51,17 @@ export default function Page() {
           />
         </Collapse>
 
-        <Collapse label="Project settings" defaultOpen={false}>
-          Some content
-        </Collapse>
-
         <Collapse label="Loops" defaultOpen={true}>
           <Tabs>
             <Tab title="Loop 1">
-              <label className="form-control w-full max-w-xs mt-2">
-                <div className="label">
-                  <span className="label-text">Start</span>
-                </div>
-                <div className="flex gap-1">
-                  <input
-                    type="text"
-                    placeholder="00:00"
-                    className="input input-bordered w-full max-w-xs"
-                  />
-                  <button className="btn btn-square">
-                    <IconMinus />
-                  </button>
-                  <button className="btn btn-square">
-                    <IconPlus />
-                  </button>
-                </div>
-              </label>
-
-              <div className="flex">
-                <label className="form-control w-full max-w-xs mt-2">
-                  <div className="label">
-                    <span className="label-text">End</span>
-                  </div>
-                  <div className="flex gap-1">
-                    <input
-                      type="text"
-                      placeholder="00:00"
-                      className="input input-bordered w-full max-w-xs"
-                    />
-                    <button className="btn btn-square">
-                      <IconMinus />
-                    </button>
-                    <button className="btn btn-square">
-                      <IconPlus />
-                    </button>
-                  </div>
-                </label>
-              </div>
+              <TimecodeInput />
+              <TimecodeInput />
             </Tab>
           </Tabs>
+        </Collapse>
+
+        <Collapse label="Export" defaultOpen={false}>
+          Some variants
         </Collapse>
       </ProjectWrapper>
     </section>

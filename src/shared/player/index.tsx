@@ -32,15 +32,18 @@ const Player = forwardRef<ReactPlayer, PlayerProps>(
     const ref = usePlayerRef(inRef);
 
     return (
-      <ReactPlayer
-        playing={playing}
-        onPlay={() => setPlaying(true)}
-        ref={ref}
-        onProgress={onProgress}
-        controls={true}
-        progressInterval={10}
-        url={url}
-      />
+      <div className="rounded-md overflow-hidden">
+        <ReactPlayer
+          style={{ borderRadius: "1rem !important" }}
+          playing={playing}
+          onPlay={() => setPlaying(true)}
+          ref={ref}
+          onProgress={onProgress}
+          controls={true}
+          progressInterval={10}
+          url={url}
+        />
+      </div>
     );
   }
 );
