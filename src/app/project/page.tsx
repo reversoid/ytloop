@@ -1,12 +1,17 @@
 "use client";
 import { Collapse } from "@/shared/collapse";
 import { Tab, Tabs } from "@/shared/tabs";
-import Player from "@/shared/player";
 import { IconMinus, IconPlus } from "@tabler/icons-react";
 import { FC, PropsWithChildren, useRef, useState } from "react";
 import ReactPlayer from "react-player";
 import { OnProgressProps } from "react-player/base";
 import { TimecodeInput } from "@/shared/timecode-input";
+
+import dynamic from "next/dynamic";
+
+const Player = dynamic(() => import("../../shared/player"), {
+  ssr: false,
+});
 
 const ProjectWrapper: FC<PropsWithChildren> = ({ children }) => {
   return <div className="flex flex-col gap-3">{children}</div>;
