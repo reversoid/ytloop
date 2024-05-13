@@ -21,23 +21,23 @@ export interface Project {
   options?: ProjectOptions;
 }
 
-export const projectId = atom<string | null>(null);
+export const projectIdAtom = atom<string | null>(null);
 
-export const projectName = atom<string | null>(null);
+export const projectNameAtom = atom<string | null>(null);
 
-export const projectVideoId = atom<string | null>(null);
+export const projectVideoIdAtom = atom<string | null>(null);
 
-export const projectLoops = atom<Loop[] | null>(null);
+export const projectLoopsAtom = atom<Loop[] | null>(null);
 
-export const projectOptions = atom<ProjectOptions | null>(null);
+export const projectOptionsAtom = atom<ProjectOptions | null>(null);
 
-export const project = atom(
+export const projectAtom = atom(
   (get) => {
-    const id = get(projectId);
-    const name = get(projectName);
-    const videoId = get(projectVideoId);
-    const loops = get(projectLoops);
-    const options = get(projectOptions);
+    const id = get(projectIdAtom);
+    const name = get(projectNameAtom);
+    const videoId = get(projectVideoIdAtom);
+    const loops = get(projectLoopsAtom);
+    const options = get(projectOptionsAtom);
 
     if (id && name && videoId && loops) {
       return { id, name, videoId, loops, options: options || undefined };
@@ -46,10 +46,10 @@ export const project = atom(
     return null;
   },
   (_get, set, project: Project) => {
-    set(projectId, project.id);
-    set(projectName, project.name);
-    set(projectVideoId, project.videoId);
-    set(projectLoops, project.loops);
-    set(projectOptions, project.options ?? null);
+    set(projectIdAtom, project.id);
+    set(projectNameAtom, project.name);
+    set(projectVideoIdAtom, project.videoId);
+    set(projectLoopsAtom, project.loops);
+    set(projectOptionsAtom, project.options ?? null);
   }
 );

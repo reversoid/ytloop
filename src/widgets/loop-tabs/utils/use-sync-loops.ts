@@ -1,13 +1,13 @@
-import { project, projectLoops } from "@/entities/project/model";
-import { workspaceCurrentLoop } from "@/entities/workspace/model";
+import { projectAtom, projectLoopsAtom } from "@/entities/project/model";
+import { workspaceCurrentLoopAtom } from "@/entities/workspace/model";
 import { useAtom, useAtomValue } from "jotai";
 import { useSetAtom } from "jotai";
 import { useEffect } from "react";
 
 /** Sync current loop with project loops */
 export const useSyncLoops = () => {
-  const currentLoop = useAtomValue(workspaceCurrentLoop);
-  const setProjectLoops = useSetAtom(projectLoops);
+  const currentLoop = useAtomValue(workspaceCurrentLoopAtom);
+  const setProjectLoops = useSetAtom(projectLoopsAtom);
 
   useEffect(() => {
     if (!currentLoop) {

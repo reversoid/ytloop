@@ -1,4 +1,4 @@
-import { workspaceIsPlaying } from "@/entities/workspace/model";
+import { workspaceIsPlayingAtom } from "@/entities/workspace/model";
 import { useAtom } from "jotai";
 import { FC } from "react";
 import ReactPlayer from "react-player";
@@ -11,7 +11,7 @@ export interface PlayerProps {
 }
 
 export const Player: FC<PlayerProps> = ({ onProgress, url, refCallback }) => {
-  const [playing, setPlaying] = useAtom(workspaceIsPlaying);
+  const [playing, setPlaying] = useAtom(workspaceIsPlayingAtom);
 
   return (
     <div className="rounded-md overflow-hidden">

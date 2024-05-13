@@ -1,23 +1,21 @@
 import { Tab, Tabs } from "@/shared/ui/tabs";
 import { TimecodesForm } from "../timecodes-form";
-import { useLoops } from "./utils/use-loops";
 import { useSyncLoops } from "./utils/use-sync-loops";
 import { createNewLoop } from "@/entities/project/utils/create-new-loop";
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { projectLoopsAtom } from "@/entities/project/model";
+import { workspaceCurrentLoopAtom } from "@/entities/workspace/model";
+import { useHydrateAtoms } from "jotai/utils";
 
 const useSetInitialLoop = () => {
-  const { projectLoops, setCurrentLoop } = useLoops();
-
-  useEffect(() => {
-    if (projectLoops) {
-      setCurrentLoop(projectLoops[0] || null);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const projectLoops = useAtomValue(projectLoopsAtom);
+  const setCurrentLoop = useSetAtom(workspaceCurrentLoopAtom);
 };
 
 export const LoopTabs = () => {
-  const { projectLoops, currentLoop, setCurrentLoop } = useLoops();
+  const projectLoops = useAtomValue(projectLoopsAtom);
+  const [currentLoop, setCurrentLoop] = useAtom(workspaceCurrentLoopAtom);
 
   useSyncLoops();
 
@@ -31,6 +29,9 @@ export const LoopTabs = () => {
             title={loop.name}
             selected={currentLoop?.id === loop.id}
             key={loop.id}
+            onSelected={() => {
+              setCurrentLoop(loop);
+            }}
           >
             <TimecodesForm />
           </Tab>
@@ -40,9 +41,9 @@ export const LoopTabs = () => {
       <Tab
         title="New"
         onSelected={() => {
-          // setCurrentLoop(
-          //   createNewLoop({ postfixNumber: (projectLoops?.length ?? 0) + 1 })
-          // );
+          setCurrentLoop(
+            createNewLoop({ postfixNumber: (projectLoops?.length ?? 0) + 1 })
+          );
         }}
       ></Tab>
     </Tabs>

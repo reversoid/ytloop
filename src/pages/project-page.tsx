@@ -5,8 +5,8 @@ import ReactPlayer from "react-player";
 import { OnProgressProps } from "react-player/base";
 
 import {
-  workspaceCurrentLoop,
-  workspaceIsPlaying,
+  workspaceCurrentLoopAtom,
+  workspaceIsPlayingAtom,
 } from "@/entities/workspace/model";
 import { LoopTabs } from "@/widgets/loop-tabs";
 import { useAtom, useAtomValue } from "jotai";
@@ -14,9 +14,9 @@ import dynamic from "next/dynamic";
 import { isLoopValid } from "@/entities/project/utils/is-loop-valid";
 import { ProjectWrapper } from "./ui/wrapper";
 import { PlayerContext } from "@/shared/utils/player-context";
-import { Project } from "@/entities/project/model";
-import { useSyncProject } from "@/features/sync-project-with-query/utils/use-sync-project";
-import { ProjectContext } from "@/shared/utils/project-context";
+import { Project, projectAtom as projectAtom } from "@/entities/project/model";
+import { useSyncProjectWithQueryParams } from "@/features/sync-project-with-query/utils/use-sync-project-with-query-params";
+import { useHydrateAtoms } from "jotai/utils";
 
 const Player = dynamic(
   () => import("../widgets/player").then((p) => p.Player),
@@ -30,13 +30,20 @@ export interface ProjectPageProps {
 }
 
 export const ProjectPage: FC<ProjectPageProps> = ({ project: inProject }) => {
-  const project = useSyncProject(inProject);
+  useHydrateAtoms([
+    [projectAtom, inProject],
+    [workspaceCurrentLoopAtom, inProject.loops[0]],
+  ]);
+
+  useSyncProjectWithQueryParams(inProject);
+
+  const project = useAtomValue(projectAtom)!;
 
   const ref = useRef<ReactPlayer | null>(null);
 
-  const [playing, setPlaying] = useAtom(workspaceIsPlaying);
+  const [playing, setPlaying] = useAtom(workspaceIsPlayingAtom);
 
-  const currentLoop = useAtomValue(workspaceCurrentLoop);
+  const currentLoop = useAtomValue(workspaceCurrentLoopAtom);
 
   const seekTo = (seconds: number) => {
     ref.current?.seekTo(seconds);
@@ -66,30 +73,28 @@ export const ProjectPage: FC<ProjectPageProps> = ({ project: inProject }) => {
         getCurrentTime: ref.current?.getCurrentTime,
       }}
     >
-      <ProjectContext.Provider value={{ project }}>
-        <section className="prose max-w-screen-xl mx-auto pt-5 px-2">
-          <h1>{project.name}</h1>
-          {/* TODO make project settings in page head */}
+      <section className="prose max-w-screen-xl mx-auto pt-5 px-2">
+        <h1>{project.name}</h1>
+        {/* TODO make project settings in page head */}
 
-          <ProjectWrapper>
-            <Collapse label="Video" defaultOpen={false}>
-              <Player
-                onProgress={handleProgress}
-                url={`https://www.youtube.com/watch?v=${project.videoId}`}
-                refCallback={(player) => (ref.current = player)}
-              />
-            </Collapse>
+        <ProjectWrapper>
+          <Collapse label="Video" defaultOpen={false}>
+            <Player
+              onProgress={handleProgress}
+              url={`https://www.youtube.com/watch?v=${project.videoId}`}
+              refCallback={(player) => (ref.current = player)}
+            />
+          </Collapse>
 
-            <Collapse label="Loops" defaultOpen={true}>
-              <LoopTabs />
-            </Collapse>
+          <Collapse label="Loops" defaultOpen={true}>
+            <LoopTabs />
+          </Collapse>
 
-            <Collapse label="Export" defaultOpen={false}>
-              Some variants of export
-            </Collapse>
-          </ProjectWrapper>
-        </section>
-      </ProjectContext.Provider>
+          <Collapse label="Export" defaultOpen={false}>
+            Some variants of export
+          </Collapse>
+        </ProjectWrapper>
+      </section>
     </PlayerContext.Provider>
   );
 };
