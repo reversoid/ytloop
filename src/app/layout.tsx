@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Providers } from "@/core/providers";
+import { AppProviders } from "@/core/app-providers";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 
@@ -20,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <Providers>
+    <AppProviders>
       <html lang="en">
         <body className={inter.className}>
           {/* <header className="h-16 bg-base-100 border-b-2">Some header</header> */}
@@ -28,6 +28,6 @@ export default function RootLayout({
           <footer></footer>
         </body>
       </html>
-    </Providers>
+    </AppProviders>
   );
 }

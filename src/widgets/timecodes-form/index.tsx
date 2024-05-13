@@ -1,27 +1,28 @@
-import { TimecodeInput } from "@/shared/ui/timecode-input";
-import { Dispatch, FC, SetStateAction } from "react";
-import { PlayButton } from "../../features/play-button";
-import { useAtom } from "jotai";
+import { PlayerContext } from "@/app/project/page";
 import {
+  workspaceCurrentLoop,
   workspaceDelta,
-  workspaceEndTime,
   workspaceIsPlaying,
-  workspaceStartTime,
 } from "@/entities/workspace/model";
+import { TimecodeInput } from "@/shared/ui/timecode-input";
+import { useAtom } from "jotai";
+import { useContext } from "react";
+import { PlayButton } from "../../features/play-button";
 
-export interface TimecodesFormProps {
-  getCurrentTime: () => number | undefined;
-  seekTo: (time: number) => void;
-}
-
-export const TimecodesForm: FC<TimecodesFormProps> = ({
-  getCurrentTime,
-  seekTo,
-}) => {
-  const [startValue, setStartValue] = useAtom(workspaceStartTime);
-  const [endValue, setEndValue] = useAtom(workspaceEndTime);
+export const TimecodesForm = () => {
+  const [currentLoop, setCurrentLoop] = useAtom(workspaceCurrentLoop);
   const [stepValue, setStepValue] = useAtom(workspaceDelta);
   const [isPlaying, setIsPlaying] = useAtom(workspaceIsPlaying);
+
+  const { getCurrentTime, seekTo } = useContext(PlayerContext);
+
+  const setStartValue = (v: number) => {
+    setCurrentLoop((loop) => loop && { ...loop, from: v });
+  };
+
+  const setEndValue = (v: number) => {
+    setCurrentLoop((loop) => loop && { ...loop, to: v });
+  };
 
   return (
     <form
@@ -32,11 +33,11 @@ export const TimecodesForm: FC<TimecodesFormProps> = ({
     >
       <TimecodeInput
         label="Start"
-        value={startValue}
-        onChange={setStartValue}
+        value={currentLoop?.from || null}
+        onChange={(v) => setStartValue(v)}
         stepValue={stepValue}
         onTakeFromVideo={() => {
-          const currentTime = getCurrentTime();
+          const currentTime = getCurrentTime?.();
           if (currentTime !== undefined) {
             setStartValue(currentTime);
           }
@@ -45,11 +46,11 @@ export const TimecodesForm: FC<TimecodesFormProps> = ({
 
       <TimecodeInput
         label="End"
-        value={endValue}
+        value={currentLoop?.to || null}
         onChange={setEndValue}
         stepValue={stepValue}
         onTakeFromVideo={() => {
-          const currentTime = getCurrentTime();
+          const currentTime = getCurrentTime?.();
           if (currentTime !== undefined) {
             setEndValue(currentTime);
           }
@@ -62,7 +63,9 @@ export const TimecodesForm: FC<TimecodesFormProps> = ({
           onPlay={() => setIsPlaying(true)}
           onStop={() => {
             setIsPlaying(false);
-            seekTo(startValue);
+            if (currentLoop?.from !== undefined) {
+              seekTo?.(currentLoop?.from);
+            }
           }}
         />
       </div>

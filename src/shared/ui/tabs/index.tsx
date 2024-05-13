@@ -1,8 +1,12 @@
 import React, { FC, PropsWithChildren } from "react";
 
 export const Tab: FC<
-  PropsWithChildren<{ title: string; selected?: boolean }>
-> = ({ children, title, selected }) => {
+  PropsWithChildren<{
+    title: string;
+    selected?: boolean;
+    onSelected?: VoidFunction;
+  }>
+> = ({ children, title, selected, onSelected }) => {
   return (
     <>
       <input
@@ -12,6 +16,12 @@ export const Tab: FC<
         className="tab"
         aria-label={title}
         checked={selected}
+        onChange={(e) => {
+          const selected = e.target.checked;
+          if (selected) {
+            onSelected?.();
+          }
+        }}
       />
       <div
         role="tabpanel"

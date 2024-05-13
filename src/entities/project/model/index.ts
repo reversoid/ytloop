@@ -1,8 +1,11 @@
 import { atom } from "jotai";
 
-interface Loop {
-  from: number;
-  to: number;
+export interface Loop {
+  id: string;
+  name: string;
+  description?: string;
+  from?: number;
+  to?: number;
 }
 
 interface ProjectOptions {
