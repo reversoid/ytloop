@@ -1,8 +1,7 @@
 import { IconArrowBadgeDown, IconMinus, IconPlus } from "@tabler/icons-react";
-import { FC, useEffect, useState } from "react";
-import { secondsToTimecode, timecodeToSeconds } from "./utils/transform";
+import { FC, useEffect } from "react";
+import { timecodeToSeconds } from "./utils/transform";
 import { useTimecodeValue } from "./utils/use-timecode-value";
-import { isValidTimecode } from "./utils/validators";
 
 export interface TimecodeInputProps {
   value: number | null;
@@ -22,8 +21,9 @@ export const TimecodeInput: FC<TimecodeInputProps> = ({
   const [timecodeValue, setTimecodeValue] = useTimecodeValue(value);
 
   useEffect(() => {
-    if (isValidTimecode(timecodeValue)) {
-      onChange(timecodeToSeconds(timecodeValue)!);
+    const seconds = timecodeToSeconds(timecodeValue);
+    if (seconds !== null) {
+      onChange(seconds);
     }
   }, [timecodeValue, onChange]);
 

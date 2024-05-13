@@ -1,32 +1,26 @@
-import { areSecondsValid, isValidTimecode } from "./validators";
+import dayjs from "dayjs";
+import { TIMECODE_FORMAT, TIMECODE_PATTERN } from "./timecode-pattern";
 
 export const secondsToTimecode = (seconds: number): string | null => {
-  if (!areSecondsValid(seconds)) {
-    return null;
-  }
+  const time = dayjs.duration({ seconds });
 
-  const totalSeconds = Math.floor(seconds);
-  const milliseconds = Math.round((seconds - totalSeconds) * 1000); // Convert fractional part to milliseconds
-  const minutes = Math.floor(totalSeconds / 60);
-  const remainingSeconds = totalSeconds % 60;
-
-  const formattedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
-  const formattedSeconds =
-    remainingSeconds < 10 ? `0${remainingSeconds}` : `${remainingSeconds}`;
-  const formattedMilliseconds = `${milliseconds}`;
-
-  return `${formattedMinutes}:${formattedSeconds}.${formattedMilliseconds}`;
+  return time.format(TIMECODE_FORMAT);
 };
 
 export const timecodeToSeconds = (timecode: string): number | null => {
-  if (!isValidTimecode(timecode)) {
+  const match = timecode.match(TIMECODE_PATTERN);
+
+  if (!match) {
     return null;
   }
 
-  const [mainTime, milliseconds] = timecode.split(".");
-  const [minutes, seconds] = mainTime.split(":").map(parseFloat);
+  const [_, mm, ss, SSS] = match;
 
-  const totalSeconds = minutes * 60 + seconds + parseFloat(milliseconds) / 1000;
+  const time = dayjs.duration({
+    minutes: Number(mm),
+    seconds: Number(ss),
+    milliseconds: Number(SSS),
+  });
 
-  return totalSeconds;
+  return time.seconds();
 };
