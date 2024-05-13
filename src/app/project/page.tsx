@@ -1,14 +1,25 @@
 "use client";
 
+import { createNewProject } from "@/entities/project/utils/create-new-project";
 import { queryToProject } from "@/features/sync-project-with-query";
 import { ProjectPage } from "@/pages/project-page";
-import { useParams, useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { NextRequest } from "next/server";
 
 export default function Page(request: NextRequest) {
-  const p = useSearchParams();
+  const query = useSearchParams();
+  const router = useRouter();
 
-  const stringifiedParams = p.toString();
+  const videoId = query.get("videoId");
 
-  return <ProjectPage project={queryToProject(stringifiedParams)} />;
+  if (!videoId) {
+    return router.replace("/");
+  }
+
+  const stringifiedParams = query.toString();
+
+  const project =
+    queryToProject(stringifiedParams) || createNewProject(videoId);
+
+  return <ProjectPage project={project} />;
 }

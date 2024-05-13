@@ -24,7 +24,7 @@ const Player = dynamic(
 );
 
 export interface ProjectPageProps {
-  project: Project | null;
+  project: Project;
 }
 
 export const ProjectPage: FC<ProjectPageProps> = ({ project }) => {

@@ -1,7 +1,22 @@
-import Image from "next/image";
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
+
+const useVideoId = (str: string) => {
+  const regex =
+    /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\s*[^\/\n\s]+\/|embed\/|v\/|watch\?v=)|youtu\.be\/)([^"&?\/\s]{11})/gi;
+
+  const match = regex.exec(str);
+
+  return match ? match[1] : null;
+};
 
 export default function Home() {
+  const [inputValue, setInputValue] = useState("");
+
+  const videoId = useVideoId(inputValue);
+
   return (
     <section className="hero min-h-screen bg-base-200">
       <div className="hero-content text-center">
@@ -14,10 +29,18 @@ export default function Home() {
 
           <input
             type="text"
-            placeholder="URL or video ID"
+            placeholder="Video URL"
             className="input input-bordered w-full"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
           />
-          <Link href="/project" className="mt-6 btn btn-primary w-full">
+
+          <Link
+            href={`/project?videoId=${videoId}`}
+            className={`mt-6 btn btn-primary w-full ${
+              inputValue && videoId ? "" : "btn-disabled"
+            }`}
+          >
             Start
           </Link>
         </div>
