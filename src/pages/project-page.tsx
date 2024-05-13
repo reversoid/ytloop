@@ -1,6 +1,6 @@
 "use client";
 import { Collapse } from "@/shared/ui/collapse";
-import { FC, createContext, useEffect, useRef } from "react";
+import { FC, useRef } from "react";
 import ReactPlayer from "react-player";
 import { OnProgressProps } from "react-player/base";
 
@@ -25,19 +25,10 @@ const Player = dynamic(
   }
 );
 
-export interface ProjectPageProps {
-  project: Project;
-}
-
-export const ProjectPage: FC<ProjectPageProps> = ({ project: inProject }) => {
-  useHydrateAtoms([
-    [projectAtom, inProject],
-    [workspaceCurrentLoopAtom, inProject.loops[0]],
-  ]);
-
-  useSyncProjectWithQueryParams(inProject);
-
+export const ProjectPage: FC = () => {
   const project = useAtomValue(projectAtom)!;
+
+  useSyncProjectWithQueryParams(project);
 
   const ref = useRef<ReactPlayer | null>(null);
 
