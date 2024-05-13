@@ -1,6 +1,5 @@
 import { Project, projectAtom as projectAtom } from "@/entities/project/model";
 import { useAtomValue } from "jotai";
-import { useHydrateAtoms } from "jotai/utils";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { projectToQuery } from "./transform";
@@ -14,7 +13,7 @@ export const useSyncProjectWithQueryParams = (project: Project): Project => {
   useEffect(() => {
     if (savedProject) {
       const query = projectToQuery(savedProject);
-      router.replace(pathname.split("?")[0] + `?${query}`);
+      router.replace(pathname?.split("?")[0] + `?${query}`);
     }
   }, [savedProject, pathname, router]);
 

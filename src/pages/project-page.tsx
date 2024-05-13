@@ -1,6 +1,6 @@
 "use client";
 import { Collapse } from "@/shared/ui/collapse";
-import { FC, createContext, useRef } from "react";
+import { FC, createContext, useEffect, useRef } from "react";
 import ReactPlayer from "react-player";
 import { OnProgressProps } from "react-player/base";
 

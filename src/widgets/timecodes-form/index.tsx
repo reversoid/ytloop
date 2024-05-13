@@ -5,7 +5,7 @@ import {
 } from "@/entities/workspace/model";
 import { TimecodeInput } from "@/shared/ui/timecode-input";
 import { useAtom } from "jotai";
-import { useContext } from "react";
+import { useCallback, useContext } from "react";
 import { PlayButton } from "../../features/play-button";
 import { PlayerContext } from "@/shared/utils/player-context";
 
@@ -16,13 +16,19 @@ export const TimecodesForm = () => {
 
   const { getCurrentTime, seekTo } = useContext(PlayerContext);
 
-  const setStartValue = (v: number) => {
-    setCurrentLoop((loop) => loop && { ...loop, from: v });
-  };
+  const setStartValue = useCallback(
+    (v: number) => {
+      setCurrentLoop((loop) => loop && { ...loop, from: v });
+    },
+    [setCurrentLoop]
+  );
 
-  const setEndValue = (v: number) => {
-    setCurrentLoop((loop) => loop && { ...loop, to: v });
-  };
+  const setEndValue = useCallback(
+    (v: number) => {
+      setCurrentLoop((loop) => loop && { ...loop, to: v });
+    },
+    [setCurrentLoop]
+  );
 
   return (
     <form
@@ -34,7 +40,7 @@ export const TimecodesForm = () => {
       <TimecodeInput
         label="Start"
         value={currentLoop?.from || null}
-        onChange={(v) => setStartValue(v)}
+        onChange={useCallback((v) => setStartValue(v), [setStartValue])}
         stepValue={stepValue}
         onTakeFromVideo={() => {
           const currentTime = getCurrentTime?.();

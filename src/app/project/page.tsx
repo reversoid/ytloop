@@ -12,9 +12,9 @@ export default function Page() {
   const query = useSearchParams();
   const router = useRouter();
 
-  const videoId = query.get("videoId");
+  const videoId = query?.get("videoId");
 
-  const stringifiedParams = query.toString();
+  const stringifiedParams = query?.toString() ?? "";
 
   const [project] = useState(
     queryToProject(stringifiedParams) || createNewProject(videoId ?? "")
