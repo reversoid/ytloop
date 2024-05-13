@@ -8,18 +8,17 @@ export interface Loop {
   to?: number;
 }
 
-interface ProjectOptions {
+export interface ProjectOptions {
   bpm?: number;
-  hideVideoOnStart?: boolean;
-  speed?: number;
+  videoSpeed?: number;
 }
 
-interface Project {
+export interface Project {
   id: string;
   name: string;
   videoId: string;
   loops: Loop[];
-  options: ProjectOptions | null;
+  options?: ProjectOptions;
 }
 
 export const projectId = atom<string | null>(null);
@@ -40,7 +39,7 @@ export const project = atom<Project | null>((get) => {
   const options = get(projectOptions);
 
   if (id && name && videoId && loops) {
-    return { id, name, videoId, loops, options };
+    return { id, name, videoId, loops, options: options || undefined };
   }
 
   return null;

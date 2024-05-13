@@ -1,6 +1,6 @@
 "use client";
 import { Collapse } from "@/shared/ui/collapse";
-import { createContext, useRef } from "react";
+import { FC, createContext, useRef } from "react";
 import ReactPlayer from "react-player";
 import { OnProgressProps } from "react-player/base";
 
@@ -13,6 +13,8 @@ import { useAtom, useAtomValue } from "jotai";
 import dynamic from "next/dynamic";
 import { isLoopValid } from "@/entities/project/utils/is-loop-valid";
 import { ProjectWrapper } from "./ui/wrapper";
+import { PlayerContext } from "@/shared/utils/player-context";
+import { Project } from "@/entities/project/model";
 
 const Player = dynamic(
   () => import("../widgets/player").then((p) => p.Player),
@@ -21,12 +23,11 @@ const Player = dynamic(
   }
 );
 
-export const PlayerContext = createContext<{
-  getCurrentTime?: () => number;
-  seekTo?: (seconds: number) => void;
-}>({});
+export interface ProjectPageProps {
+  project: Project | null;
+}
 
-export const ProjectPage = () => {
+export const ProjectPage: FC<ProjectPageProps> = ({ project }) => {
   const ref = useRef<ReactPlayer | null>(null);
 
   const [playing, setPlaying] = useAtom(workspaceIsPlaying);
