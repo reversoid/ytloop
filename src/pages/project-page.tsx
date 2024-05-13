@@ -16,6 +16,7 @@ import { ProjectWrapper } from "./ui/wrapper";
 import { PlayerContext } from "@/shared/utils/player-context";
 import { Project } from "@/entities/project/model";
 import { useSyncProject } from "@/features/sync-project-with-query/utils/use-sync-project";
+import { ProjectContext } from "@/shared/utils/project-context";
 
 const Player = dynamic(
   () => import("../widgets/player").then((p) => p.Player),
@@ -65,28 +66,30 @@ export const ProjectPage: FC<ProjectPageProps> = ({ project: inProject }) => {
         getCurrentTime: ref.current?.getCurrentTime,
       }}
     >
-      <section className="prose max-w-screen-xl mx-auto pt-5 px-2">
-        <h1>Your project</h1>
-        {/* TODO make project settings in page head */}
+      <ProjectContext.Provider value={{ project }}>
+        <section className="prose max-w-screen-xl mx-auto pt-5 px-2">
+          <h1>{project.name}</h1>
+          {/* TODO make project settings in page head */}
 
-        <ProjectWrapper>
-          <Collapse label="Video" defaultOpen={false}>
-            <Player
-              onProgress={handleProgress}
-              url={`https://www.youtube.com/watch?v=${project.videoId}`}
-              refCallback={(player) => (ref.current = player)}
-            />
-          </Collapse>
+          <ProjectWrapper>
+            <Collapse label="Video" defaultOpen={false}>
+              <Player
+                onProgress={handleProgress}
+                url={`https://www.youtube.com/watch?v=${project.videoId}`}
+                refCallback={(player) => (ref.current = player)}
+              />
+            </Collapse>
 
-          <Collapse label="Loops" defaultOpen={true}>
-            <LoopTabs />
-          </Collapse>
+            <Collapse label="Loops" defaultOpen={true}>
+              <LoopTabs />
+            </Collapse>
 
-          <Collapse label="Export" defaultOpen={false}>
-            Some variants of export
-          </Collapse>
-        </ProjectWrapper>
-      </section>
+            <Collapse label="Export" defaultOpen={false}>
+              Some variants of export
+            </Collapse>
+          </ProjectWrapper>
+        </section>
+      </ProjectContext.Provider>
     </PlayerContext.Provider>
   );
 };
