@@ -4,14 +4,18 @@ import { Tab, Tabs } from "@/shared/ui/tabs";
 import { FC, PropsWithChildren, useRef, useState } from "react";
 import ReactPlayer from "react-player";
 import { OnProgressProps } from "react-player/base";
-import { TimecodeInput } from "@/shared/ui/timecode-input";
 
 import dynamic from "next/dynamic";
-import { PlayButton } from "@/features/play-button";
-import { TimecodesForm } from "@/features/timecodes-form";
+import { TimecodesForm } from "@/widgets/timecodes-form";
+import { useAtom, useAtomValue } from "jotai";
+import {
+  workspaceEndTime,
+  workspaceIsPlaying,
+  workspaceStartTime,
+} from "@/entities/workspace/model";
 
 const Player = dynamic(
-  () => import("../../entities/player").then((p) => p.Player),
+  () => import("../../widgets/player").then((p) => p.Player),
   {
     ssr: false,
   }
@@ -23,10 +27,10 @@ const ProjectWrapper: FC<PropsWithChildren> = ({ children }) => {
 
 export default function Page() {
   const ref = useRef<ReactPlayer | null>(null);
-  const [playing, setPlaying] = useState(false);
+  const [playing, setPlaying] = useAtom(workspaceIsPlaying);
 
-  const [startValue, setStartValue] = useState(0);
-  const [endValue, setEndValue] = useState<number | null>(null);
+  const startValue = useAtomValue(workspaceStartTime);
+  const endValue = useAtomValue(workspaceEndTime);
 
   const seekTo = (seconds: number) => {
     ref.current?.seekTo(seconds);
@@ -57,8 +61,6 @@ export default function Page() {
         <Collapse label="Video" defaultOpen={false}>
           <Player
             onProgress={handleProgress}
-            playing={playing}
-            setPlaying={setPlaying}
             url="https://www.youtube.com/watch?v=LXb3EKWsInQ"
             refCallback={(player) => (ref.current = player)}
           />
@@ -68,18 +70,12 @@ export default function Page() {
           <Tabs>
             <Tab title="Loop 1" selected>
               <TimecodesForm
-                endValue={endValue}
                 getCurrentTime={() => {
                   if (ref.current) {
                     return ref.current.getCurrentTime();
                   }
                 }}
-                playing={playing}
-                setPlaying={setPlaying}
                 seekTo={seekTo}
-                setEndValue={setEndValue}
-                setStartValue={setStartValue}
-                startValue={startValue}
               />
             </Tab>
             <Tab title="New"></Tab>

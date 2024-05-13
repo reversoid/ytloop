@@ -1,31 +1,28 @@
 import { TimecodeInput } from "@/shared/ui/timecode-input";
 import { Dispatch, FC, SetStateAction } from "react";
-import { PlayButton } from "./play-button";
+import { PlayButton } from "../../features/play-button";
+import { useAtom } from "jotai";
+import {
+  workspaceDelta,
+  workspaceEndTime,
+  workspaceIsPlaying,
+  workspaceStartTime,
+} from "@/entities/workspace/model";
 
 export interface TimecodesFormProps {
-  startValue: number;
-  setStartValue: Dispatch<SetStateAction<number>>;
-
-  endValue: number | null;
-  setEndValue: Dispatch<SetStateAction<number | null>>;
-
   getCurrentTime: () => number | undefined;
-
-  playing: boolean;
-  setPlaying: Dispatch<SetStateAction<boolean>>;
   seekTo: (time: number) => void;
 }
 
 export const TimecodesForm: FC<TimecodesFormProps> = ({
   getCurrentTime,
-  setEndValue,
-  endValue,
-  setStartValue,
-  startValue,
-  playing,
-  setPlaying,
   seekTo,
 }) => {
+  const [startValue, setStartValue] = useAtom(workspaceStartTime);
+  const [endValue, setEndValue] = useAtom(workspaceEndTime);
+  const [stepValue, setStepValue] = useAtom(workspaceDelta);
+  const [isPlaying, setIsPlaying] = useAtom(workspaceIsPlaying);
+
   return (
     <form
       className="flex flex-col gap-2 sm:max-w-md"
@@ -37,7 +34,7 @@ export const TimecodesForm: FC<TimecodesFormProps> = ({
         label="Start"
         value={startValue}
         onChange={setStartValue}
-        stepValue={0.001}
+        stepValue={stepValue}
         onTakeFromVideo={() => {
           const currentTime = getCurrentTime();
           if (currentTime !== undefined) {
@@ -50,7 +47,7 @@ export const TimecodesForm: FC<TimecodesFormProps> = ({
         label="End"
         value={endValue}
         onChange={setEndValue}
-        stepValue={0.25}
+        stepValue={stepValue}
         onTakeFromVideo={() => {
           const currentTime = getCurrentTime();
           if (currentTime !== undefined) {
@@ -61,10 +58,10 @@ export const TimecodesForm: FC<TimecodesFormProps> = ({
 
       <div className="sm:max-w-md mt-5">
         <PlayButton
-          isPlaying={playing}
-          onPlay={() => setPlaying(true)}
+          isPlaying={isPlaying}
+          onPlay={() => setIsPlaying(true)}
           onStop={() => {
-            setPlaying(false);
+            setIsPlaying(false);
             seekTo(startValue);
           }}
         />
