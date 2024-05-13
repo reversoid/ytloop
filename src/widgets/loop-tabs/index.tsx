@@ -1,14 +1,14 @@
 import { projectLoops } from "@/entities/project/model";
 import { workspaceCurrentLoop } from "@/entities/workspace/model";
 import { Tab, Tabs } from "@/shared/ui/tabs";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { TimecodesForm } from "../timecodes-form";
 
 export interface LoopTabsProps {}
 
 export const LoopTabs = () => {
   const [currentLoop, setCurrentLoop] = useAtom(workspaceCurrentLoop);
-  const [loops, setLoops] = useAtom(projectLoops);
+  const loops = useAtomValue(projectLoops);
 
   return (
     <Tabs>

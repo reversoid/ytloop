@@ -21,26 +21,8 @@ export interface Project {
   options?: ProjectOptions;
 }
 
-export const projectId = atom<string | null>(null);
+export const project = atom<Project | null>(null);
 
-export const projectName = atom<string | null>(null);
-
-export const projectVideoId = atom<string | null>(null);
-
-export const projectLoops = atom<Loop[] | null>(null);
-
-export const projectOptions = atom<ProjectOptions | null>(null);
-
-export const project = atom<Project | null>((get) => {
-  const id = get(projectId);
-  const name = get(projectName);
-  const videoId = get(projectVideoId);
-  const loops = get(projectLoops);
-  const options = get(projectOptions);
-
-  if (id && name && videoId && loops) {
-    return { id, name, videoId, loops, options: options || undefined };
-  }
-
-  return null;
-});
+export const projectLoops = atom<Loop[] | null>(
+  (get) => get(project)?.loops ?? null
+);

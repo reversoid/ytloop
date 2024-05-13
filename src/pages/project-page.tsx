@@ -15,6 +15,7 @@ import { isLoopValid } from "@/entities/project/utils/is-loop-valid";
 import { ProjectWrapper } from "./ui/wrapper";
 import { PlayerContext } from "@/shared/utils/player-context";
 import { Project } from "@/entities/project/model";
+import { useSyncProject } from "@/features/sync-project-with-query/utils/use-sync-project";
 
 const Player = dynamic(
   () => import("../widgets/player").then((p) => p.Player),
@@ -27,7 +28,9 @@ export interface ProjectPageProps {
   project: Project;
 }
 
-export const ProjectPage: FC<ProjectPageProps> = ({ project }) => {
+export const ProjectPage: FC<ProjectPageProps> = ({ project: inProject }) => {
+  const project = useSyncProject(inProject);
+
   const ref = useRef<ReactPlayer | null>(null);
 
   const [playing, setPlaying] = useAtom(workspaceIsPlaying);
@@ -70,7 +73,7 @@ export const ProjectPage: FC<ProjectPageProps> = ({ project }) => {
           <Collapse label="Video" defaultOpen={false}>
             <Player
               onProgress={handleProgress}
-              url="https://www.youtube.com/watch?v=LXb3EKWsInQ"
+              url={`https://www.youtube.com/watch?v=${project.videoId}`}
               refCallback={(player) => (ref.current = player)}
             />
           </Collapse>
