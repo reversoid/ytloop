@@ -10,24 +10,16 @@ import dynamic from "next/dynamic";
 import { PlayButton } from "@/features/play-button";
 import { TimecodesForm } from "@/features/timecodes-form";
 
-const Player = dynamic(() => import("../../shared/ui/player"), {
-  ssr: false,
-});
+const Player = dynamic(
+  () => import("../../entities/player").then((p) => p.Player),
+  {
+    ssr: false,
+  }
+);
 
 const ProjectWrapper: FC<PropsWithChildren> = ({ children }) => {
   return <div className="flex flex-col gap-3">{children}</div>;
 };
-
-interface ILoop {
-  from: number;
-  to: number;
-}
-
-interface IProject {
-  name: string;
-  videoId: string;
-  loops: ILoop[];
-}
 
 export default function Page() {
   const ref = useRef<ReactPlayer | null>(null);

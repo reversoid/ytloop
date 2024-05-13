@@ -10,7 +10,7 @@ export interface PlayerProps {
   refCallback?: (player: ReactPlayer | null) => void;
 }
 
-const Player: FC<PlayerProps> = ({
+export const Player: FC<PlayerProps> = ({
   playing,
   setPlaying,
   onProgress,
@@ -33,7 +33,3 @@ const Player: FC<PlayerProps> = ({
     </div>
   );
 };
-
-Player.displayName = "Player";
-
-export default Player;
