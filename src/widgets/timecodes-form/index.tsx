@@ -1,4 +1,3 @@
-import { PlayerContext } from "@/app/project/page";
 import {
   workspaceCurrentLoop,
   workspaceDelta,
@@ -8,6 +7,7 @@ import { TimecodeInput } from "@/shared/ui/timecode-input";
 import { useAtom } from "jotai";
 import { useContext } from "react";
 import { PlayButton } from "../../features/play-button";
+import { PlayerContext } from "@/pages/project-page";
 
 export const TimecodesForm = () => {
   const [currentLoop, setCurrentLoop] = useAtom(workspaceCurrentLoop);
