@@ -5,7 +5,7 @@ import { useTimecodeValue } from "./utils/use-timecode-value";
 
 export interface TimecodeInputProps {
   value: number | null;
-  onChange: (value: number) => void;
+  onChange: (value: number | null) => void;
   onTakeFromVideo: VoidFunction;
   label: string;
   stepValue: number;
@@ -22,9 +22,7 @@ export const TimecodeInput: FC<TimecodeInputProps> = ({
 
   useEffect(() => {
     const seconds = timecodeToSeconds(timecodeValue);
-    if (seconds !== null) {
-      onChange(seconds);
-    }
+    onChange(seconds);
   }, [timecodeValue, onChange]);
 
   return (

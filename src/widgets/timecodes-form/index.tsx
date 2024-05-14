@@ -17,15 +17,15 @@ export const TimecodesForm = () => {
   const { getCurrentTime, seekTo } = useContext(PlayerContext);
 
   const setStartValue = useCallback(
-    (v: number) => {
-      setCurrentLoop((loop) => loop && { ...loop, from: v });
+    (v: number | null) => {
+      setCurrentLoop((loop) => loop && { ...loop, from: v ?? undefined });
     },
     [setCurrentLoop]
   );
 
   const setEndValue = useCallback(
-    (v: number) => {
-      setCurrentLoop((loop) => loop && { ...loop, to: v });
+    (v: number | null) => {
+      setCurrentLoop((loop) => loop && { ...loop, to: v ?? undefined });
     },
     [setCurrentLoop]
   );
