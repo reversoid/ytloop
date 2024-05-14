@@ -8,5 +8,5 @@ export const createNewLoop = ({
 }: {
   postfixNumber: number;
 }): Loop => {
-  return { id: createLoopId(), name: `New loop ${postfixNumber}` };
+  return { id: createLoopId(), name: `New Loop ${postfixNumber}` };
 };
