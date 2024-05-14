@@ -17,6 +17,7 @@
     "qs": "^6.12.1",
     "react": "^18",
     "react-dom": "^18",
+    "react-input-mask": "^2.0.4",
     "react-player": "^2.16.0",
     "sqids": "^0.3.0",
     "zod": "^3.23.8"
@@ -27,6 +28,7 @@
     "@types/qs": "^6.9.15",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/react-input-mask": "^3.0.5",
     "daisyui": "^4.11.1",
     "eslint": "^8",
     "eslint-config-next": "14.2.3",

@@ -2,6 +2,7 @@ import { IconArrowBadgeDown, IconMinus, IconPlus } from "@tabler/icons-react";
 import { FC, useEffect } from "react";
 import { timecodeToSeconds } from "./utils/transform";
 import { useTimecodeDisplayValue } from "./utils/use-timecode-value";
+import ReactInputMask from "react-input-mask";
 
 export interface TimecodeInputProps {
   value: number | null;
@@ -36,11 +37,14 @@ export const TimecodeInput: FC<TimecodeInputProps> = ({
         <span className="label-text">{label}</span>
       </div>
       <div className="gap-2 flex flex-col sm:flex-row">
-        <input
+        <ReactInputMask
+          mask={"99:99.999"}
+          maskChar={""}
+          inputMode="numeric"
+          placeholder="hh:mm:SSS"
           value={displayValue}
           onChange={(event) => setDisplayValue(event.target.value)}
           type="text"
-          placeholder="mm:ss.mss"
           className="input input-bordered w-full"
         />
         <div className="flex gap-1">

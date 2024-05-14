@@ -18,7 +18,7 @@ export const PlayButton: FC<PlayButtonProps> = ({
       <button
         onClick={onStop}
         className={`btn btn-primary btn-outline w-full ${
-          disabled && "btn-disabled"
+          disabled && "btn-disabled no-animation"
         }`}
       >
         Stop
@@ -29,7 +29,9 @@ export const PlayButton: FC<PlayButtonProps> = ({
   return (
     <button
       onClick={onPlay}
-      className={`btn btn-primary w-full ${disabled && "btn-disabled"}`}
+      className={`btn btn-primary w-full ${
+        disabled && "btn-disabled no-animation"
+      }`}
     >
       Play
     </button>

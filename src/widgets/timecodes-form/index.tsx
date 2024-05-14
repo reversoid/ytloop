@@ -34,7 +34,7 @@ export const TimecodesForm = () => {
 
   return (
     <div>
-      <div className="collapse bg-base-200 collapse-arrow">
+      {/* <div className="collapse bg-base-200 collapse-arrow">
         <input type="checkbox" />
         <div className="collapse-title text-lg font-medium">Loop options</div>
         <div className="collapse-content">
@@ -60,7 +60,7 @@ export const TimecodesForm = () => {
             ></textarea>
           </label>
         </div>
-      </div>
+      </div> */}
 
       <form
         className="flex flex-col gap-2 sm:max-w-md"
