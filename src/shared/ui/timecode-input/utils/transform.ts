@@ -1,5 +1,4 @@
-import dayjs from "dayjs";
-import { TIMECODE_FORMAT, TIMECODE_PATTERN } from "./timecode-pattern";
+import { TIMECODE_PATTERN } from "./timecode-pattern";
 
 export const secondsToTimecode = (seconds: number): string | null => {
   const milliseconds = Number(Number(seconds.toFixed(3)) * 1000);

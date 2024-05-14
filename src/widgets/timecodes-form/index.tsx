@@ -5,7 +5,7 @@ import {
 } from "@/entities/workspace/model";
 import { TimecodeInput } from "@/shared/ui/timecode-input";
 import { useAtom } from "jotai";
-import { useCallback, useContext } from "react";
+import { useCallback, useContext, useState } from "react";
 import { PlayButton } from "../../features/play-button";
 import { PlayerContext } from "@/shared/utils/player-context";
 
@@ -30,6 +30,8 @@ export const TimecodesForm = () => {
     [setCurrentLoop]
   );
 
+  const [invalid, setInvalid] = useState(false);
+
   return (
     <form
       className="flex flex-col gap-2 sm:max-w-md"
@@ -40,7 +42,17 @@ export const TimecodesForm = () => {
       <TimecodeInput
         label="Start"
         value={currentLoop?.from || null}
-        onChange={useCallback((v) => setStartValue(v), [setStartValue])}
+        onChange={useCallback(
+          (v) => {
+            if (v === -1) {
+              setInvalid(true);
+            } else {
+              setInvalid(false);
+              setStartValue(v);
+            }
+          },
+          [setInvalid, setStartValue]
+        )}
         stepValue={stepValue}
         onTakeFromVideo={() => {
           const currentTime = getCurrentTime?.();
@@ -53,7 +65,17 @@ export const TimecodesForm = () => {
       <TimecodeInput
         label="End"
         value={currentLoop?.to || null}
-        onChange={setEndValue}
+        onChange={useCallback(
+          (v) => {
+            if (v === -1) {
+              setInvalid(true);
+            } else {
+              setInvalid(false);
+              setEndValue(v);
+            }
+          },
+          [setInvalid, setEndValue]
+        )}
         stepValue={stepValue}
         onTakeFromVideo={() => {
           const currentTime = getCurrentTime?.();
@@ -68,7 +90,9 @@ export const TimecodesForm = () => {
         <PlayButton
           isPlaying={isPlaying}
           disabled={
-            currentLoop?.from === undefined || currentLoop.to === undefined
+            invalid ||
+            currentLoop?.from === undefined ||
+            currentLoop.to === undefined
           }
           onPlay={() => setIsPlaying(true)}
           onStop={() => {

@@ -1,7 +1,7 @@
 import { IconArrowBadgeDown, IconMinus, IconPlus } from "@tabler/icons-react";
 import { FC, useEffect } from "react";
 import { timecodeToSeconds } from "./utils/transform";
-import { useTimecodeValue } from "./utils/use-timecode-value";
+import { useTimecodeDisplayValue } from "./utils/use-timecode-value";
 
 export interface TimecodeInputProps {
   value: number | null;
@@ -18,12 +18,17 @@ export const TimecodeInput: FC<TimecodeInputProps> = ({
   stepValue,
   onTakeFromVideo,
 }) => {
-  const [timecodeValue, setTimecodeValue] = useTimecodeValue(value);
+  const [displayValue, setDisplayValue] = useTimecodeDisplayValue(value);
 
   useEffect(() => {
-    const seconds = timecodeToSeconds(timecodeValue);
-    onChange(seconds);
-  }, [timecodeValue, onChange]);
+    const seconds = timecodeToSeconds(displayValue);
+
+    if (!displayValue) {
+      return onChange(null);
+    }
+
+    onChange(seconds ?? -1);
+  }, [displayValue, onChange]);
 
   return (
     <label className="form-control w-full">
@@ -32,8 +37,8 @@ export const TimecodeInput: FC<TimecodeInputProps> = ({
       </div>
       <div className="gap-2 flex flex-col sm:flex-row">
         <input
-          value={timecodeValue}
-          onChange={(event) => setTimecodeValue(event.target.value)}
+          value={displayValue}
+          onChange={(event) => setDisplayValue(event.target.value)}
           type="text"
           placeholder="mm:ss.mss"
           className="input input-bordered w-full"
