@@ -1,6 +1,6 @@
 import { projectAtom } from "@/entities/project/model";
 import { projectToQuery } from "@/features/sync-project-with-query/utils/transform";
-import { Tabs } from "@/shared/ui/tabs";
+import { Button, Checkbox, Tab, Tabs } from "@nextui-org/react";
 import { IconCheck } from "@tabler/icons-react";
 import { useAtomValue } from "jotai";
 import { useEffect, useState } from "react";
@@ -25,7 +25,6 @@ const useCopy = () => {
 };
 
 export const ShareTabs = () => {
-  const [selectedTab, setSelectedTab] = useState<"full" | "selected">("full");
   const project = useAtomValue(projectAtom);
   const { copy, isCopied } = useCopy();
 
@@ -34,92 +33,81 @@ export const ShareTabs = () => {
   );
 
   return (
-    <Tabs
-      tabs={[
-        {
-          title: "Full project",
-          selected: selectedTab === "full",
-          onSelected: () => setSelectedTab("full"),
-          content: (
-            <div className="prose">
-              <p className="mt-0">
-                The project will have all loops, available in this workspace
-              </p>
+    <Tabs size="lg">
+      <Tab title="Full project">
+        <div className="prose">
+          <p className="mt-0">
+            The project will have all loops, available in this workspace
+          </p>
 
-              <button
-                onClick={() => copy(window.location.href)}
-                className="btn btn-primary w-40"
-              >
-                {isCopied ? <IconCheck /> : "Copy link"}
-              </button>
-            </div>
-          ),
-        },
-        {
-          title: "Selected loops",
-          selected: selectedTab === "selected",
-          onSelected: () => setSelectedTab("selected"),
-          content: (
-            <div className="prose">
-              <p className="mt-0">The project will have only selected loops:</p>
+          <Button
+            size="lg"
+            onClick={() => copy(window.location.href)}
+            fullWidth
+            className="mt-4 max-w-sm"
+            color="primary"
+          >
+            {isCopied ? <IconCheck /> : "Copy link"}
+          </Button>
+        </div>
+      </Tab>
 
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  if (!project) {
-                    return;
-                  }
+      <Tab title="Selected loops">
+        <div>
+          <p>The project will have only selected loops:</p>
 
-                  const host = window.location.host;
-                  const pathname = window.location.pathname;
-                  const query = projectToQuery({
-                    ...project,
-                    loops: project.loops.filter((l) => selectedLoops.has(l.id)),
-                  });
+          <form
+            className="mt-2 flex flex-col gap-4 max-w-sm"
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (!project) {
+                return;
+              }
 
-                  const url = `${host}${pathname}?${query}`;
+              const host = window.location.host;
+              const pathname = window.location.pathname;
+              const query = projectToQuery({
+                ...project,
+                loops: project.loops.filter((l) => selectedLoops.has(l.id)),
+              });
 
-                  copy(url);
-                }}
-                className="flex flex-col gap-4"
-              >
-                <div className="flex flex-col gap-1 loops">
-                  {project?.loops.map((loop) => (
-                    <div
-                      key={loop.id}
-                      className="form-control max-w-sm bg-base-200 rounded-md px-1"
-                    >
-                      <label className="label cursor-pointer">
-                        <span className="label-text">{loop.name}</span>
-                        <input
-                          type="checkbox"
-                          className="checkbox"
-                          checked={selectedLoops.has(loop.id)}
-                          onChange={(e) =>
-                            setSelectedLoops((prev) => {
-                              if (e.target.checked) {
-                                prev.add(loop.id);
-                              } else {
-                                prev.delete(loop.id);
-                              }
+              const url = `${host}${pathname}?${query}`;
 
-                              return new Set(prev);
-                            })
-                          }
-                        />
-                      </label>
-                    </div>
-                  ))}
+              copy(url);
+            }}
+          >
+            <div className="flex flex-col gap-1 loops">
+              {project?.loops.map((loop) => (
+                <div
+                  key={loop.id}
+                  className="form-control max-w-sm bg-base-200 rounded-md px-1"
+                >
+                  <Checkbox
+                    isSelected={selectedLoops.has(loop.id)}
+                    onValueChange={(selected) =>
+                      setSelectedLoops((prev) => {
+                        if (selected) {
+                          prev.add(loop.id);
+                        } else {
+                          prev.delete(loop.id);
+                        }
+
+                        return new Set(prev);
+                      })
+                    }
+                  >
+                    {loop.name}
+                  </Checkbox>
                 </div>
-
-                <button type="submit" className="btn btn-primary w-40">
-                  {isCopied ? <IconCheck /> : "Copy link"}
-                </button>
-              </form>
+              ))}
             </div>
-          ),
-        },
-      ]}
-    />
+
+            <Button color="primary" size="lg" fullWidth type="submit">
+              {isCopied ? <IconCheck /> : "Copy link"}
+            </Button>
+          </form>
+        </div>
+      </Tab>
+    </Tabs>
   );
 };

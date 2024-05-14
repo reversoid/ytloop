@@ -43,7 +43,7 @@ export const TimecodeInput: FC<TimecodeInputProps> = ({
       <div className="label">
         <span className="label-text">{label}</span>
       </div>
-      <div className="gap-2 flex flex-col sm:flex-row">
+      <div className="gap-3 flex flex-col sm:flex-row">
         <Input
           ref={maskRef}
           value={displayValue}

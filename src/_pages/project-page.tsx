@@ -17,6 +17,7 @@ import { useAtom, useAtomValue } from "jotai";
 import dynamic from "next/dynamic";
 import { ShareTabs } from "@/widgets/share-tabs";
 import { Accordion, AccordionItem, Button } from "@nextui-org/react";
+import styles from "./ui/styles.module.css";
 
 const Player = dynamic(() => import("../widgets/player"), {
   ssr: false,
@@ -66,34 +67,36 @@ const ProjectPage: FC = () => {
           <h1 className="font-black text-2xl">{project.name}</h1>
         </div>
 
-        <Accordion
-          defaultExpandedKeys={["Loops"]}
-          variant="splitted"
-          selectionMode="multiple"
-        >
-          <AccordionItem
-            key={"Video"}
-            aria-label="Video"
-            title="Video"
-            keepContentMounted
+        <div className={styles["accordion-wrapper"]}>
+          <Accordion
+            defaultExpandedKeys={["Loops"]}
+            variant="splitted"
+            selectionMode="multiple"
           >
-            <Player
-              onProgress={handleProgress}
-              url={`https://www.youtube.com/watch?v=${project.videoId}`}
-              refCallback={(player: ReactPlayer | null) =>
-                (ref.current = player)
-              }
-            />
-          </AccordionItem>
+            <AccordionItem
+              key={"Video"}
+              aria-label="Video"
+              title="Video"
+              keepContentMounted
+            >
+              <Player
+                onProgress={handleProgress}
+                url={`https://www.youtube.com/watch?v=${project.videoId}`}
+                refCallback={(player: ReactPlayer | null) =>
+                  (ref.current = player)
+                }
+              />
+            </AccordionItem>
 
-          <AccordionItem key={"Loops"} aria-label="Loops" title="Loops">
-            <LoopTabs />
-          </AccordionItem>
+            <AccordionItem key={"Loops"} aria-label="Loops" title="Loops">
+              <LoopTabs />
+            </AccordionItem>
 
-          <AccordionItem key={"Share"} aria-label="Share" title="Share">
-            <ShareTabs />
-          </AccordionItem>
-        </Accordion>
+            <AccordionItem key={"Share"} aria-label="Share" title="Share">
+              <ShareTabs />
+            </AccordionItem>
+          </Accordion>
+        </div>
       </section>
     </PlayerContext.Provider>
   );

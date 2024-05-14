@@ -6,6 +6,7 @@ import { LoopBlock } from "../loop-block";
 import { useSyncLoops } from "./utils/use-sync-loops";
 import { Tab, Tabs } from "@nextui-org/react";
 import { useId } from "react";
+import { IconPlus } from "@tabler/icons-react";
 
 export const LoopTabs = () => {
   const [projectLoops, setProjectLoops] = useAtom(projectLoopsAtom);
@@ -32,6 +33,7 @@ export const LoopTabs = () => {
 
   return (
     <Tabs
+      className="overflow-hidden"
       size="lg"
       selectedKey={currentLoop?.id}
       onSelectionChange={(key) => {
@@ -48,7 +50,7 @@ export const LoopTabs = () => {
         </Tab>
       ))}
 
-      <Tab title={"new"} key={newTabKey}></Tab>
+      <Tab title={<IconPlus />} key={newTabKey}></Tab>
     </Tabs>
   );
 };
