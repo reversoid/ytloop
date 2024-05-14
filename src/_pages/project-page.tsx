@@ -15,8 +15,9 @@ import { PlayerContext } from "@/shared/utils/player-context";
 import { LoopTabs } from "@/widgets/loop-tabs";
 import { useAtom, useAtomValue } from "jotai";
 import dynamic from "next/dynamic";
-import { ProjectWrapper } from "./ui/wrapper";
 import { ShareTabs } from "@/widgets/share-tabs";
+import { Accordion, AccordionItem, Button } from "@nextui-org/react";
+import styles from "./ui/styles.module.css";
 
 const Player = dynamic(() => import("../widgets/player"), {
   ssr: false,
@@ -63,28 +64,39 @@ const ProjectPage: FC = () => {
     >
       <section className="max-w-screen-xl mx-auto py-5 px-2">
         <div className="prose mb-5">
-          <h1>{project.name}</h1>
+          <h1 className="font-black text-2xl">{project.name}</h1>
         </div>
 
-        <ProjectWrapper>
-          <Collapse label="Video" defaultOpen={false} size="xl">
-            <Player
-              onProgress={handleProgress}
-              url={`https://www.youtube.com/watch?v=${project.videoId}`}
-              refCallback={(player: ReactPlayer | null) =>
-                (ref.current = player)
-              }
-            />
-          </Collapse>
+        <div className={styles["accordion-wrapper"]}>
+          <Accordion
+            defaultExpandedKeys={["Loops"]}
+            variant="splitted"
+            selectionMode="multiple"
+          >
+            <AccordionItem
+              key={"Video"}
+              aria-label="Video"
+              title="Video"
+              keepContentMounted
+            >
+              <Player
+                onProgress={handleProgress}
+                url={`https://www.youtube.com/watch?v=${project.videoId}`}
+                refCallback={(player: ReactPlayer | null) =>
+                  (ref.current = player)
+                }
+              />
+            </AccordionItem>
 
-          <Collapse label="Loops" defaultOpen={true} size="xl">
-            <LoopTabs />
-          </Collapse>
+            <AccordionItem key={"Loops"} aria-label="Loops" title="Loops">
+              <LoopTabs />
+            </AccordionItem>
 
-          <Collapse label="Share" defaultOpen={false} size="xl">
-            <ShareTabs />
-          </Collapse>
-        </ProjectWrapper>
+            <AccordionItem key={"Share"} aria-label="Share" title="Share">
+              <ShareTabs />
+            </AccordionItem>
+          </Accordion>
+        </div>
       </section>
     </PlayerContext.Provider>
   );

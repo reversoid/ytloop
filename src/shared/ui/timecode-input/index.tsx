@@ -3,6 +3,8 @@ import { FC, useEffect } from "react";
 import { timecodeToSeconds } from "./utils/transform";
 import { useTimecodeDisplayValue } from "./utils/use-timecode-value";
 import ReactInputMask from "react-input-mask";
+import { Button, Input, Tooltip } from "@nextui-org/react";
+import { useInputMask, withMask } from "use-mask-input";
 
 export interface TimecodeInputProps {
   value: number | null;
@@ -31,48 +33,54 @@ export const TimecodeInput: FC<TimecodeInputProps> = ({
     onChange(seconds ?? -1);
   }, [displayValue, onChange]);
 
+  const maskRef = useInputMask({
+    mask: "99:99.999",
+    options: { placeholder: "", jitMasking: true, showMaskOnHover: false },
+  });
+
   return (
-    <label className="form-control w-full">
-      <div className="label">
-        <span className="label-text">{label}</span>
-      </div>
-      <div className="gap-2 flex flex-col sm:flex-row">
-        <ReactInputMask
-          mask={"99:99.999"}
-          maskChar={""}
-          inputMode="numeric"
-          placeholder="mm:ss:SSS"
+    <div className="w-full">
+      <div className="gap-3 flex flex-col sm:flex-row">
+        <Input
+          label={label}
+          ref={maskRef}
           value={displayValue}
           onChange={(event) => setDisplayValue(event.target.value)}
+          inputMode="numeric"
           type="text"
-          className="input input-bordered w-full"
+          size="lg"
+          placeholder="mm:ss.SSS"
+          labelPlacement="outside"
         />
-        <div className="flex gap-1">
-          <div className="tooltip" data-tip={`Subtract ${stepValue}s`}>
-            <button
+
+        <div className="flex gap-1 items-end">
+          <Tooltip content={`Subtract ${stepValue}s`}>
+            <Button
               onClick={() => value && onChange(value - stepValue)}
-              className="btn btn-square"
+              isIconOnly
+              size="lg"
             >
               <IconMinus />
-            </button>
-          </div>
+            </Button>
+          </Tooltip>
 
-          <div className="tooltip" data-tip={`Add ${stepValue}s`}>
-            <button
+          <Tooltip content={`Add ${stepValue}s`}>
+            <Button
               onClick={() => value && onChange(value + stepValue)}
-              className="btn btn-square"
+              isIconOnly
+              size="lg"
             >
               <IconPlus />
-            </button>
-          </div>
+            </Button>
+          </Tooltip>
 
-          <div className="tooltip" data-tip="Take from current video position">
-            <button onClick={onTakeFromVideo} className="btn btn-square">
+          <Tooltip content="Take from current video position">
+            <Button onClick={onTakeFromVideo} isIconOnly size="lg">
               <IconArrowBadgeDown />
-            </button>
-          </div>
+            </Button>
+          </Tooltip>
         </div>
       </div>
-    </label>
+    </div>
   );
 };
