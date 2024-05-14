@@ -15,7 +15,7 @@ export interface PlayerProps {
 const Player: FC<PlayerProps> = memo(({ onProgress, url, refCallback }) => {
   const [playing, setPlaying] = useAtom(workspaceIsPlayingAtom);
 
-  const [playbackRate, setPlaybackRate] = useState(1);
+  const [playbackRate, setPlaybackRate] = useState(new Set([1]));
 
   return (
     <div className="flex flex-col sm:flex-row justify-between gap-5 mt-1">
@@ -31,7 +31,7 @@ const Player: FC<PlayerProps> = memo(({ onProgress, url, refCallback }) => {
           controls={true}
           progressInterval={1}
           url={url}
-          playbackRate={playbackRate}
+          playbackRate={Array.from(playbackRate)[0]}
         />
       </div>
 
@@ -40,8 +40,14 @@ const Player: FC<PlayerProps> = memo(({ onProgress, url, refCallback }) => {
         <Select
           label="Playback rate"
           className="mt-2"
-          value={playbackRate}
-          onChange={(e) => setPlaybackRate(Number(e.target.value))}
+          selectedKeys={playbackRate}
+          onChange={(e) =>
+            setPlaybackRate((prev) => {
+              prev.clear();
+              prev.add(Number(e.target.value));
+              return new Set(prev);
+            })
+          }
         >
           <SelectItem key={0.25} value={0.25}>
             0.25

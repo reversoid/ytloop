@@ -39,12 +39,10 @@ export const TimecodeInput: FC<TimecodeInputProps> = ({
   });
 
   return (
-    <label className="form-control w-full">
-      <div className="label">
-        <span className="label-text">{label}</span>
-      </div>
+    <div className="w-full">
       <div className="gap-3 flex flex-col sm:flex-row">
         <Input
+          label={label}
           ref={maskRef}
           value={displayValue}
           onChange={(event) => setDisplayValue(event.target.value)}
@@ -52,6 +50,7 @@ export const TimecodeInput: FC<TimecodeInputProps> = ({
           type="text"
           size="lg"
           placeholder="mm:ss.SSS"
+          labelPlacement="outside"
         />
 
         <div className="flex gap-1">
@@ -82,6 +81,6 @@ export const TimecodeInput: FC<TimecodeInputProps> = ({
           </Tooltip>
         </div>
       </div>
-    </label>
+    </div>
   );
 };
