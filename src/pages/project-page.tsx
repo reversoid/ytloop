@@ -61,7 +61,7 @@ const ProjectPage: FC = () => {
         getCurrentTime: ref.current?.getCurrentTime,
       }}
     >
-      <section className="prose max-w-screen-xl mx-auto pt-5 px-2">
+      <section className="prose max-w-screen-xl mx-auto py-5 px-2">
         <h1>{project.name}</h1>
         {/* TODO make project settings in page head */}
 

@@ -3,6 +3,7 @@ import { useAtom } from "jotai";
 import { FC, memo } from "react";
 import ReactPlayer from "react-player";
 import { OnProgressProps } from "react-player/base";
+import styles from "./styles.module.css";
 
 export interface PlayerProps {
   onProgress: (props: OnProgressProps) => void;
@@ -14,9 +15,10 @@ const Player: FC<PlayerProps> = memo(({ onProgress, url, refCallback }) => {
   const [playing, setPlaying] = useAtom(workspaceIsPlayingAtom);
 
   return (
-    <div className="rounded-md overflow-hidden">
+    <div
+      className={`max-w-2xl rounded-xl overflow-hidden ${styles["player-wrapper"]}`}
+    >
       <ReactPlayer
-        style={{ borderRadius: "1rem !important" }}
         playing={playing}
         onPlay={() => setPlaying(true)}
         onPause={() => setPlaying(false)}
