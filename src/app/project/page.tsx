@@ -7,7 +7,7 @@ import {
   projectToQuery,
   queryToProject,
 } from "@/features/sync-project-with-query/utils/transform";
-import ProjectPage from "@/pages/project-page";
+import ProjectPage from "@/_pages/project-page";
 import { useHydrateAtoms } from "jotai/utils";
 import { useRouter, useSearchParams } from "next/navigation";
 import QueryString from "qs";
