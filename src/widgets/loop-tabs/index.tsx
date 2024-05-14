@@ -1,45 +1,54 @@
 import { projectLoopsAtom } from "@/entities/project/model";
 import { createNewLoop } from "@/entities/project/utils/create-new-loop";
 import { workspaceCurrentLoopAtom } from "@/entities/workspace/model";
-import { Tabs } from "@/shared/ui/tabs";
 import { useAtom } from "jotai";
 import { LoopBlock } from "../loop-block";
 import { useSyncLoops } from "./utils/use-sync-loops";
+import { Tab, Tabs } from "@nextui-org/react";
+import { useId } from "react";
 
 export const LoopTabs = () => {
   const [projectLoops, setProjectLoops] = useAtom(projectLoopsAtom);
   const [currentLoop, setCurrentLoop] = useAtom(workspaceCurrentLoopAtom);
 
+  const newTabKey = useId();
+
   useSyncLoops();
+
+  const handleNewLoop = () => {
+    const newLoop = createNewLoop({
+      postfixNumber: (projectLoops?.length ?? 0) + 1,
+    });
+
+    setProjectLoops((loops) => {
+      if (!loops) {
+        return null;
+      }
+      return [...loops, newLoop];
+    });
+
+    setCurrentLoop(newLoop);
+  };
 
   return (
     <Tabs
-      tabs={(projectLoops ?? [])
-        ?.map((loop) => ({
-          content: <LoopBlock />,
-          onSelected: () => setCurrentLoop(loop),
-          selected: currentLoop?.id === loop.id,
-          title: loop.name,
-        }))
-        .concat({
-          title: "New",
-          selected: false,
-          content: <></>,
-          onSelected: () => {
-            const newLoop = createNewLoop({
-              postfixNumber: (projectLoops?.length ?? 0) + 1,
-            });
+      size="lg"
+      selectedKey={currentLoop?.id}
+      onSelectionChange={(key) => {
+        if (key === newTabKey) {
+          handleNewLoop();
+        } else {
+          setCurrentLoop(projectLoops?.find((l) => l.id === key) ?? null);
+        }
+      }}
+    >
+      {projectLoops?.map((loop) => (
+        <Tab title={loop.name} key={loop.id}>
+          <LoopBlock />
+        </Tab>
+      ))}
 
-            setProjectLoops((loops) => {
-              if (!loops) {
-                return null;
-              }
-              return [...loops, newLoop];
-            });
-
-            setCurrentLoop(newLoop);
-          },
-        })}
-    ></Tabs>
+      <Tab title={"new"} key={newTabKey}></Tab>
+    </Tabs>
   );
 };

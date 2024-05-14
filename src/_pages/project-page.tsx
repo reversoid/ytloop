@@ -66,8 +66,17 @@ const ProjectPage: FC = () => {
           <h1 className="font-black text-2xl">{project.name}</h1>
         </div>
 
-        <Accordion variant="splitted" selectionMode="multiple">
-          <AccordionItem aria-label="Video" title="Video" keepContentMounted>
+        <Accordion
+          defaultExpandedKeys={["Loops"]}
+          variant="splitted"
+          selectionMode="multiple"
+        >
+          <AccordionItem
+            key={"Video"}
+            aria-label="Video"
+            title="Video"
+            keepContentMounted
+          >
             <Player
               onProgress={handleProgress}
               url={`https://www.youtube.com/watch?v=${project.videoId}`}
@@ -77,11 +86,11 @@ const ProjectPage: FC = () => {
             />
           </AccordionItem>
 
-          <AccordionItem aria-label="Loops" title="Loops">
+          <AccordionItem key={"Loops"} aria-label="Loops" title="Loops">
             <LoopTabs />
           </AccordionItem>
 
-          <AccordionItem aria-label="Share" title="Share">
+          <AccordionItem key={"Share"} aria-label="Share" title="Share">
             <ShareTabs />
           </AccordionItem>
         </Accordion>

@@ -1,3 +1,4 @@
+import { Button } from "@nextui-org/react";
 import { FC } from "react";
 
 export interface PlayButtonProps {
@@ -15,25 +16,28 @@ export const PlayButton: FC<PlayButtonProps> = ({
 }) => {
   if (isPlaying) {
     return (
-      <button
+      <Button
+        fullWidth
+        color="primary"
+        variant="bordered"
         onClick={onStop}
-        className={`btn btn-primary btn-outline w-full ${
-          disabled && "btn-disabled no-animation"
-        }`}
+        isDisabled={disabled}
+        size="lg"
       >
         Stop
-      </button>
+      </Button>
     );
   }
 
   return (
-    <button
+    <Button
+      fullWidth
+      color="primary"
       onClick={onPlay}
-      className={`btn btn-primary w-full ${
-        disabled && "btn-disabled no-animation"
-      }`}
+      isDisabled={disabled}
+      size="lg"
     >
       Play
-    </button>
+    </Button>
   );
 };
