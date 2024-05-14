@@ -41,7 +41,7 @@ export const TimecodeInput: FC<TimecodeInputProps> = ({
           mask={"99:99.999"}
           maskChar={""}
           inputMode="numeric"
-          placeholder="hh:mm:SSS"
+          placeholder="mm:ss:SSS"
           value={displayValue}
           onChange={(event) => setDisplayValue(event.target.value)}
           type="text"
