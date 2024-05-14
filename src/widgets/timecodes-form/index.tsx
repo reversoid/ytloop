@@ -57,6 +57,7 @@ export const TimecodesForm = () => {
         stepValue={stepValue}
         onTakeFromVideo={() => {
           const currentTime = getCurrentTime?.();
+
           if (currentTime !== undefined) {
             setEndValue(currentTime);
           }

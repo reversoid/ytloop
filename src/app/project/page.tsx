@@ -3,25 +3,30 @@
 import { projectAtom } from "@/entities/project/model";
 import { createNewProject } from "@/entities/project/utils/create-new-project";
 import { workspaceCurrentLoopAtom } from "@/entities/workspace/model";
-import { queryToProject } from "@/features/sync-project-with-query/utils/transform";
+import {
+  projectToQuery,
+  queryToProject,
+} from "@/features/sync-project-with-query/utils/transform";
 import ProjectPage from "@/pages/project-page";
 import { useHydrateAtoms } from "jotai/utils";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import QueryString from "qs";
 import { useMemo } from "react";
 
-export default function Page({
-  searchParams,
-}: {
-  searchParams: Record<string, string>;
-}) {
+export default function Page() {
   const router = useRouter();
-  const videoId = searchParams["videoId"];
-
-  const stringifiedParams = new URLSearchParams(searchParams).toString();
+  const params = useSearchParams();
+  const videoId = params?.get("videoId");
 
   const project = useMemo(
-    () => queryToProject(stringifiedParams) || createNewProject(videoId ?? ""),
-    [stringifiedParams, videoId]
+    () => {
+      return (
+        queryToProject(params?.toString() ?? "") ||
+        createNewProject(videoId ?? "")
+      );
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
   );
 
   useHydrateAtoms([

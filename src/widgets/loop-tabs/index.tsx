@@ -1,25 +1,16 @@
+import { projectLoopsAtom } from "@/entities/project/model";
+import { createNewLoop } from "@/entities/project/utils/create-new-loop";
+import { workspaceCurrentLoopAtom } from "@/entities/workspace/model";
 import { Tab, Tabs } from "@/shared/ui/tabs";
+import { useAtom, useAtomValue } from "jotai";
 import { TimecodesForm } from "../timecodes-form";
 import { useSyncLoops } from "./utils/use-sync-loops";
-import { createNewLoop } from "@/entities/project/utils/create-new-loop";
-import { useEffect, useLayoutEffect } from "react";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { projectLoopsAtom } from "@/entities/project/model";
-import { workspaceCurrentLoopAtom } from "@/entities/workspace/model";
-import { useHydrateAtoms } from "jotai/utils";
-
-const useSetInitialLoop = () => {
-  const projectLoops = useAtomValue(projectLoopsAtom);
-  const setCurrentLoop = useSetAtom(workspaceCurrentLoopAtom);
-};
 
 export const LoopTabs = () => {
   const projectLoops = useAtomValue(projectLoopsAtom);
   const [currentLoop, setCurrentLoop] = useAtom(workspaceCurrentLoopAtom);
 
   useSyncLoops();
-
-  useSetInitialLoop();
 
   return (
     <Tabs>
