@@ -67,6 +67,9 @@ export const TimecodesForm = () => {
       <div className="sm:max-w-md mt-5">
         <PlayButton
           isPlaying={isPlaying}
+          disabled={
+            currentLoop?.from === undefined || currentLoop.to === undefined
+          }
           onPlay={() => setIsPlaying(true)}
           onStop={() => {
             setIsPlaying(false);
