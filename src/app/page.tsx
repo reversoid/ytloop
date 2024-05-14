@@ -1,5 +1,6 @@
 "use client";
 
+import { Button, Input } from "@nextui-org/react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -18,31 +19,35 @@ export default function Home() {
   const videoId = useVideoId(inputValue);
 
   return (
-    <section className="hero min-h-screen bg-base-200">
-      <div className="hero-content text-center">
+    <section className="h-screen">
+      <div className="flex items-center justify-center h-full">
         <div className="max-w-md">
-          <h1 className="text-5xl font-bold">Loop any YouTube video</h1>
-          <p className="py-6">
+          <h1 className="text-5xl font-bold text-center">
+            Loop any YouTube video
+          </h1>
+          <p className="py-6 text-center">
             Free, beatiful and easy-to-use service for musicians, allowing them
             to loop specific parts of YouTube video.
           </p>
 
-          <input
-            type="text"
+          <Input
+            size="lg"
             placeholder="Video URL"
-            className="input input-bordered w-full"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
           />
 
-          <Link
+          <Button
             href={`/project?videoId=${videoId}`}
-            className={`mt-6 btn btn-primary w-full ${
-              inputValue && videoId ? "" : "btn-disabled"
-            }`}
+            isDisabled={!(inputValue && videoId)}
+            color="primary"
+            className="mt-5"
+            fullWidth
+            size="lg"
+            as={"a"}
           >
             Start
-          </Link>
+          </Button>
         </div>
       </div>
     </section>

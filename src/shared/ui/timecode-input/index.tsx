@@ -53,7 +53,7 @@ export const TimecodeInput: FC<TimecodeInputProps> = ({
           labelPlacement="outside"
         />
 
-        <div className="flex gap-1">
+        <div className="flex gap-1 items-end">
           <Tooltip content={`Subtract ${stepValue}s`}>
             <Button
               onClick={() => value && onChange(value - stepValue)}
