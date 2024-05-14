@@ -17,7 +17,7 @@ const Player: FC<PlayerProps> = memo(({ onProgress, url, refCallback }) => {
   const [playbackRate, setPlaybackRate] = useState(1);
 
   return (
-    <div className="flex justify-between gap-5 mt-1">
+    <div className="flex flex-col sm:flex-row justify-between gap-5 mt-1">
       <div
         className={`w-full max-w-2xl rounded-xl overflow-hidden flex-grow ${styles["player-wrapper"]}`}
       >
