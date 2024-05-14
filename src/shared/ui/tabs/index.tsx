@@ -32,7 +32,7 @@ export const Tabs: FC<TabsProps> = ({ tabs }) => {
         })}
       </div>
 
-      <div className="p-2 bg-base-100 border-l border-r border-b rounded-lg rounded-tl-none  border-base-300">
+      <div className="p-4 bg-base-100 border-l border-r border-b rounded-lg rounded-tl-none  border-base-300">
         {tabs?.map((t) =>
           t.selected ? (
             <React.Fragment key={`title-${t.title}`}>

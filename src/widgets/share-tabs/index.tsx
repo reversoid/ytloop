@@ -41,7 +41,7 @@ export const ShareTabs = () => {
           selected: selectedTab === "full",
           onSelected: () => setSelectedTab("full"),
           content: (
-            <>
+            <div className="prose">
               <p className="mt-0">
                 The project will have all loops, available in this workspace
               </p>
@@ -52,7 +52,7 @@ export const ShareTabs = () => {
               >
                 {isCopied ? <IconCheck /> : "Copy link"}
               </button>
-            </>
+            </div>
           ),
         },
         {
@@ -60,7 +60,7 @@ export const ShareTabs = () => {
           selected: selectedTab === "selected",
           onSelected: () => setSelectedTab("selected"),
           content: (
-            <>
+            <div className="prose">
               <p className="mt-0">The project will have only selected loops:</p>
 
               <form
@@ -116,7 +116,7 @@ export const ShareTabs = () => {
                   {isCopied ? <IconCheck /> : "Copy link"}
                 </button>
               </form>
-            </>
+            </div>
           ),
         },
       ]}
