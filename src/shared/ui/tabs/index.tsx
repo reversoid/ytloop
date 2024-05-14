@@ -11,7 +11,7 @@ export const Tab: FC<
     <>
       <input
         type="radio"
-        name="my_tabs"
+        name={title}
         role="tab"
         className="tab"
         aria-label={title}

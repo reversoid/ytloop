@@ -20,6 +20,7 @@
     "react-input-mask": "^2.0.4",
     "react-player": "^2.16.0",
     "sqids": "^0.3.0",
+    "usehooks-ts": "^3.1.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {

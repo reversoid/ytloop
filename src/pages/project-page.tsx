@@ -16,6 +16,7 @@ import { LoopTabs } from "@/widgets/loop-tabs";
 import { useAtom, useAtomValue } from "jotai";
 import dynamic from "next/dynamic";
 import { ProjectWrapper } from "./ui/wrapper";
+import { ShareTabs } from "@/widgets/share-tabs";
 
 const Player = dynamic(() => import("../widgets/player"), {
   ssr: false,
@@ -80,7 +81,7 @@ const ProjectPage: FC = () => {
           </Collapse>
 
           <Collapse label="Share" defaultOpen={false} size="xl">
-            Some variants of export
+            <ShareTabs />
           </Collapse>
         </ProjectWrapper>
       </section>

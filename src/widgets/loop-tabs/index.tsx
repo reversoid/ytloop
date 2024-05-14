@@ -31,6 +31,7 @@ export const LoopTabs = () => {
 
       <Tab
         title="New"
+        selected={false}
         onSelected={() => {
           const newLoop = createNewLoop({
             postfixNumber: (projectLoops?.length ?? 0) + 1,
