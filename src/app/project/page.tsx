@@ -1,19 +1,15 @@
 "use client";
 
+import ProjectPage from "@/_pages/project-page";
 import { projectAtom } from "@/entities/project/model";
 import { createNewProject } from "@/entities/project/utils/create-new-project";
 import { workspaceCurrentLoopAtom } from "@/entities/workspace/model";
-import {
-  projectToQuery,
-  queryToProject,
-} from "@/features/sync-project-with-query/utils/transform";
-import ProjectPage from "@/_pages/project-page";
+import { queryToProject } from "@/features/sync-project-with-query/utils/transform";
 import { useHydrateAtoms } from "jotai/utils";
 import { useRouter, useSearchParams } from "next/navigation";
-import QueryString from "qs";
-import { useMemo } from "react";
+import { Suspense, useMemo } from "react";
 
-export default function Page() {
+const PageContent = () => {
   const router = useRouter();
   const params = useSearchParams();
   const videoId = params?.get("videoId");
@@ -35,8 +31,17 @@ export default function Page() {
   ]);
 
   if (!videoId) {
-    return router.replace("/");
+    router.replace("/");
+    return <></>;
   }
 
   return <ProjectPage />;
+};
+
+export default function Page() {
+  return (
+    <Suspense>
+      <PageContent />
+    </Suspense>
+  );
 }
