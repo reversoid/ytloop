@@ -16,14 +16,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <AppProviders>
-      <html lang="en">
-        <body className={inter.className}>
+    <html lang="en">
+      <body className={inter.className}>
+        <AppProviders>
           {/* <header className="h-16 bg-base-100 border-b-2">Some header</header> */}
           <main>{children}</main>
-          <footer></footer>
-        </body>
-      </html>
-    </AppProviders>
+        </AppProviders>
+
+        <footer></footer>
+      </body>
+    </html>
   );
 }

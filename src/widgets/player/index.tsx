@@ -4,6 +4,7 @@ import { FC, memo, useState } from "react";
 import ReactPlayer from "react-player";
 import { OnProgressProps } from "react-player/base";
 import styles from "./styles.module.css";
+import { Select, SelectItem } from "@nextui-org/react";
 
 export interface PlayerProps {
   onProgress: (props: OnProgressProps) => void;
@@ -36,20 +37,37 @@ const Player: FC<PlayerProps> = memo(({ onProgress, url, refCallback }) => {
 
       <div className="w-full">
         <h6 className="font-bold">Playback rate</h6>
-        <select
-          className="p-2 select mt-2 w-full"
+        <Select
+          label="Playback rate"
+          className="mt-2"
           value={playbackRate}
           onChange={(e) => setPlaybackRate(Number(e.target.value))}
         >
-          <option value={0.25}>0.25</option>
-          <option value={0.5}>0.5</option>
-          <option value={0.75}>0.75</option>
-          <option value={1}>Default speed</option>
-          <option value={1.25}>1.25</option>
-          <option value={1.5}>1.5</option>
-          <option value={1.75}>1.75</option>
-          <option value={2}>2</option>
-        </select>
+          <SelectItem key={0.25} value={0.25}>
+            0.25
+          </SelectItem>
+          <SelectItem key={0.5} value={0.5}>
+            0.5
+          </SelectItem>
+          <SelectItem key={0.75} value={0.75}>
+            0.75
+          </SelectItem>
+          <SelectItem key={1} value={1}>
+            Default speed
+          </SelectItem>
+          <SelectItem key={1.25} value={1.25}>
+            1.25
+          </SelectItem>
+          <SelectItem key={1.5} value={1.5}>
+            1.5
+          </SelectItem>
+          <SelectItem key={1.75} value={1.75}>
+            1.75
+          </SelectItem>
+          <SelectItem key={2} value={2}>
+            2
+          </SelectItem>
+        </Select>
       </div>
     </div>
   );
