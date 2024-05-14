@@ -22,7 +22,7 @@ export const Collapse: FC<PropsWithChildren<CollapseProps>> = ({
       >
         {label}
       </div>
-      <div className="collapse-content">{children}</div>
+      <div className="collapse-content overflow-hidden">{children}</div>
     </div>
   );
 };
