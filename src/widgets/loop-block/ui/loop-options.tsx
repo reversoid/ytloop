@@ -49,7 +49,7 @@ export const LoopOptions = () => {
         onClick={() => dialogRef.current?.showModal()}
         className="btn btn-neutral no-animation"
       >
-        Settings <IconSettings />
+        Settings
       </button>
 
       <dialog ref={dialogRef} className="modal">

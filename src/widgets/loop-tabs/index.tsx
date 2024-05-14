@@ -2,12 +2,12 @@ import { projectLoopsAtom } from "@/entities/project/model";
 import { createNewLoop } from "@/entities/project/utils/create-new-loop";
 import { workspaceCurrentLoopAtom } from "@/entities/workspace/model";
 import { Tab, Tabs } from "@/shared/ui/tabs";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom } from "jotai";
 import { LoopBlock } from "../loop-block";
 import { useSyncLoops } from "./utils/use-sync-loops";
 
 export const LoopTabs = () => {
-  const projectLoops = useAtomValue(projectLoopsAtom);
+  const [projectLoops, setProjectLoops] = useAtom(projectLoopsAtom);
   const [currentLoop, setCurrentLoop] = useAtom(workspaceCurrentLoopAtom);
 
   useSyncLoops();
@@ -32,9 +32,18 @@ export const LoopTabs = () => {
       <Tab
         title="New"
         onSelected={() => {
-          setCurrentLoop(
-            createNewLoop({ postfixNumber: (projectLoops?.length ?? 0) + 1 })
-          );
+          const newLoop = createNewLoop({
+            postfixNumber: (projectLoops?.length ?? 0) + 1,
+          });
+
+          setProjectLoops((loops) => {
+            if (!loops) {
+              return null;
+            }
+            return [...loops, newLoop];
+          });
+
+          setCurrentLoop(newLoop);
         }}
       ></Tab>
     </Tabs>
