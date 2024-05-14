@@ -7,7 +7,10 @@ export const useTimecodeValue = (seconds: number | null) => {
   );
 
   useEffect(() => {
-    setValue(seconds === null ? "" : secondsToTimecode(seconds) ?? "");
+    setValue(
+      (prevValue) =>
+        prevValue || (seconds === null ? "" : secondsToTimecode(seconds) ?? "")
+    );
   }, [seconds]);
 
   return [value, setValue] as const;
