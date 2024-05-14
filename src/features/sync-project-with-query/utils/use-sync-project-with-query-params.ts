@@ -13,7 +13,7 @@ export const useSyncProjectWithQueryParams = (project: Project): Project => {
   useEffect(() => {
     if (savedProject) {
       const query = projectToQuery(savedProject);
-      router.replace(pathname?.split("?")[0] + `?${query}`);
+      router.replace(pathname?.split("?")[0] + `?${query}`, { scroll: false });
     }
   }, [savedProject, pathname, router]);
 

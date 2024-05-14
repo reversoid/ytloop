@@ -1,31 +1,27 @@
 "use client";
 import { Collapse } from "@/shared/ui/collapse";
-import { FC, useRef } from "react";
+import { FC, useCallback, useRef } from "react";
 import ReactPlayer from "react-player";
 import { OnProgressProps } from "react-player/base";
 
+import { projectAtom } from "@/entities/project/model";
+import { isLoopValid } from "@/entities/project/utils/is-loop-valid";
 import {
   workspaceCurrentLoopAtom,
   workspaceIsPlayingAtom,
 } from "@/entities/workspace/model";
+import { useSyncProjectWithQueryParams } from "@/features/sync-project-with-query/utils/use-sync-project-with-query-params";
+import { PlayerContext } from "@/shared/utils/player-context";
 import { LoopTabs } from "@/widgets/loop-tabs";
 import { useAtom, useAtomValue } from "jotai";
 import dynamic from "next/dynamic";
-import { isLoopValid } from "@/entities/project/utils/is-loop-valid";
 import { ProjectWrapper } from "./ui/wrapper";
-import { PlayerContext } from "@/shared/utils/player-context";
-import { Project, projectAtom as projectAtom } from "@/entities/project/model";
-import { useSyncProjectWithQueryParams } from "@/features/sync-project-with-query/utils/use-sync-project-with-query-params";
-import { useHydrateAtoms } from "jotai/utils";
 
-const Player = dynamic(
-  () => import("../widgets/player").then((p) => p.Player),
-  {
-    ssr: false,
-  }
-);
+const Player = dynamic(() => import("../widgets/player"), {
+  ssr: false,
+});
 
-export const ProjectPage: FC = () => {
+const ProjectPage: FC = () => {
   const project = useAtomValue(projectAtom)!;
 
   useSyncProjectWithQueryParams(project);
@@ -73,7 +69,9 @@ export const ProjectPage: FC = () => {
             <Player
               onProgress={handleProgress}
               url={`https://www.youtube.com/watch?v=${project.videoId}`}
-              refCallback={(player) => (ref.current = player)}
+              refCallback={(player: ReactPlayer | null) =>
+                (ref.current = player)
+              }
             />
           </Collapse>
 
@@ -89,3 +87,7 @@ export const ProjectPage: FC = () => {
     </PlayerContext.Provider>
   );
 };
+
+ProjectPage.displayName = "ProjectPage";
+
+export default ProjectPage;

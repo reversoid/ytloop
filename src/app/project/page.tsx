@@ -4,7 +4,7 @@ import { projectAtom } from "@/entities/project/model";
 import { createNewProject } from "@/entities/project/utils/create-new-project";
 import { workspaceCurrentLoopAtom } from "@/entities/workspace/model";
 import { queryToProject } from "@/features/sync-project-with-query/utils/transform";
-import { ProjectPage } from "@/pages/project-page";
+import ProjectPage from "@/pages/project-page";
 import { useHydrateAtoms } from "jotai/utils";
 import { useRouter } from "next/navigation";
 import { useMemo } from "react";
@@ -21,7 +21,7 @@ export default function Page({
 
   const project = useMemo(
     () => queryToProject(stringifiedParams) || createNewProject(videoId ?? ""),
-    []
+    [stringifiedParams, videoId]
   );
 
   useHydrateAtoms([

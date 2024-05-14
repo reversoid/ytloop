@@ -1,6 +1,6 @@
 import { workspaceIsPlayingAtom } from "@/entities/workspace/model";
 import { useAtom } from "jotai";
-import { FC } from "react";
+import { FC, memo } from "react";
 import ReactPlayer from "react-player";
 import { OnProgressProps } from "react-player/base";
 
@@ -10,7 +10,7 @@ export interface PlayerProps {
   refCallback?: (player: ReactPlayer | null) => void;
 }
 
-export const Player: FC<PlayerProps> = ({ onProgress, url, refCallback }) => {
+const Player: FC<PlayerProps> = memo(({ onProgress, url, refCallback }) => {
   const [playing, setPlaying] = useAtom(workspaceIsPlayingAtom);
 
   return (
@@ -28,4 +28,8 @@ export const Player: FC<PlayerProps> = ({ onProgress, url, refCallback }) => {
       />
     </div>
   );
-};
+});
+
+Player.displayName = "Player";
+
+export default Player;
