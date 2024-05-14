@@ -1,6 +1,6 @@
 "use client";
 import { Collapse } from "@/shared/ui/collapse";
-import { FC, useCallback, useRef } from "react";
+import { FC, useRef } from "react";
 import ReactPlayer from "react-player";
 import { OnProgressProps } from "react-player/base";
 
@@ -65,7 +65,7 @@ const ProjectPage: FC = () => {
         {/* TODO make project settings in page head */}
 
         <ProjectWrapper>
-          <Collapse label="Video" defaultOpen={false}>
+          <Collapse label="Video" defaultOpen={false} size="xl">
             <Player
               onProgress={handleProgress}
               url={`https://www.youtube.com/watch?v=${project.videoId}`}
@@ -75,11 +75,11 @@ const ProjectPage: FC = () => {
             />
           </Collapse>
 
-          <Collapse label="Loops" defaultOpen={true}>
+          <Collapse label="Loops" defaultOpen={true} size="xl">
             <LoopTabs />
           </Collapse>
 
-          <Collapse label="Export" defaultOpen={false}>
+          <Collapse label="Share" defaultOpen={false} size="xl">
             Some variants of export
           </Collapse>
         </ProjectWrapper>

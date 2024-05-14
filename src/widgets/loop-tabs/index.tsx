@@ -3,7 +3,7 @@ import { createNewLoop } from "@/entities/project/utils/create-new-loop";
 import { workspaceCurrentLoopAtom } from "@/entities/workspace/model";
 import { Tab, Tabs } from "@/shared/ui/tabs";
 import { useAtom, useAtomValue } from "jotai";
-import { TimecodesForm } from "../timecodes-form";
+import { LoopBlock } from "../loop-block";
 import { useSyncLoops } from "./utils/use-sync-loops";
 
 export const LoopTabs = () => {
@@ -24,7 +24,7 @@ export const LoopTabs = () => {
               setCurrentLoop(loop);
             }}
           >
-            <TimecodesForm />
+            <LoopBlock />
           </Tab>
         );
       })}
