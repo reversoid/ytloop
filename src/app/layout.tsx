@@ -35,7 +35,7 @@ export default function RootLayout({
             <main className="flex-grow">{children}</main>
 
             <footer className="h-16 border-t-1 flex justify-center items-center">
-              <div className="flex grow justify-between max-w-screen-lg items-center">
+              <div className="flex grow justify-between max-w-screen-lg px-2 items-center">
                 <Button
                   as={Link}
                   href="https://github.com/reversoid/ytloop"
