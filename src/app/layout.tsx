@@ -22,20 +22,22 @@ export default function RootLayout({
       <body>
         <AppProviders>
           <div className="flex flex-col h-full">
-            <header className="h-16 border-b-1 shrink-0 flex justify-center items-center">
-              <NextLink className="w-fit" href={"/"}>
-                <Image
-                  className="h-10 w-fit aspect-video"
-                  src={logo}
-                  alt="Logo image"
-                />
-              </NextLink>
+            <header className="h-16 border-b-1 shrink-0 flex justify-center">
+              <div className="h-16 grow flex items-center max-w-screen-xl">
+                <NextLink className="w-fit" href={"/"}>
+                  <Image
+                    className="h-10 w-fit aspect-video"
+                    src={logo}
+                    alt="Logo image"
+                  />
+                </NextLink>
+              </div>
             </header>
 
             <main className="flex-grow">{children}</main>
 
             <footer className="border-t-1 flex justify-center items-center">
-              <div className="h-16 flex grow justify-between max-w-screen-lg px-2 items-center">
+              <div className="h-16 flex grow justify-between max-w-screen-xl px-2 items-center">
                 <Button
                   as={Link}
                   href="https://github.com/reversoid/ytloop"
