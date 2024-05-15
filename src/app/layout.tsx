@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { AppProviders } from "@/core/app-providers";
-import { Link } from "@nextui-org/react";
+import { Button, Link } from "@nextui-org/react";
 import NextLink from "next/link";
 import Image from "next/image";
 import logo from "./static/logo.svg";
+import { IconAt } from "@tabler/icons-react";
 
 export const metadata: Metadata = {
   title: "YTLoop",
@@ -34,9 +35,9 @@ export default function RootLayout({
             <main className="flex-grow">{children}</main>
 
             <footer className="h-16 border-t-1 flex justify-center items-center">
-              <Link color="foreground" href="mailto:grenka7777777gmail.com">
-                Contact
-              </Link>
+              <Button as={Link} href="mailto:grenka7777777gmail.com">
+                <IconAt />
+              </Button>
             </footer>
           </div>
         </AppProviders>
