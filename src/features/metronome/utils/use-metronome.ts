@@ -7,7 +7,14 @@ interface UseMetronomeProps {
 }
 
 export const useMetronome = ({ bpm, onFinishedPlay }: UseMetronomeProps) => {
-  const audio = useMemo(() => new Audio("/metronome-click.mp3"), []);
+  const audio = useMemo(() => {
+    if (typeof window === undefined) {
+      return;
+    }
+    if (window.Audio) {
+      return new window.Audio("/metronome-click.mp3");
+    }
+  }, []);
 
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -15,8 +22,10 @@ export const useMetronome = ({ bpm, onFinishedPlay }: UseMetronomeProps) => {
   const playedAmountRef = useRef<number>(0);
 
   const playSound = () => {
-    audio.play();
-    playedAmountRef.current++;
+    if (audio) {
+      audio.play();
+      playedAmountRef.current++;
+    }
   };
 
   const play = (amount = Number.POSITIVE_INFINITY) => {

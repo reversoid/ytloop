@@ -9,17 +9,16 @@ export const loopSchema = z.object({
   description: z.string().optional(),
 });
 
-export const optionsSchema = z
-  .object({
-    bpm: z.coerce.number().optional(),
-    videoSpeed: z.coerce.number().optional(),
-  })
-  .optional();
+export const optionsSchema = z.object({
+  bpm: z.coerce.number().min(1).optional(),
+  videoSpeed: z.coerce.number().optional(),
+});
 
 export const projectSchema: ZodSchema<Project> = z.object({
   id: z.string(),
   loops: z.array(loopSchema).min(1),
   name: z.string(),
+  description: z.string().optional(),
   videoId: z.string(),
-  options: optionsSchema,
+  options: optionsSchema.optional(),
 });

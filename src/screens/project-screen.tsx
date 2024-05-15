@@ -15,8 +15,10 @@ import { LoopTabs } from "@/widgets/loop-tabs";
 import { useAtom, useAtomValue } from "jotai";
 import dynamic from "next/dynamic";
 import { ShareTabs } from "@/widgets/share-tabs";
-import { Accordion, AccordionItem } from "@nextui-org/react";
+import { Accordion, AccordionItem, Button } from "@nextui-org/react";
 import styles from "./ui/styles.module.css";
+import { IconSettings } from "@tabler/icons-react";
+import { ProjectSettingsButton } from "@/features/project-settings";
 
 const Player = dynamic(() => import("../widgets/player"), {
   ssr: false,
@@ -62,11 +64,12 @@ const ProjectPage: FC = () => {
       }}
     >
       <section className="max-w-screen-xl mx-auto py-5 px-2">
-        <div className="prose mb-5">
+        <div className="flex gap-3 items-center">
           <h1 className="font-black text-2xl">{project.name}</h1>
+          <ProjectSettingsButton />
         </div>
 
-        <div className={styles["accordion-wrapper"]}>
+        <div className={`mt-5 ${styles["accordion-wrapper"]}`}>
           <Accordion
             defaultExpandedKeys={["Loops"]}
             variant="splitted"
