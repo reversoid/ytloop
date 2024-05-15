@@ -105,16 +105,18 @@ export const TimecodesForm = () => {
       />
 
       <div className="mt-2 flex items-center gap-3">
-        <Checkbox
-          isSelected={tickBeforeStart}
-          onValueChange={(isSelected) => {
-            setTickBeforeStart(isSelected);
-          }}
-          isDisabled={!currentLoop?.bpm}
-          size="lg"
-        >
-          Tick before loop starts
-        </Checkbox>
+        <div className="py-1">
+          <Checkbox
+            isSelected={tickBeforeStart}
+            onValueChange={(isSelected) => {
+              setTickBeforeStart(isSelected);
+            }}
+            isDisabled={!currentLoop?.bpm}
+            size="lg"
+          >
+            Tick before loop starts
+          </Checkbox>
+        </div>
 
         {!currentLoop?.bpm && <DisabledTickExplanation />}
       </div>
