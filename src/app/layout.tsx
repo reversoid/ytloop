@@ -5,7 +5,7 @@ import { Button, Link } from "@nextui-org/react";
 import NextLink from "next/link";
 import Image from "next/image";
 import logo from "./static/logo.svg";
-import { IconAt } from "@tabler/icons-react";
+import { IconAt, IconBrandGithub } from "@tabler/icons-react";
 
 export const metadata: Metadata = {
   title: "YTLoop",
@@ -35,9 +35,20 @@ export default function RootLayout({
             <main className="flex-grow">{children}</main>
 
             <footer className="h-16 border-t-1 flex justify-center items-center">
-              <Button as={Link} href="mailto:grenka7777777gmail.com">
-                <IconAt />
-              </Button>
+              <div className="flex grow justify-between max-w-screen-lg items-center">
+                <Button
+                  as={Link}
+                  href="https://github.com/reversoid/ytloop"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <IconBrandGithub />
+                </Button>
+
+                <Button as={Link} href="mailto:grenka7777777gmail.com">
+                  <IconAt />
+                </Button>
+              </div>
             </footer>
           </div>
         </AppProviders>
