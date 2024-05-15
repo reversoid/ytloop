@@ -1,4 +1,11 @@
+import { projectOptionsAtom } from "@/entities/project/model";
+import { useAtomValue } from "jotai";
 import { useMemo, useRef, useState } from "react";
+
+const usePlaybackSpeed = () => {
+  const projectOptions = useAtomValue(projectOptionsAtom);
+  return projectOptions?.videoSpeed ?? 1;
+};
 
 interface UseMetronomeProps {
   bpm: number;
@@ -15,6 +22,8 @@ export const useMetronome = ({ bpm }: UseMetronomeProps) => {
   }, []);
 
   const [isPlaying, setIsPlaying] = useState(false);
+
+  const playbackSpeed = usePlaybackSpeed();
 
   const timerRef = useRef<NodeJS.Timeout>();
   const playedAmountRef = useRef<number>(0);
@@ -47,7 +56,7 @@ export const useMetronome = ({ bpm }: UseMetronomeProps) => {
         }
 
         playSound();
-      }, interval);
+      }, interval / playbackSpeed / 2);
     });
   };
 
