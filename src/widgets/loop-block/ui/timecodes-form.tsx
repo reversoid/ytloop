@@ -4,7 +4,7 @@ import {
   workspaceIsPlayingAtom,
 } from "@/entities/workspace/model";
 import { PlayButton } from "@/features/play-button";
-import { TimecodeInput } from "@/shared/ui/timecode-input";
+import { TimecodeInput } from "@/shared/timecode-input";
 import { PlayerContext } from "@/shared/utils/player-context";
 import { useAtom } from "jotai";
 import { useCallback, useContext, useState } from "react";

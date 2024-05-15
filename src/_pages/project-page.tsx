@@ -1,5 +1,4 @@
 "use client";
-import { Collapse } from "@/shared/ui/collapse";
 import { FC, useRef } from "react";
 import ReactPlayer from "react-player";
 import { OnProgressProps } from "react-player/base";
@@ -16,7 +15,7 @@ import { LoopTabs } from "@/widgets/loop-tabs";
 import { useAtom, useAtomValue } from "jotai";
 import dynamic from "next/dynamic";
 import { ShareTabs } from "@/widgets/share-tabs";
-import { Accordion, AccordionItem, Button } from "@nextui-org/react";
+import { Accordion, AccordionItem } from "@nextui-org/react";
 import styles from "./ui/styles.module.css";
 
 const Player = dynamic(() => import("../widgets/player"), {

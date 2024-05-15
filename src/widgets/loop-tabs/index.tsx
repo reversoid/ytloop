@@ -33,7 +33,8 @@ export const LoopTabs = () => {
 
   return (
     <Tabs
-      className="overflow-hidden"
+      className="overflow-auto"
+      classNames={{ base: "overflow-auto w-full" }}
       size="lg"
       selectedKey={currentLoop?.id}
       onSelectionChange={(key) => {
