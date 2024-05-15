@@ -6,6 +6,7 @@ export interface Loop {
   description?: string;
   from?: number;
   to?: number;
+  bpm?: number;
 }
 
 export interface ProjectOptions {

@@ -83,6 +83,7 @@ export const ShareTabs = () => {
                   className="form-control max-w-sm bg-base-200 rounded-md px-1"
                 >
                   <Checkbox
+                    size="lg"
                     isSelected={selectedLoops.has(loop.id)}
                     onValueChange={(selected) =>
                       setSelectedLoops((prev) => {

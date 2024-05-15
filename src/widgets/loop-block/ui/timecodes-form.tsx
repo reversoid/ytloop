@@ -9,8 +9,11 @@ import { useMetronome } from "@/features/metronome/utils/use-metronome";
 import { PlayButton } from "@/features/play-button";
 import { TimecodeInput } from "@/shared/timecode-input";
 import { PlayerContext } from "@/shared/utils/player-context";
+import { Checkbox } from "@nextui-org/react";
 import { useAtom } from "jotai";
 import { useCallback, useContext, useState } from "react";
+import { DisabledTickExplanation } from "./disabled-tick-explanation";
+import { useBoolean } from "usehooks-ts";
 
 export const TimecodesForm = () => {
   const [currentLoop, setCurrentLoop] = useAtom(workspaceCurrentLoopAtom);
@@ -35,8 +38,10 @@ export const TimecodesForm = () => {
 
   const [invalid, setInvalid] = useState(false);
 
+  const [tickBeforeStart, setTickBeforeStart] = useState(false);
+
   const metronome = useMetronome({
-    bpm: 90,
+    bpm: currentLoop?.bpm ?? -1,
   });
 
   return (
@@ -93,7 +98,22 @@ export const TimecodesForm = () => {
         }}
       />
 
-      <div className="sm:max-w-md mt-5">
+      <div className="mt-2 flex items-center gap-3">
+        <Checkbox
+          isSelected={tickBeforeStart}
+          onValueChange={(isSelected) => {
+            setTickBeforeStart(isSelected);
+          }}
+          isDisabled={!currentLoop?.bpm}
+          size="lg"
+        >
+          Tick before loop starts
+        </Checkbox>
+
+        <DisabledTickExplanation />
+      </div>
+
+      <div className="mt-1">
         <PlayButton
           isPlaying={isPlaying || metronome.isPlaying}
           disabled={
@@ -102,7 +122,11 @@ export const TimecodesForm = () => {
             currentLoop.to === undefined
           }
           onPlay={() => {
-            metronome.play(4).then(() => setIsPlaying(true));
+            if (tickBeforeStart) {
+              metronome.play(4).then(() => setIsPlaying(true));
+            } else {
+              setIsPlaying(true);
+            }
           }}
           onStop={() => {
             metronome.stop();

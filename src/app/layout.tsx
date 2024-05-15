@@ -23,7 +23,7 @@ export default function RootLayout({
         <AppProviders>
           <div className="flex flex-col h-full">
             <header className="h-16 border-b-1 shrink-0 flex justify-center">
-              <div className="h-16 grow flex items-center max-w-screen-xl">
+              <div className="px-2 h-16 grow flex items-center max-w-screen-xl">
                 <NextLink className="w-fit" href={"/"}>
                   <Image
                     className="h-10 w-fit aspect-video"

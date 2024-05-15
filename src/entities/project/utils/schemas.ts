@@ -1,12 +1,13 @@
 import { ZodSchema, z } from "zod";
-import { Project } from "../model";
+import { Loop, Project } from "../model";
 
-export const loopSchema = z.object({
+export const loopSchema: ZodSchema<Loop> = z.object({
   id: z.string(),
   name: z.string(),
   from: z.coerce.number().min(0).optional(),
   to: z.coerce.number().optional(),
   description: z.string().optional(),
+  bpm: z.number().min(1).optional(),
 });
 
 export const optionsSchema = z.object({

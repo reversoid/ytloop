@@ -26,6 +26,9 @@ export const OptionsModal: FC<OptionsModalProps> = ({ isOpen, onClose }) => {
   const [description, setDescription] = useState(
     currentLoop?.description ?? ""
   );
+  const [bpm, setBpm] = useState(
+    currentLoop?.bpm ? String(currentLoop?.bpm) : ""
+  );
 
   const canDelete = projectLoops?.length && projectLoops.length > 1;
   const removeLoop = () => {
@@ -51,7 +54,14 @@ export const OptionsModal: FC<OptionsModalProps> = ({ isOpen, onClose }) => {
       if (!l) {
         return null;
       }
-      return { ...l, name, description };
+
+      const numbericBpm = Number(bpm);
+      return {
+        ...l,
+        name,
+        description,
+        bpm: numbericBpm > 0 ? numbericBpm : currentLoop?.bpm,
+      };
     });
   };
 
@@ -86,6 +96,14 @@ export const OptionsModal: FC<OptionsModalProps> = ({ isOpen, onClose }) => {
                   size="lg"
                   label="Description"
                   placeholder="Enter some description"
+                />
+
+                <Input
+                  value={bpm}
+                  onChange={(e) => setBpm(e.target.value)}
+                  size="lg"
+                  label="BPM"
+                  placeholder="Current loop bpm"
                 />
               </form>
             </ModalBody>

@@ -9,16 +9,15 @@ import {
   workspaceCurrentLoopAtom,
   workspaceIsPlayingAtom,
 } from "@/entities/workspace/model";
+import { ProjectSettingsButton } from "@/features/project-settings";
 import { useSyncProjectWithQueryParams } from "@/features/sync-project-with-query/utils/use-sync-project-with-query-params";
 import { PlayerContext } from "@/shared/utils/player-context";
 import { LoopTabs } from "@/widgets/loop-tabs";
+import { ShareTabs } from "@/widgets/share-tabs";
+import { Accordion, AccordionItem } from "@nextui-org/react";
 import { useAtom, useAtomValue } from "jotai";
 import dynamic from "next/dynamic";
-import { ShareTabs } from "@/widgets/share-tabs";
-import { Accordion, AccordionItem, Button } from "@nextui-org/react";
 import styles from "./ui/styles.module.css";
-import { IconSettings } from "@tabler/icons-react";
-import { ProjectSettingsButton } from "@/features/project-settings";
 
 const Player = dynamic(() => import("../widgets/player"), {
   ssr: false,

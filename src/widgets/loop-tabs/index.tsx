@@ -1,7 +1,7 @@
-import { projectLoopsAtom } from "@/entities/project/model";
+import { projectLoopsAtom, projectOptionsAtom } from "@/entities/project/model";
 import { createNewLoop } from "@/entities/project/utils/create-new-loop";
 import { workspaceCurrentLoopAtom } from "@/entities/workspace/model";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { LoopBlock } from "../loop-block";
 import { useSyncLoops } from "./utils/use-sync-loops";
 import { Tab, Tabs } from "@nextui-org/react";
@@ -10,6 +10,7 @@ import { IconPlus } from "@tabler/icons-react";
 
 export const LoopTabs = () => {
   const [projectLoops, setProjectLoops] = useAtom(projectLoopsAtom);
+  const projectOptions = useAtomValue(projectOptionsAtom);
   const [currentLoop, setCurrentLoop] = useAtom(workspaceCurrentLoopAtom);
 
   const newTabKey = useId();
@@ -19,6 +20,7 @@ export const LoopTabs = () => {
   const handleNewLoop = () => {
     const newLoop = createNewLoop({
       postfixNumber: (projectLoops?.length ?? 0) + 1,
+      bpm: projectOptions?.bpm,
     });
 
     setProjectLoops((loops) => {
@@ -33,9 +35,9 @@ export const LoopTabs = () => {
 
   return (
     <Tabs
+      size="lg"
       className="overflow-auto"
       classNames={{ base: "overflow-auto w-full" }}
-      size="lg"
       selectedKey={currentLoop?.id}
       onSelectionChange={(key) => {
         if (key === newTabKey) {

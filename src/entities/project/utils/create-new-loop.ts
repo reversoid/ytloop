@@ -5,8 +5,10 @@ const createLoopId = () => createId(5);
 
 export const createNewLoop = ({
   postfixNumber,
+  bpm,
 }: {
   postfixNumber: number;
+  bpm?: number;
 }): Loop => {
-  return { id: createLoopId(), name: `New Loop ${postfixNumber}` };
+  return { id: createLoopId(), name: `New Loop ${postfixNumber}`, bpm };
 };

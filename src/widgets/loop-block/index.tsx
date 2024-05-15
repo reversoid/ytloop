@@ -1,4 +1,4 @@
-import { LoopOptions } from "./ui/loop-options";
+import { LoopOptionsButton } from "./ui/loop-options-button";
 import { TimecodesForm } from "./ui/timecodes-form";
 
 export const LoopBlock = () => {
@@ -7,7 +7,7 @@ export const LoopBlock = () => {
       <div className="mt-1">
         <TimecodesForm />
       </div>
-      <LoopOptions />
+      <LoopOptionsButton />
     </div>
   );
 };
