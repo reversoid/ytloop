@@ -1,12 +1,10 @@
-import { useAtomValue } from "jotai";
 import { useMemo, useRef, useState } from "react";
 
 interface UseMetronomeProps {
   bpm: number;
-  onFinishedPlay?: VoidFunction;
 }
 
-export const useMetronome = ({ bpm, onFinishedPlay }: UseMetronomeProps) => {
+export const useMetronome = ({ bpm }: UseMetronomeProps) => {
   const audio = useMemo(() => {
     if (typeof window === undefined) {
       return;
@@ -30,24 +28,27 @@ export const useMetronome = ({ bpm, onFinishedPlay }: UseMetronomeProps) => {
 
   const play = (amount = Number.POSITIVE_INFINITY) => {
     if (isPlaying) {
-      return;
+      return new Promise((_, reject) => reject("ALREADY_PLAYING"));
     }
-    setIsPlaying(true);
 
-    const bps = bpm / 60;
-    const interval = 1000 / bps;
+    return new Promise<void>((resolve) => {
+      setIsPlaying(true);
 
-    playSound();
-
-    timerRef.current = setInterval(() => {
-      if (playedAmountRef.current >= amount) {
-        onFinishedPlay?.();
-        stop();
-        return;
-      }
+      const bps = bpm / 60;
+      const interval = 1000 / bps;
 
       playSound();
-    }, interval);
+
+      timerRef.current = setInterval(() => {
+        if (playedAmountRef.current >= amount) {
+          resolve();
+          stop();
+          return;
+        }
+
+        playSound();
+      }, interval);
+    });
   };
 
   const stop = () => {

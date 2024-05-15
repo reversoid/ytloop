@@ -37,7 +37,6 @@ export const TimecodesForm = () => {
 
   const metronome = useMetronome({
     bpm: 90,
-    onFinishedPlay: () => setIsPlaying(true),
   });
 
   return (
@@ -103,7 +102,7 @@ export const TimecodesForm = () => {
             currentLoop.to === undefined
           }
           onPlay={() => {
-            metronome.play(4);
+            metronome.play(4).then(() => setIsPlaying(true));
           }}
           onStop={() => {
             metronome.stop();
