@@ -4,7 +4,7 @@ import { Project } from "../model";
 export const loopSchema = z.object({
   id: z.string(),
   name: z.string(),
-  from: z.coerce.number().optional(),
+  from: z.coerce.number().min(0).optional(),
   to: z.coerce.number().optional(),
   description: z.string().optional(),
 });
@@ -18,7 +18,7 @@ export const optionsSchema = z
 
 export const projectSchema: ZodSchema<Project> = z.object({
   id: z.string(),
-  loops: z.array(loopSchema),
+  loops: z.array(loopSchema).min(1),
   name: z.string(),
   videoId: z.string(),
   options: optionsSchema,
