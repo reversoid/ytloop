@@ -2,7 +2,7 @@ import { Loop } from "../model";
 
 type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 
-export type ValidLoop = PartialBy<Required<Loop>, "description">;
+export type ValidLoop = PartialBy<Required<Loop>, "description" | "bpm">;
 
 export const isLoopValid = (loop: Loop): loop is ValidLoop => {
   return Boolean(

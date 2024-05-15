@@ -7,11 +7,7 @@ const usePlaybackSpeed = () => {
   return projectOptions?.videoSpeed ?? 1;
 };
 
-interface UseMetronomeProps {
-  bpm: number;
-}
-
-export const useMetronome = ({ bpm }: UseMetronomeProps) => {
+export const useInitMetronome = () => {
   const audio = useMemo(() => {
     if (typeof window === undefined) {
       return;
@@ -35,9 +31,12 @@ export const useMetronome = ({ bpm }: UseMetronomeProps) => {
     }
   };
 
-  const play = (amount = Number.POSITIVE_INFINITY) => {
+  const play = (
+    bpm: number,
+    amount = Number.POSITIVE_INFINITY
+  ): Promise<void> => {
     if (isPlaying) {
-      return new Promise((_, reject) => reject("ALREADY_PLAYING"));
+      return new Promise<void>((_, reject) => reject("ALREADY_PLAYING"));
     }
 
     return new Promise<void>((resolve) => {

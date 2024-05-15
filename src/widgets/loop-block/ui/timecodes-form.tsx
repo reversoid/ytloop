@@ -3,9 +3,10 @@
 import {
   workspaceCurrentLoopAtom,
   workspaceDeltaAtom,
+  workspaceEnabledCountdown,
   workspaceIsPlayingAtom,
 } from "@/entities/workspace/model";
-import { useMetronome } from "@/features/metronome/utils/use-metronome";
+import { useInitMetronome } from "@/features/metronome/utils/use-init-metronome";
 import { PlayButton } from "@/features/play-button";
 import { TimecodeInput } from "@/shared/timecode-input";
 import { PlayerContext } from "@/shared/utils/player-context";
@@ -14,6 +15,7 @@ import { useAtom } from "jotai";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { DisabledTickExplanation } from "./disabled-tick-explanation";
 import { useBoolean } from "usehooks-ts";
+import { MetronomeContext } from "@/features/metronome/utils/metronome-context";
 
 export const TimecodesForm = () => {
   const [currentLoop, setCurrentLoop] = useAtom(workspaceCurrentLoopAtom);
@@ -38,17 +40,17 @@ export const TimecodesForm = () => {
 
   const [invalid, setInvalid] = useState(false);
 
-  const [tickBeforeStart, setTickBeforeStart] = useState(false);
+  const [tickBeforeStart, setTickBeforeStart] = useAtom(
+    workspaceEnabledCountdown
+  );
 
-  const metronome = useMetronome({
-    bpm: currentLoop?.bpm ?? -1,
-  });
+  const metronome = useContext(MetronomeContext);
 
   useEffect(() => {
     if (!currentLoop?.bpm) {
       setTickBeforeStart(false);
     }
-  }, [currentLoop?.bpm]);
+  }, [currentLoop?.bpm, setTickBeforeStart]);
 
   return (
     <form
@@ -131,7 +133,9 @@ export const TimecodesForm = () => {
           }
           onPlay={() => {
             if (tickBeforeStart) {
-              metronome.play(4).then(() => setIsPlaying(true));
+              metronome
+                .play(currentLoop?.bpm!, 4)
+                .then(() => setIsPlaying(true));
             } else {
               setIsPlaying(true);
             }
