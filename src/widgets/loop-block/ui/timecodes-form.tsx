@@ -1,8 +1,11 @@
+"use client";
+
 import {
   workspaceCurrentLoopAtom,
   workspaceDeltaAtom,
   workspaceIsPlayingAtom,
 } from "@/entities/workspace/model";
+import { useMetronome } from "@/features/metronome/utils/use-metronome";
 import { PlayButton } from "@/features/play-button";
 import { TimecodeInput } from "@/shared/timecode-input";
 import { PlayerContext } from "@/shared/utils/player-context";
@@ -31,6 +34,11 @@ export const TimecodesForm = () => {
   );
 
   const [invalid, setInvalid] = useState(false);
+
+  const metronome = useMetronome({
+    bpm: 90,
+    onFinishedPlay: () => setIsPlaying(true),
+  });
 
   return (
     <form
@@ -88,14 +96,18 @@ export const TimecodesForm = () => {
 
       <div className="sm:max-w-md mt-5">
         <PlayButton
-          isPlaying={isPlaying}
+          isPlaying={isPlaying || metronome.isPlaying}
           disabled={
             invalid ||
             currentLoop?.from === undefined ||
             currentLoop.to === undefined
           }
-          onPlay={() => setIsPlaying(true)}
+          onPlay={() => {
+            metronome.play(4);
+          }}
           onStop={() => {
+            metronome.stop();
+
             setIsPlaying(false);
             if (currentLoop?.from !== undefined) {
               seekTo?.(currentLoop?.from);

@@ -4,7 +4,7 @@ import { AppProviders } from "@/core/app-providers";
 import { Button, Link } from "@nextui-org/react";
 import NextLink from "next/link";
 import Image from "next/image";
-import logo from "./static/logo.svg";
+import logo from "@/assets/logo.svg";
 import { IconAt, IconBrandGithub } from "@tabler/icons-react";
 
 export const metadata: Metadata = {
