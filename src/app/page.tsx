@@ -19,7 +19,7 @@ export default function Home() {
   const videoId = useVideoId(inputValue);
 
   return (
-    <section className="h-screen">
+    <section className="h-full">
       <div className="flex items-center justify-center h-full">
         <div className="max-w-md px-3">
           <h1 className="text-5xl font-bold text-center">Loop YouTube video</h1>

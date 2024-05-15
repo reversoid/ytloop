@@ -1,6 +1,6 @@
 "use client";
 
-import ProjectPage from "@/_pages/project-page";
+import ProjectScreen from "@/screens/project-screen";
 import { projectAtom } from "@/entities/project/model";
 import { createNewProject } from "@/entities/project/utils/create-new-project";
 import { workspaceCurrentLoopAtom } from "@/entities/workspace/model";
@@ -35,7 +35,7 @@ const PageContent = () => {
     return <></>;
   }
 
-  return <ProjectPage />;
+  return <ProjectScreen />;
 };
 
 export default function Page() {

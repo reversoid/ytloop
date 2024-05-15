@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { AppProviders } from "@/core/app-providers";
-
-const inter = Inter({ subsets: ["latin"] });
+import { Link } from "@nextui-org/react";
+import NextLink from "next/link";
+import Image from "next/image";
+import logo from "./static/logo.svg";
 
 export const metadata: Metadata = {
   title: "YTLoop",
@@ -17,13 +18,28 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body>
         <AppProviders>
-          {/* <header className="h-16 bg-base-100 border-b-2">Some header</header> */}
-          <main>{children}</main>
-        </AppProviders>
+          <div className="flex flex-col h-full">
+            <header className="h-16 border-b-1 shrink-0 flex justify-center items-center">
+              <NextLink className="w-fit" href={"/"}>
+                <Image
+                  className="h-10 w-fit aspect-video"
+                  src={logo}
+                  alt="Logo image"
+                />
+              </NextLink>
+            </header>
 
-        <footer></footer>
+            <main className="flex-grow">{children}</main>
+
+            <footer className="h-16 border-t-1 flex justify-center items-center">
+              <Link color="foreground" href="mailto:grenka7777777gmail.com">
+                Contact
+              </Link>
+            </footer>
+          </div>
+        </AppProviders>
       </body>
     </html>
   );
