@@ -12,6 +12,7 @@ import {
 } from "@nextui-org/react";
 import { useAtom } from "jotai";
 import { FC, useId, useState } from "react";
+import { useInputMask } from "use-mask-input";
 
 export interface OptionsModalProps {
   isOpen: boolean;
@@ -56,16 +57,26 @@ export const OptionsModal: FC<OptionsModalProps> = ({ isOpen, onClose }) => {
       }
 
       const numbericBpm = Number(bpm);
+
       return {
         ...l,
         name,
         description,
-        bpm: numbericBpm > 0 ? numbericBpm : currentLoop?.bpm,
+        bpm: !bpm
+          ? undefined
+          : numbericBpm > 0
+          ? numbericBpm
+          : currentLoop?.bpm,
       };
     });
   };
 
   const formId = useId();
+
+  const bpmMaskRef = useInputMask({
+    mask: "(99)|(999)",
+    options: { placeholder: "", jitMasking: true, showMaskOnHover: false },
+  });
 
   return (
     <Modal size={"sm"} isOpen={isOpen} onClose={onClose}>
@@ -104,6 +115,8 @@ export const OptionsModal: FC<OptionsModalProps> = ({ isOpen, onClose }) => {
                   size="lg"
                   label="BPM"
                   placeholder="Current loop bpm"
+                  inputMode="numeric"
+                  ref={bpmMaskRef}
                 />
               </form>
             </ModalBody>

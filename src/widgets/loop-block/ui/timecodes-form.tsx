@@ -11,7 +11,7 @@ import { TimecodeInput } from "@/shared/timecode-input";
 import { PlayerContext } from "@/shared/utils/player-context";
 import { Checkbox } from "@nextui-org/react";
 import { useAtom } from "jotai";
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { DisabledTickExplanation } from "./disabled-tick-explanation";
 import { useBoolean } from "usehooks-ts";
 
@@ -43,6 +43,12 @@ export const TimecodesForm = () => {
   const metronome = useMetronome({
     bpm: currentLoop?.bpm ?? -1,
   });
+
+  useEffect(() => {
+    if (!currentLoop?.bpm) {
+      setTickBeforeStart(false);
+    }
+  }, [currentLoop?.bpm]);
 
   return (
     <form
@@ -110,7 +116,7 @@ export const TimecodesForm = () => {
           Tick before loop starts
         </Checkbox>
 
-        <DisabledTickExplanation />
+        {!currentLoop?.bpm && <DisabledTickExplanation />}
       </div>
 
       <div className="mt-1">
