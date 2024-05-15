@@ -21,7 +21,8 @@ export const useInitMetronome = () => {
 
   const playbackSpeed = usePlaybackSpeed();
 
-  const timerRef = useRef<NodeJS.Timeout>();
+  const intervalRef = useRef<NodeJS.Timeout>();
+  const lastTimerRef = useRef<NodeJS.Timeout>();
   const playedAmountRef = useRef<number>(0);
 
   const playSound = () => {
@@ -47,22 +48,29 @@ export const useInitMetronome = () => {
 
       playSound();
 
-      timerRef.current = setInterval(() => {
-        if (playedAmountRef.current >= amount) {
-          resolve();
-          stop();
+      intervalRef.current = setInterval(() => {
+        if (playedAmountRef.current >= amount - 1) {
+          playSound();
+
+          const VIDEO_START_DELAY = 70;
+
+          lastTimerRef.current = setTimeout(() => {
+            resolve();
+            stop();
+          }, interval / playbackSpeed - VIDEO_START_DELAY);
           return;
         }
 
         playSound();
-      }, interval / playbackSpeed / 2);
+      }, interval / playbackSpeed);
     });
   };
 
   const stop = () => {
     playedAmountRef.current = 0;
     setIsPlaying(false);
-    clearInterval(timerRef.current);
+    clearInterval(intervalRef.current);
+    clearTimeout(lastTimerRef.current);
   };
 
   return { play, stop, isPlaying };

@@ -7,7 +7,7 @@ export const loopSchema: ZodSchema<Loop> = z.object({
   from: z.coerce.number().min(0).optional(),
   to: z.coerce.number().optional(),
   description: z.string().optional(),
-  bpm: z.number().min(1).optional(),
+  bpm: z.coerce.number().min(1).optional(),
 });
 
 export const optionsSchema = z.object({
