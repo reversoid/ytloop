@@ -18,7 +18,7 @@ const Player: FC<PlayerProps> = memo(({ onProgress, url, refCallback }) => {
   const [playbackRate, setPlaybackRate] = useState(new Set([1]));
 
   return (
-    <div className="flex flex-col sm:flex-row justify-between gap-5 mt-1">
+    <div className="pb-3 flex flex-col sm:flex-row justify-between gap-5">
       <div
         className={`w-full max-w-2xl rounded-xl overflow-hidden flex-grow ${styles["player-wrapper"]}`}
       >
@@ -36,10 +36,8 @@ const Player: FC<PlayerProps> = memo(({ onProgress, url, refCallback }) => {
       </div>
 
       <div className="w-full">
-        <h6 className="font-bold">Playback rate</h6>
         <Select
           label="Playback rate"
-          className="mt-2"
           selectedKeys={playbackRate}
           onChange={(e) =>
             setPlaybackRate((prev) => {
