@@ -52,12 +52,10 @@ export const useInitMetronome = () => {
         if (playedAmountRef.current >= amount - 1) {
           playSound();
 
-          const VIDEO_START_DELAY = 70;
-
           lastTimerRef.current = setTimeout(() => {
             resolve();
             stop();
-          }, interval / playbackSpeed - VIDEO_START_DELAY);
+          }, interval / playbackSpeed);
           return;
         }
 
