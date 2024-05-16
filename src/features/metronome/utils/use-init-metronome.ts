@@ -1,6 +1,6 @@
 import { projectOptionsAtom } from "@/entities/project/model";
 import { useAtomValue } from "jotai";
-import { useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 
 const usePlaybackSpeed = () => {
   const projectOptions = useAtomValue(projectOptionsAtom);
@@ -25,51 +25,56 @@ export const useInitMetronome = () => {
   const lastTimerRef = useRef<NodeJS.Timeout>();
   const playedAmountRef = useRef<number>(0);
 
-  const playSound = () => {
+  const playSound = useCallback(() => {
     if (audio) {
       audio.play();
       playedAmountRef.current++;
     }
-  };
+  }, [audio]);
 
-  const play = (
-    bpm: number,
-    amount = Number.POSITIVE_INFINITY
-  ): Promise<void> => {
-    if (isPlaying) {
-      return new Promise<void>((_, reject) => reject("ALREADY_PLAYING"));
+  const stopSound = useCallback(() => {
+    if (audio) {
+      audio.pause();
+      audio.currentTime = 0;
     }
+  }, [audio]);
 
-    return new Promise<void>((resolve) => {
-      setIsPlaying(true);
-
-      const bps = bpm / 60;
-      const interval = 1000 / bps;
-
-      playSound();
-
-      intervalRef.current = setInterval(() => {
-        if (playedAmountRef.current >= amount - 1) {
-          playSound();
-
-          lastTimerRef.current = setTimeout(() => {
-            resolve();
-            stop();
-          }, interval / playbackSpeed);
-          return;
-        }
-
-        playSound();
-      }, interval / playbackSpeed);
-    });
-  };
-
-  const stop = () => {
+  const stop = useCallback(() => {
     playedAmountRef.current = 0;
+    stopSound();
     setIsPlaying(false);
     clearInterval(intervalRef.current);
     clearTimeout(lastTimerRef.current);
-  };
+  }, [stopSound]);
+
+  const play = useCallback(
+    (bpm: number, amount = Number.POSITIVE_INFINITY): Promise<void> => {
+      if (isPlaying) {
+        return new Promise<void>((_, reject) => reject("ALREADY_PLAYING"));
+      }
+
+      return new Promise<void>((resolve) => {
+        setIsPlaying(true);
+
+        const bps = bpm / 60;
+        const interval = 1000 / bps;
+
+        playSound();
+
+        intervalRef.current = setInterval(() => {
+          if (playedAmountRef.current >= amount) {
+            stop();
+            resolve();
+            return;
+          }
+
+          stopSound();
+          playSound();
+        }, interval / playbackSpeed);
+      });
+    },
+    [isPlaying, playSound, playbackSpeed, stop, stopSound]
+  );
 
   return { play, stop, isPlaying };
 };
