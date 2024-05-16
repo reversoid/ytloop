@@ -33,7 +33,7 @@ const Player: FC<PlayerProps> = memo(({ onProgress, url, refCallback }) => {
           ref={refCallback}
           onProgress={onProgress}
           controls={true}
-          progressInterval={1}
+          progressInterval={10}
           url={url}
           playbackRate={Array.from(playbackRate)[0]}
         />
