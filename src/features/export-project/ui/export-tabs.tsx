@@ -63,7 +63,7 @@ export const ShareTabs: FC<ShareTabsProps> = ({ onSetLink }) => {
         <div>
           <p>Exported project will have only selected loops:</p>
 
-          <form className="mt-2 flex flex-col gap-4 max-w-sm">
+          <form className="mt-4 flex flex-col gap-4 max-w-sm">
             <div className="flex flex-col gap-1 loops">
               {project?.loops.map((loop) => (
                 <div
