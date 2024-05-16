@@ -1,14 +1,11 @@
-import type { Metadata } from "next";
-import "./globals.css";
-import { AppProviders } from "@/core/app-providers";
-import { Button, Link } from "@nextui-org/react";
-import NextLink from "next/link";
-import Image from "next/image";
-import logoDark from "@/assets/logo-dark.svg";
-import { IconAt, IconBrandGithub } from "@tabler/icons-react";
-import { ThemeSwitcher } from "@/shared/theme-switcher";
-import { useTheme } from "next-themes";
 import Logo from "@/assets/logo";
+import { AppProviders } from "@/core/app-providers";
+import { ThemeSwitcher } from "@/shared/theme-switcher";
+import { Button, Link } from "@nextui-org/react";
+import { IconAt, IconBrandGithub } from "@tabler/icons-react";
+import type { Metadata } from "next";
+import NextLink from "next/link";
+import "./globals.css";
 export const metadata: Metadata = {
   title: "YTLoop",
   description: "Loop youtube video",

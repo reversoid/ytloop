@@ -8,7 +8,7 @@ export const AppProviders: FC<PropsWithChildren> = ({ children }) => {
   return (
     <Provider>
       <NextUIProvider>
-        <NextThemesProvider defaultTheme="light" attribute="class">
+        <NextThemesProvider defaultTheme="dark" attribute="class">
           {children}
         </NextThemesProvider>
       </NextUIProvider>
