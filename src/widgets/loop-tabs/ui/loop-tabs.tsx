@@ -2,11 +2,12 @@ import { projectLoopsAtom, projectOptionsAtom } from "@/entities/project/model";
 import { createNewLoop } from "@/entities/project/utils/create-new-loop";
 import { workspaceCurrentLoopAtom } from "@/entities/workspace/model";
 import { useAtom, useAtomValue } from "jotai";
-import { LoopBlock } from "../loop-block";
-import { useSyncLoops } from "./utils/use-sync-loops";
+import { LoopBlock } from "./loop-block";
+import { useSyncLoops } from "../utils/use-sync-loops";
 import { Tab, Tabs } from "@nextui-org/react";
 import { useId } from "react";
 import { IconPlus } from "@tabler/icons-react";
+import { useAutoSeekStart } from "../utils/use-auto-seek-start";
 
 export const LoopTabs = () => {
   const [projectLoops, setProjectLoops] = useAtom(projectLoopsAtom);
@@ -16,6 +17,7 @@ export const LoopTabs = () => {
   const newTabKey = useId();
 
   useSyncLoops();
+  useAutoSeekStart();
 
   const handleNewLoop = () => {
     const newLoop = createNewLoop({

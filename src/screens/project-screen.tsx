@@ -1,5 +1,5 @@
 "use client";
-import { FC, useRef } from "react";
+import { FC, useCallback, useRef } from "react";
 import ReactPlayer from "react-player";
 import { OnProgressProps } from "react-player/base";
 
@@ -16,11 +16,12 @@ import { useMetronome } from "@/features/metronome/utils/use-init-metronome";
 import { ProjectSettingsButton } from "@/features/project-settings";
 import { useSyncProjectWithQueryParams } from "@/features/sync-project-with-query/utils/use-sync-project-with-query-params";
 import { PlayerContext } from "@/shared/utils/player-context";
-import { LoopTabs } from "@/widgets/loop-tabs";
+import { LoopTabs } from "@/widgets/loop-tabs/ui/loop-tabs";
 import { Accordion, AccordionItem } from "@nextui-org/react";
 import { useAtom, useAtomValue } from "jotai";
 import dynamic from "next/dynamic";
 import styles from "./ui/styles.module.css";
+import { useBoolean } from "usehooks-ts";
 
 const Player = dynamic(() => import("../widgets/player"), {
   ssr: false,
@@ -39,9 +40,11 @@ const ProjectPage: FC = () => {
 
   const enabledCountdown = useAtomValue(workspaceEnabledCountdown);
 
-  const seekTo = (seconds: number) => {
+  const { value: isPlayerReady, setTrue: markPlayerAsReady } = useBoolean();
+
+  const seekTo = useCallback((seconds: number) => {
     ref.current?.seekTo(seconds);
-  };
+  }, []);
 
   const {
     play: playMetronome,
@@ -79,6 +82,7 @@ const ProjectPage: FC = () => {
       value={{
         seekTo,
         getCurrentTime: ref.current?.getCurrentTime,
+        isPlayerReady,
       }}
     >
       <MetronomeContext.Provider
@@ -112,6 +116,7 @@ const ProjectPage: FC = () => {
               >
                 <Player
                   onProgress={handleProgress}
+                  onReady={markPlayerAsReady}
                   url={`https://www.youtube.com/watch?v=${project.videoId}`}
                   refCallback={(player: ReactPlayer | null) =>
                     (ref.current = player)

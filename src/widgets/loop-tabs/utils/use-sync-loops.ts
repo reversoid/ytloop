@@ -1,6 +1,6 @@
 import { projectAtom, projectLoopsAtom } from "@/entities/project/model";
 import { workspaceCurrentLoopAtom } from "@/entities/workspace/model";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtomValue } from "jotai";
 import { useSetAtom } from "jotai";
 import { useEffect } from "react";
 

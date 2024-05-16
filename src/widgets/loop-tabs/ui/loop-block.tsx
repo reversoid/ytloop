@@ -1,5 +1,5 @@
-import { LoopOptionsButton } from "./ui/loop-options-button";
-import { TimecodesForm } from "./ui/timecodes-form";
+import { LoopOptionsButton } from "@/features/loop-options/ui/loop-options-button";
+import { TimecodesForm } from "./timecodes-form";
 
 export const LoopBlock = () => {
   return (
