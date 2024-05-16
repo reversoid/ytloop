@@ -14,6 +14,7 @@ export const useMetronome = () => {
   const nextNoteTimeRef = useRef<number>(0);
   const timerIDRef = useRef<number | null>(null);
   const clickCountRef = useRef<number>(0);
+  const playbackSpeed = usePlaybackSpeed();
 
   const audioUrl = "/metronome-click.mp3";
   const intervalRef = useRef<number>(0); // seconds per beat
@@ -81,7 +82,7 @@ export const useMetronome = () => {
     if (!audioBufferRef.current) {
       return Promise.reject("Audio buffer not loaded yet.");
     }
-    intervalRef.current = 60 / bpm;
+    intervalRef.current = 60 / bpm / playbackSpeed;
     nextNoteTimeRef.current = audioContextRef.current!.currentTime;
     clickCountRef.current = 0;
     setIsPlaying(true);

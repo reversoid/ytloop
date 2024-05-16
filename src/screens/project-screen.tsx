@@ -62,18 +62,15 @@ const ProjectPage: FC = () => {
       return;
     }
 
-    const playFromStart = () => {
-      seekTo(currentLoop.from);
-      setPlaying(true);
-    };
-
     if (currentLoop.bpm && enabledCountdown) {
       setPlaying(false);
+      seekTo(currentLoop.from);
       playMetronome(currentLoop.bpm, 4).then(() => {
-        playFromStart();
+        setPlaying(true);
       });
     } else {
-      playFromStart();
+      seekTo(currentLoop.from);
+      setPlaying(true);
     }
   };
 
