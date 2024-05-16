@@ -1,80 +1,102 @@
 import { projectOptionsAtom } from "@/entities/project/model";
 import { useAtomValue } from "jotai";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 const usePlaybackSpeed = () => {
   const projectOptions = useAtomValue(projectOptionsAtom);
   return projectOptions?.videoSpeed ?? 1;
 };
 
-export const useInitMetronome = () => {
-  const audio = useMemo(() => {
+export const useMetronome = () => {
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const audioBufferRef = useRef<AudioBuffer | null>(null);
+  const nextNoteTimeRef = useRef<number>(0);
+  const timerIDRef = useRef<number | null>(null);
+  const clickCountRef = useRef<number>(0);
+
+  const audioUrl = "/metronome-click.mp3";
+  const intervalRef = useRef<number>(0); // seconds per beat
+
+  useEffect(() => {
     if (typeof window === undefined) {
       return;
     }
-    if (window.Audio) {
-      return new window.Audio("/metronome-click.mp3");
-    }
+
+    const audioContext = new window.AudioContext();
+    audioContextRef.current = audioContext;
+
+    const loadAudio = async () => {
+      try {
+        const response = await fetch(audioUrl);
+        const arrayBuffer = await response.arrayBuffer();
+        const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+        audioBufferRef.current = audioBuffer;
+      } catch (error) {
+        console.error("Error loading audio file:", error);
+      }
+    };
+
+    loadAudio();
+
+    return () => {
+      if (audioContext) {
+        audioContext.close();
+      }
+    };
   }, []);
 
-  const [isPlaying, setIsPlaying] = useState(false);
-
-  const playbackSpeed = usePlaybackSpeed();
-
-  const intervalRef = useRef<NodeJS.Timeout>();
-  const lastTimerRef = useRef<NodeJS.Timeout>();
-  const playedAmountRef = useRef<number>(0);
-
-  const playSound = useCallback(() => {
-    if (audio) {
-      audio.play();
-      playedAmountRef.current++;
-    }
-  }, [audio]);
-
-  const stopSound = useCallback(() => {
-    if (audio) {
-      audio.pause();
-      audio.currentTime = 0;
-    }
-  }, [audio]);
-
-  const stop = useCallback(() => {
-    playedAmountRef.current = 0;
-    stopSound();
-    setIsPlaying(false);
-    clearInterval(intervalRef.current);
-    clearTimeout(lastTimerRef.current);
-  }, [stopSound]);
-
-  const play = useCallback(
-    (bpm: number, amount = Number.POSITIVE_INFINITY): Promise<void> => {
-      if (isPlaying) {
-        return new Promise<void>((_, reject) => reject("ALREADY_PLAYING"));
+  const scheduleNote = (
+    clicksToPlay: number | undefined,
+    resolve: () => void
+  ) => {
+    while (
+      nextNoteTimeRef.current <
+      audioContextRef.current!.currentTime + 0.1
+    ) {
+      if (clicksToPlay !== undefined && clickCountRef.current >= clicksToPlay) {
+        stopMetronome();
+        resolve();
+        return;
       }
 
-      return new Promise<void>((resolve) => {
-        setIsPlaying(true);
+      playClick(nextNoteTimeRef.current);
+      nextNoteTimeRef.current += intervalRef.current;
+      clickCountRef.current += 1;
+    }
+    timerIDRef.current = window.setTimeout(
+      () => scheduleNote(clicksToPlay, resolve),
+      25
+    );
+  };
 
-        const bps = bpm / 60;
-        const interval = 1000 / bps;
+  const playClick = (time: number) => {
+    const source = audioContextRef.current!.createBufferSource();
+    source.buffer = audioBufferRef.current;
+    source.connect(audioContextRef.current!.destination);
+    source.start(time);
+  };
 
-        playSound();
+  const playMetronome = (bpm: number, clicksToPlay?: number): Promise<void> => {
+    if (!audioBufferRef.current) {
+      return Promise.reject("Audio buffer not loaded yet.");
+    }
+    intervalRef.current = 60 / bpm;
+    nextNoteTimeRef.current = audioContextRef.current!.currentTime;
+    clickCountRef.current = 0;
+    setIsPlaying(true);
 
-        intervalRef.current = setInterval(() => {
-          if (playedAmountRef.current >= amount) {
-            stop();
-            resolve();
-            return;
-          }
+    return new Promise<void>((resolve) => {
+      scheduleNote(clicksToPlay, resolve);
+    });
+  };
 
-          stopSound();
-          playSound();
-        }, interval / playbackSpeed);
-      });
-    },
-    [isPlaying, playSound, playbackSpeed, stop, stopSound]
-  );
+  const stopMetronome = () => {
+    if (timerIDRef.current !== null) {
+      clearTimeout(timerIDRef.current);
+    }
+    setIsPlaying(false);
+  };
 
-  return { play, stop, isPlaying };
+  return { isPlaying, play: playMetronome, stop: stopMetronome };
 };

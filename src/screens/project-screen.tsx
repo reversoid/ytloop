@@ -12,7 +12,7 @@ import {
 } from "@/entities/workspace/model";
 import { ExportProjectButton } from "@/features/export-project";
 import { MetronomeContext } from "@/features/metronome/utils/metronome-context";
-import { useInitMetronome } from "@/features/metronome/utils/use-init-metronome";
+import { useMetronome } from "@/features/metronome/utils/use-init-metronome";
 import { ProjectSettingsButton } from "@/features/project-settings";
 import { useSyncProjectWithQueryParams } from "@/features/sync-project-with-query/utils/use-sync-project-with-query-params";
 import { PlayerContext } from "@/shared/utils/player-context";
@@ -47,7 +47,7 @@ const ProjectPage: FC = () => {
     play: playMetronome,
     stop: stopMetronome,
     isPlaying: isMetronomePlaying,
-  } = useInitMetronome();
+  } = useMetronome();
 
   const handleProgress = ({ playedSeconds }: OnProgressProps) => {
     if (!currentLoop || !isLoopValid(currentLoop)) {
