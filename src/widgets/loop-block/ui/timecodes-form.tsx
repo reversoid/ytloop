@@ -6,7 +6,6 @@ import {
   workspaceEnabledCountdown,
   workspaceIsPlayingAtom,
 } from "@/entities/workspace/model";
-import { useInitMetronome } from "@/features/metronome/utils/use-init-metronome";
 import { PlayButton } from "@/features/play-button";
 import { TimecodeInput } from "@/shared/timecode-input";
 import { PlayerContext } from "@/shared/utils/player-context";
@@ -14,7 +13,6 @@ import { Checkbox } from "@nextui-org/react";
 import { useAtom } from "jotai";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { DisabledTickExplanation } from "./disabled-tick-explanation";
-import { useBoolean } from "usehooks-ts";
 import { MetronomeContext } from "@/features/metronome/utils/metronome-context";
 
 export const TimecodesForm = () => {

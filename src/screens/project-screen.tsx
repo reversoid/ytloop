@@ -10,17 +10,17 @@ import {
   workspaceEnabledCountdown,
   workspaceIsPlayingAtom,
 } from "@/entities/workspace/model";
+import { ExportProjectButton } from "@/features/export-project";
+import { MetronomeContext } from "@/features/metronome/utils/metronome-context";
+import { useInitMetronome } from "@/features/metronome/utils/use-init-metronome";
 import { ProjectSettingsButton } from "@/features/project-settings";
 import { useSyncProjectWithQueryParams } from "@/features/sync-project-with-query/utils/use-sync-project-with-query-params";
 import { PlayerContext } from "@/shared/utils/player-context";
 import { LoopTabs } from "@/widgets/loop-tabs";
-import { ShareTabs } from "@/widgets/share-tabs";
 import { Accordion, AccordionItem } from "@nextui-org/react";
 import { useAtom, useAtomValue } from "jotai";
 import dynamic from "next/dynamic";
 import styles from "./ui/styles.module.css";
-import { MetronomeContext } from "@/features/metronome/utils/metronome-context";
-import { useInitMetronome } from "@/features/metronome/utils/use-init-metronome";
 
 const Player = dynamic(() => import("../widgets/player"), {
   ssr: false,
@@ -92,9 +92,13 @@ const ProjectPage: FC = () => {
         }}
       >
         <section className="max-w-screen-xl mx-auto py-5 px-2">
-          <div className="flex gap-3 items-center">
+          <div className="flex gap-3 justify-between items-center">
             <h1 className="font-black text-2xl">{project.name}</h1>
-            <ProjectSettingsButton />
+
+            <div className="flex gap-2">
+              <ExportProjectButton />
+              <ProjectSettingsButton />
+            </div>
           </div>
 
           <div className={`mt-5 ${styles["accordion-wrapper"]}`}>
@@ -120,10 +124,6 @@ const ProjectPage: FC = () => {
 
               <AccordionItem key={"Loops"} aria-label="Loops" title="Loops">
                 <LoopTabs />
-              </AccordionItem>
-
-              <AccordionItem key={"Share"} aria-label="Share" title="Share">
-                <ShareTabs />
               </AccordionItem>
             </Accordion>
           </div>
