@@ -4,10 +4,11 @@ import { AppProviders } from "@/core/app-providers";
 import { Button, Link } from "@nextui-org/react";
 import NextLink from "next/link";
 import Image from "next/image";
-import logo from "@/assets/logo.svg";
+import logoDark from "@/assets/logo-dark.svg";
 import { IconAt, IconBrandGithub } from "@tabler/icons-react";
 import { ThemeSwitcher } from "@/shared/theme-switcher";
-
+import { useTheme } from "next-themes";
+import Logo from "@/assets/logo";
 export const metadata: Metadata = {
   title: "YTLoop",
   description: "Loop youtube video",
@@ -25,13 +26,9 @@ export default function RootLayout({
           <div className="flex flex-col h-full">
             <header className="h-16 border-b-1 border-foreground-200 shrink-0 flex justify-center">
               <div className="px-2 h-16 grow flex justify-between items-center max-w-screen-xl">
-                <div className="dark:lg:bg-foreground-600 p-0.5 rounded-lg">
+                <div className="">
                   <NextLink className="w-fit" href={"/"}>
-                    <Image
-                      className="h-10 w-fit aspect-video"
-                      src={logo}
-                      alt="Logo image"
-                    />
+                    <Logo />
                   </NextLink>
                 </div>
 
