@@ -1,6 +1,6 @@
 import { projectOptionsAtom } from "@/entities/project/model";
 import { useAtomValue } from "jotai";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const usePlaybackSpeed = () => {
   const projectOptions = useAtomValue(projectOptionsAtom);
@@ -20,21 +20,23 @@ export const useMetronome = () => {
   const intervalRef = useRef<number>(0); // seconds per beat
 
   useEffect(() => {
-    if (typeof window === undefined) {
-      return;
-    }
-
     const audioContext = new window.AudioContext();
     audioContextRef.current = audioContext;
 
+    let loadAttempts = 0;
     const loadAudio = async () => {
+      loadAttempts++;
       try {
         const response = await fetch(audioUrl);
         const arrayBuffer = await response.arrayBuffer();
         const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
         audioBufferRef.current = audioBuffer;
       } catch (error) {
-        console.error("Error loading audio file:", error);
+        if (loadAttempts > 3) {
+          console.error("Error loading audio file:", error);
+        } else {
+          loadAudio();
+        }
       }
     };
 
