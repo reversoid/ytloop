@@ -13,12 +13,12 @@ export const Timeline: FC = () => {
   }, [loops]);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="w-full flex flex-col gap-4 overflow-x-scroll">
       <VideoLine />
 
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 h-80">
         {loopsGrid.map((loopsRow, index) => (
-          <div className="flex" key={index}>
+          <div className="flex relative h-8" key={index}>
             {loopsRow.map((loop) => (
               <TimelineLoop loop={loop} key={loop.id} />
             ))}

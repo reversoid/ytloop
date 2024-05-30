@@ -150,7 +150,7 @@ const ProjectPage: FC = () => {
                 <LoopTabs />
               </AccordionItem>
 
-              <AccordionItem
+              {/* <AccordionItem
                 key={"Timeline"}
                 aria-label="Timeline"
                 title={
@@ -163,7 +163,7 @@ const ProjectPage: FC = () => {
                 }
               >
                 <Timeline />
-              </AccordionItem>
+              </AccordionItem> */}
             </Accordion>
           </div>
         </section>
