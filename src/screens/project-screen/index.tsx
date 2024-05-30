@@ -17,24 +17,19 @@ import { ProjectSettingsButton } from "@/features/project-settings";
 import { useSyncProjectWithQueryParams } from "@/features/sync-project-with-query/utils/use-sync-project-with-query-params";
 import { PlayerContext } from "@/shared/utils/player-context";
 import { LoopTabs } from "@/widgets/loop-tabs/ui/loop-tabs";
-import { Accordion, AccordionItem } from "@nextui-org/react";
-import { useAtom, useAtomValue } from "jotai";
-import dynamic from "next/dynamic";
-import styles from "./ui/styles.module.css";
-import { useBoolean } from "usehooks-ts";
 import { Timeline } from "@/widgets/timeline";
+import { Accordion, AccordionItem } from "@nextui-org/react";
 import {
-  IconArrowCapsule,
-  IconArrowLoopRight,
-  IconArrowLoopRight2,
-  IconBaselineDensityMedium,
-  IconBaselineDensitySmall,
+  IconArrowRightBar,
+  IconArrowsRight,
   IconBrandYoutube,
   IconChartArrows,
-  IconCurlyLoop,
-  IconInfinity,
   IconRefresh,
 } from "@tabler/icons-react";
+import { useAtom, useAtomValue } from "jotai";
+import dynamic from "next/dynamic";
+import { useBoolean } from "usehooks-ts";
+import styles from "./ui/styles.module.css";
 
 const Player = dynamic(() => import("../../widgets/player"), {
   ssr: false,
@@ -159,8 +154,10 @@ const ProjectPage: FC = () => {
                 key={"Timeline"}
                 aria-label="Timeline"
                 title={
-                  <div className="flex items-center gap-2">
-                    <IconChartArrows />
+                  <div
+                    className={`flex items-center gap-2 ${styles["title-wrapper"]}`}
+                  >
+                    <IconArrowRightBar />
                     <span>Timeline</span>
                   </div>
                 }
