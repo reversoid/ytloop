@@ -1,17 +1,29 @@
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import { VideoLine } from "./ui/video-line";
 import { TimelineLoop } from "./ui/timeline-loop";
+import { useAtomValue } from "jotai";
+import { projectLoopsAtom } from "@/entities/project/model";
+import { organizeLoopsIntoGrid } from "./utils/organize-loops-into-grid";
 
 export const Timeline: FC = () => {
+  const loops = useAtomValue(projectLoopsAtom);
+
+  const loopsGrid = useMemo(() => {
+    return organizeLoopsIntoGrid(loops ?? []);
+  }, [loops]);
+
   return (
     <div className="flex flex-col gap-4">
       <VideoLine />
 
-      <div className="flex">
-        <TimelineLoop />
-        <TimelineLoop />
-        <TimelineLoop />
-        <TimelineLoop />
+      <div className="flex flex-col gap-2">
+        {loopsGrid.map((loopsRow, index) => (
+          <div className="flex" key={index}>
+            {loopsRow.map((loop) => (
+              <TimelineLoop loop={loop} key={loop.id} />
+            ))}
+          </div>
+        ))}
       </div>
     </div>
   );
