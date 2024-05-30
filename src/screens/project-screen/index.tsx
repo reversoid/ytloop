@@ -22,8 +22,21 @@ import { useAtom, useAtomValue } from "jotai";
 import dynamic from "next/dynamic";
 import styles from "./ui/styles.module.css";
 import { useBoolean } from "usehooks-ts";
+import { Timeline } from "@/widgets/timeline";
+import {
+  IconArrowCapsule,
+  IconArrowLoopRight,
+  IconArrowLoopRight2,
+  IconBaselineDensityMedium,
+  IconBaselineDensitySmall,
+  IconBrandYoutube,
+  IconChartArrows,
+  IconCurlyLoop,
+  IconInfinity,
+  IconRefresh,
+} from "@tabler/icons-react";
 
-const Player = dynamic(() => import("../widgets/player"), {
+const Player = dynamic(() => import("../../widgets/player"), {
   ssr: false,
 });
 
@@ -111,7 +124,12 @@ const ProjectPage: FC = () => {
               <AccordionItem
                 key={"Video"}
                 aria-label="Video"
-                title="Video"
+                title={
+                  <div className="flex items-center gap-2">
+                    <IconBrandYoutube />
+                    <span>Video</span>
+                  </div>
+                }
                 keepContentMounted
               >
                 <Player
@@ -124,8 +142,30 @@ const ProjectPage: FC = () => {
                 />
               </AccordionItem>
 
-              <AccordionItem key={"Loops"} aria-label="Loops" title="Loops">
+              <AccordionItem
+                key={"Loops"}
+                aria-label="Loops"
+                title={
+                  <div className="flex items-center gap-2">
+                    <IconRefresh />
+                    <span>Loops</span>
+                  </div>
+                }
+              >
                 <LoopTabs />
+              </AccordionItem>
+
+              <AccordionItem
+                key={"Timeline"}
+                aria-label="Timeline"
+                title={
+                  <div className="flex items-center gap-2">
+                    <IconChartArrows />
+                    <span>Timeline</span>
+                  </div>
+                }
+              >
+                <Timeline />
               </AccordionItem>
             </Accordion>
           </div>
