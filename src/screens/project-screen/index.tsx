@@ -7,6 +7,7 @@ import { projectAtom } from "@/entities/project/model";
 import { isLoopValid } from "@/entities/project/utils/is-loop-valid";
 import {
   workspaceCurrentLoopAtom,
+  workspaceCurrentVideoPosition,
   workspaceEnabledCountdown,
   workspaceIsPlayingAtom,
 } from "@/entities/workspace/model";
@@ -26,7 +27,7 @@ import {
   IconChartArrows,
   IconRefresh,
 } from "@tabler/icons-react";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import dynamic from "next/dynamic";
 import { useBoolean } from "usehooks-ts";
 import styles from "./ui/styles.module.css";
@@ -60,7 +61,11 @@ const ProjectPage: FC = () => {
     isPlaying: isMetronomePlaying,
   } = useMetronome();
 
+  const setCurrentVideoPosition = useSetAtom(workspaceCurrentVideoPosition);
+
   const handleProgress = ({ playedSeconds }: OnProgressProps) => {
+    setCurrentVideoPosition(playedSeconds);
+
     if (!currentLoop || !isLoopValid(currentLoop)) {
       return;
     }
@@ -154,9 +159,7 @@ const ProjectPage: FC = () => {
                 key={"Timeline"}
                 aria-label="Timeline"
                 title={
-                  <div
-                    className={`flex items-center gap-2 ${styles["title-wrapper"]}`}
-                  >
+                  <div className={`flex items-center gap-2`}>
                     <IconArrowRightBar />
                     <span>Timeline</span>
                   </div>
