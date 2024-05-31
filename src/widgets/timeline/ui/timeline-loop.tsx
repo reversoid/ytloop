@@ -25,15 +25,15 @@ export const TimelineLoop: FC<TimelineLoopProps> = ({ loop }) => {
     }
 
     setUiLoopsData((prev) => [
-      ...prev.filter((l) => l.loopId !== loop.id),
-      { loopId: loop.id, textWidth: textRef.current!.offsetWidth },
+      ...prev.filter((l) => l.loop.id !== loop.id),
+      { textWidth: textRef.current!.offsetWidth, loop: loop },
     ]);
-  }, [loop.id, setUiLoopsData, textRef.current?.offsetWidth]);
+  }, [loop, loop.id, setUiLoopsData, textRef.current?.offsetWidth]);
 
   return (
     <div
-      style={{ minWidth: `${widthPercentage}%`, left: `${leftPercentage}%` }}
-      className="absolute border-2 overflow-hidden px-2 py-1"
+      style={{ width: `${widthPercentage}%`, left: `${leftPercentage}%` }}
+      className="absolute border-2 overflow-hidden text-nowrap px-2 py-1"
       ref={blockRef}
     >
       <span ref={textRef}>{loop.name}</span>

@@ -25,17 +25,25 @@ export const Timeline: FC = () => {
       return;
     }
 
-    const loopDataWithMaxTextLength = uiLoopsData.reduce(
-      (prev, value) => (value.textWidth > prev.textWidth ? value : prev),
-      uiLoopsData[0]
-    );
+    const loopDataWithMaxTextLength = uiLoopsData.reduce((prev, value) => {
+      const prevPercents = (prev.loop.to - prev.loop.from) / videoLength;
+
+      const currentPercents = (value.loop.to - value.loop.from) / videoLength;
+
+      const prevValue = prev.textWidth / prevPercents;
+
+      const currentValue = value.textWidth / currentPercents;
+
+      return currentValue > prevValue ? value : prev;
+    }, uiLoopsData[0]);
 
     const paddingX = 16;
-    const blockWidth = loopDataWithMaxTextLength.textWidth + paddingX;
+    const blockWidth = Math.min(
+      loopDataWithMaxTextLength.textWidth + paddingX,
+      200
+    );
 
-    const loop = loops.find(
-      (l) => l.id === loopDataWithMaxTextLength.loopId
-    ) as ValidLoop;
+    const loop = loopDataWithMaxTextLength.loop;
 
     const percentsOfVideo = ((loop.to - loop.from) / videoLength) * 100;
 
@@ -52,7 +60,7 @@ export const Timeline: FC = () => {
 
       <div className="flex flex-col gap-2 h-80">
         {loopsGrid.map((loopsRow, index) => (
-          <div className="flex relative h-8" key={index}>
+          <div className="w-full flex relative h-8" key={index}>
             {loopsRow.map((loop) => (
               <TimelineLoop loop={loop} key={loop.id} />
             ))}

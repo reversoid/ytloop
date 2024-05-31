@@ -1,8 +1,8 @@
-import { Loop } from "@/entities/project/model";
+import { ValidLoop } from "@/entities/project/utils/is-loop-valid";
 import { atom } from "jotai";
 
 export interface UILoopData {
-  loopId: Loop["id"];
+  loop: ValidLoop;
   textWidth: number;
 }
 
