@@ -1,10 +1,9 @@
 import { ValidLoop } from "@/entities/project/utils/is-loop-valid";
-import { Code, Tooltip } from "@nextui-org/react";
-import { useAtom, useSetAtom } from "jotai";
-import { FC, useEffect, useRef } from "react";
-import { UiLoopsAtom } from "../utils/ui-loops-atom";
-import { loopColorHash } from "@/shared/utils/loop-color-hash";
 import { workspaceCurrentLoopAtom } from "@/entities/workspace/model";
+import { loopColorHash } from "@/shared/utils/loop-color-hash";
+import { Tooltip } from "@nextui-org/react";
+import { useSetAtom } from "jotai";
+import { FC } from "react";
 
 export interface TimelineLoopProps {
   loop: ValidLoop;

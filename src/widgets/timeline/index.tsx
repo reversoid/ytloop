@@ -1,7 +1,7 @@
 import { FC, useEffect, useMemo, useRef, useState } from "react";
 import { VideoLine } from "./ui/video-line";
 import { TimelineLoop } from "./ui/timeline-loop";
-import { useAtomValue, useSetAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { Loop, projectLoopsAtom } from "@/entities/project/model";
 import { organizeLoopsIntoGrid } from "./utils/organize-loops-into-grid";
 import { UiLoopsAtom } from "./utils/ui-loops-atom";
@@ -57,7 +57,7 @@ export const Timeline: FC = () => {
   // //   rowRef.current!.style.width = `${timelineWidth}px`;
   // // }, [loops, uiLoopsData]);
 
-  const setCurrentLoop = useSetAtom(workspaceCurrentLoopAtom);
+  const [currentLoop, setCurrentLoop] = useAtom(workspaceCurrentLoopAtom);
 
   return (
     <div>
@@ -80,7 +80,12 @@ export const Timeline: FC = () => {
           ?.filter(isLoopValid)
           .sort((a, b) => a.from - b.from)
           .map((loop) => (
-            <Card className="bg-zinc-800 hover:bg-zinc-700" key={loop.id}>
+            <Card
+              className={`bg-zinc-800 hover:bg-zinc-700 ${
+                currentLoop?.id === loop.id ? "bg-primary hover:bg-primary" : ""
+              }`}
+              key={loop.id}
+            >
               <CardBody as={"button"} onClick={() => setCurrentLoop(loop)}>
                 <div key={loop.id} className="flex gap-2 items-center">
                   <div
