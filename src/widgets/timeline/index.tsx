@@ -27,7 +27,7 @@ export const Timeline: FC = () => {
 
   return (
     <div>
-      <div className="w-full flex flex-col gap-4 overflow-x-scroll">
+      <div className="w-full flex flex-col gap-4">
         <VideoLine />
 
         <div className="flex flex-col gap-4">
