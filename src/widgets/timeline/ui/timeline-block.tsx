@@ -12,7 +12,7 @@ export interface TimelineLoopProps {
   loop: ValidLoop;
 }
 
-export const TimelineLoop: FC<TimelineLoopProps> = ({ loop }) => {
+export const TimelineBlock: FC<TimelineLoopProps> = ({ loop }) => {
   const videoLength = useAtomValue(workspaceVideoLength);
 
   const widthPercentage = ((loop.to - loop.from) / videoLength) * 100;

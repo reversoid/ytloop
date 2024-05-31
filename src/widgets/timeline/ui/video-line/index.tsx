@@ -15,6 +15,10 @@ export const VideoLine: FC = () => {
   const progress = ((currentVideoPosition ?? 0) / videoLength) * 100;
 
   return (
-    <Progress className={`${styles["progress"]}`} size="md" value={progress} />
+    <Progress
+      classNames={{ indicator: `rounded-r-none ${styles["quick-transition"]}` }}
+      size="md"
+      value={progress}
+    />
   );
 };
