@@ -1,8 +1,10 @@
 import { ValidLoop } from "@/entities/project/utils/is-loop-valid";
-import { Code } from "@nextui-org/react";
+import { Code, Tooltip } from "@nextui-org/react";
 import { useAtom, useSetAtom } from "jotai";
 import { FC, useEffect, useRef } from "react";
 import { UiLoopsAtom } from "../utils/ui-loops-atom";
+import { loopColorHash } from "@/shared/utils/loop-color-hash";
+import { workspaceCurrentLoopAtom } from "@/entities/workspace/model";
 
 export interface TimelineLoopProps {
   loop: ValidLoop;
@@ -14,29 +16,19 @@ export const TimelineLoop: FC<TimelineLoopProps> = ({ loop }) => {
   const widthPercentage = ((loop.to - loop.from) / videoLength) * 100;
   const leftPercentage = (loop.from / videoLength) * 100;
 
-  const blockRef = useRef<HTMLDivElement>(null);
-  const textRef = useRef<HTMLSpanElement>(null);
-
-  const setUiLoopsData = useSetAtom(UiLoopsAtom);
-
-  useEffect(() => {
-    if (!textRef.current) {
-      return;
-    }
-
-    setUiLoopsData((prev) => [
-      ...prev.filter((l) => l.loop.id !== loop.id),
-      { textWidth: textRef.current!.offsetWidth, loop: loop },
-    ]);
-  }, [loop, loop.id, setUiLoopsData, textRef.current?.offsetWidth]);
+  const setCurrentLoop = useSetAtom(workspaceCurrentLoopAtom);
 
   return (
-    <div
-      style={{ width: `${widthPercentage}%`, left: `${leftPercentage}%` }}
-      className="absolute border-2 overflow-hidden text-nowrap px-2 py-1"
-      ref={blockRef}
-    >
-      <span ref={textRef}>{loop.name}</span>
-    </div>
+    <Tooltip content={loop.name} showArrow>
+      <button
+        style={{
+          background: loopColorHash.hex(loop.id),
+          width: `${widthPercentage}%`,
+          left: `${leftPercentage}%`,
+        }}
+        className="h-4 absolute overflow-hidden text-nowrap px-2 py-1"
+        onClick={() => setCurrentLoop(loop)}
+      ></button>
+    </Tooltip>
   );
 };

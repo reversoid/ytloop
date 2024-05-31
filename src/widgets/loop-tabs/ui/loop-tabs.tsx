@@ -8,6 +8,7 @@ import { Tab, Tabs } from "@nextui-org/react";
 import { useId } from "react";
 import { IconPlus } from "@tabler/icons-react";
 import { useAutoSeekStart } from "../utils/use-auto-seek-start";
+import { loopColorHash } from "@/shared/utils/loop-color-hash";
 
 export const LoopTabs = () => {
   const [projectLoops, setProjectLoops] = useAtom(projectLoopsAtom);
@@ -50,7 +51,18 @@ export const LoopTabs = () => {
       }}
     >
       {projectLoops?.map((loop) => (
-        <Tab title={loop.name} key={loop.id}>
+        <Tab
+          title={
+            <div className="flex gap-2 items-center">
+              <div
+                style={{ background: loopColorHash.hex(loop.id) }}
+                className="w-2 h-2 rounded-lg"
+              ></div>
+              {loop.name}
+            </div>
+          }
+          key={loop.id}
+        >
           <LoopBlock />
         </Tab>
       ))}
