@@ -1,13 +1,17 @@
 import { projectLoopsAtom } from "@/entities/project/model";
 import { isLoopValid } from "@/entities/project/utils/is-loop-valid";
-import { workspaceCurrentLoopAtom } from "@/entities/workspace/model";
+import {
+  workspaceCurrentLoopAtom,
+  workspaceIsPlayingAtom,
+} from "@/entities/workspace/model";
 import { loopColorHash } from "@/shared/utils/loop-color-hash";
-import { Card, CardBody } from "@nextui-org/react";
+import { Button, Card, CardBody } from "@nextui-org/react";
 import { useAtom, useAtomValue } from "jotai";
-import { FC, useMemo } from "react";
+import { FC, useContext, useMemo } from "react";
 import { TimelineLoop } from "./ui/timeline-loop";
 import { VideoLine } from "./ui/video-line";
 import { organizeLoopsIntoGrid } from "./utils/organize-loops-into-grid";
+import { PlayerContext } from "@/shared/utils/player-context";
 
 export const Timeline: FC = () => {
   const videoLength = 226;
@@ -19,6 +23,9 @@ export const Timeline: FC = () => {
   }, [loops]);
 
   const [currentLoop, setCurrentLoop] = useAtom(workspaceCurrentLoopAtom);
+  const [isPlaying, setIsPlaying] = useAtom(workspaceIsPlayingAtom);
+
+  const { seekTo } = useContext(PlayerContext);
 
   return (
     <div>
@@ -41,23 +48,39 @@ export const Timeline: FC = () => {
           ?.filter(isLoopValid)
           .sort((a, b) => a.from - b.from)
           .map((loop) => (
-            <Card
-              className={`bg-zinc-800 hover:bg-zinc-700 ${
-                currentLoop?.id === loop.id ? "bg-primary hover:bg-primary" : ""
-              }`}
+            <Button
+              disableRipple
+              className="flex justify-start"
+              size="lg"
               key={loop.id}
-            >
-              <CardBody as={"button"} onClick={() => setCurrentLoop(loop)}>
-                <div key={loop.id} className="flex gap-2 items-center">
-                  <div
-                    style={{ background: loopColorHash.hex(loop.id) }}
-                    className="w-2 h-2 rounded-lg"
-                  ></div>
+              onClick={() => {
+                seekTo?.(loop.from);
+                setCurrentLoop(loop);
 
-                  <p>{loop.name}</p>
-                </div>
-              </CardBody>
-            </Card>
+                if (loop.id !== currentLoop?.id) {
+                  setIsPlaying(true);
+                } else {
+                  setIsPlaying((v) => !v);
+                }
+              }}
+              color={currentLoop?.id === loop.id ? "primary" : "default"}
+              variant={
+                isPlaying && currentLoop?.id === loop.id
+                  ? "bordered"
+                  : currentLoop?.id === loop.id
+                  ? "solid"
+                  : "bordered"
+              }
+            >
+              <div className="flex gap-2 items-center">
+                <div
+                  style={{ background: loopColorHash.hex(loop.id) }}
+                  className="w-2 h-2 rounded-lg"
+                ></div>
+
+                <p>{loop.name}</p>
+              </div>
+            </Button>
           ))}
       </div>
     </div>
