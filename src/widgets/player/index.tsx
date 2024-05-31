@@ -1,5 +1,8 @@
-import { workspaceIsPlayingAtom } from "@/entities/workspace/model";
-import { useAtom } from "jotai";
+import {
+  workspaceIsPlayingAtom,
+  workspaceVideoLength,
+} from "@/entities/workspace/model";
+import { useAtom, useSetAtom } from "jotai";
 import { FC, memo, useState } from "react";
 import ReactPlayer from "react-player";
 import { OnProgressProps } from "react-player/base";
@@ -23,6 +26,8 @@ const Player: FC<PlayerProps> = memo(
       new Set([projectOptions?.videoSpeed ?? 1])
     );
 
+    const setWorkspaceVideoLength = useSetAtom(workspaceVideoLength);
+
     return (
       <div className="pb-3 px-0.5 flex flex-col sm:flex-row justify-between gap-5">
         <div
@@ -39,6 +44,7 @@ const Player: FC<PlayerProps> = memo(
             url={url}
             playbackRate={Array.from(playbackRate)[0]}
             onReady={onReady}
+            onDuration={(duration) => setWorkspaceVideoLength(duration)}
           />
         </div>
 

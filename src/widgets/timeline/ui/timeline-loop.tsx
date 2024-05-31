@@ -1,8 +1,11 @@
 import { ValidLoop } from "@/entities/project/utils/is-loop-valid";
-import { workspaceCurrentLoopAtom } from "@/entities/workspace/model";
+import {
+  workspaceCurrentLoopAtom,
+  workspaceVideoLength,
+} from "@/entities/workspace/model";
 import { loopColorHash } from "@/shared/utils/loop-color-hash";
 import { Tooltip } from "@nextui-org/react";
-import { useSetAtom } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { FC } from "react";
 
 export interface TimelineLoopProps {
@@ -10,7 +13,7 @@ export interface TimelineLoopProps {
 }
 
 export const TimelineLoop: FC<TimelineLoopProps> = ({ loop }) => {
-  const videoLength = 226;
+  const videoLength = useAtomValue(workspaceVideoLength);
 
   const widthPercentage = ((loop.to - loop.from) / videoLength) * 100;
   const leftPercentage = (loop.from / videoLength) * 100;

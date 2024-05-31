@@ -1,15 +1,14 @@
-import { workspaceCurrentVideoPosition } from "@/entities/workspace/model";
 import {
-  IconArrowBadgeDown,
-  IconArrowBadgeDownFilled,
-} from "@tabler/icons-react";
+  workspaceCurrentVideoPosition,
+  workspaceVideoLength,
+} from "@/entities/workspace/model";
 import { useAtomValue } from "jotai";
 import { FC } from "react";
 
 export const VideoLine: FC = () => {
   const currentVideoPosition = useAtomValue(workspaceCurrentVideoPosition);
 
-  const videoLength = 226;
+  const videoLength = useAtomValue(workspaceVideoLength);
 
   return (
     <div className="relative w-full h-2 flex overflow-hidden rounded-lg">

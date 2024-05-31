@@ -14,8 +14,6 @@ import { organizeLoopsIntoGrid } from "./utils/organize-loops-into-grid";
 import { PlayerContext } from "@/shared/utils/player-context";
 
 export const Timeline: FC = () => {
-  const videoLength = 226;
-
   const loops = useAtomValue(projectLoopsAtom);
 
   const loopsGrid = useMemo(() => {
