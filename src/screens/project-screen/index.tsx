@@ -119,7 +119,7 @@ const ProjectPage: FC = () => {
             <Accordion
               defaultExpandedKeys={["Loops"]}
               variant="splitted"
-              selectionMode="multiple"
+              selectionMode="single"
             >
               <AccordionItem
                 key={"Video"}
@@ -151,6 +151,7 @@ const ProjectPage: FC = () => {
                     <span>Loops</span>
                   </div>
                 }
+                keepContentMounted
               >
                 <LoopTabs />
               </AccordionItem>
@@ -164,6 +165,7 @@ const ProjectPage: FC = () => {
                     <span>Timeline</span>
                   </div>
                 }
+                keepContentMounted
               >
                 <Timeline />
               </AccordionItem>
