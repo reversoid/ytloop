@@ -6,7 +6,7 @@ import {
 import { ValidLoop, isLoopValid } from "@/entities/project/utils/is-loop-valid";
 import {
   workspaceCurrentLoopAtom,
-  workspaceEnabledCountdown,
+  workspaceEnabledCountdownAtom,
   workspaceIsPlayingAtom,
 } from "@/entities/workspace/model";
 import { loopColorHash } from "@/shared/utils/loop-color-hash";
@@ -23,7 +23,7 @@ export const LoopsList = () => {
   const [currentLoop, setCurrentLoop] = useAtom(workspaceCurrentLoopAtom);
   const [isPlaying, setIsPlaying] = useAtom(workspaceIsPlayingAtom);
 
-  const isCountdownEnabled = useAtomValue(workspaceEnabledCountdown);
+  const isCountdownEnabled = useAtomValue(workspaceEnabledCountdownAtom);
 
   const metronome = useContext(MetronomeContext);
 

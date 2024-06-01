@@ -4,4 +4,5 @@ export const PlayerContext = createContext<{
   getCurrentTime?: () => number;
   seekTo?: (seconds: number) => void;
   isPlayerReady: boolean;
-}>({ isPlayerReady: false });
+  videoLength: number;
+}>({ isPlayerReady: false, videoLength: 0 });

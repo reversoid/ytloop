@@ -1,14 +1,15 @@
 "use client";
-import { FC, useCallback, useRef } from "react";
+import { FC, useCallback, useRef, useState } from "react";
 import ReactPlayer from "react-player";
 import { OnProgressProps } from "react-player/base";
 
 import { projectAtom } from "@/entities/project/model";
 import { isLoopValid } from "@/entities/project/utils/is-loop-valid";
 import {
+  workspaceContinuePlayingAfterLoopEndsAtom,
   workspaceCurrentLoopAtom,
   workspaceCurrentVideoPosition,
-  workspaceEnabledCountdown,
+  workspaceEnabledCountdownAtom,
   workspaceIsPlayingAtom,
 } from "@/entities/workspace/model";
 import { ExportProjectButton } from "@/features/export-project";
@@ -47,9 +48,15 @@ const ProjectPage: FC = () => {
 
   const currentLoop = useAtomValue(workspaceCurrentLoopAtom);
 
-  const enabledCountdown = useAtomValue(workspaceEnabledCountdown);
+  const enabledCountdown = useAtomValue(workspaceEnabledCountdownAtom);
 
   const { value: isPlayerReady, setTrue: markPlayerAsReady } = useBoolean();
+
+  const [videoLength, setVideoLength] = useState(0);
+
+  const continuePlayingAfterLoopEnds = useAtomValue(
+    workspaceContinuePlayingAfterLoopEndsAtom
+  );
 
   const seekTo = useCallback((seconds: number) => {
     ref.current?.seekTo(seconds);
@@ -78,6 +85,10 @@ const ProjectPage: FC = () => {
       return;
     }
 
+    if (continuePlayingAfterLoopEnds) {
+      return;
+    }
+
     if (currentLoop.bpm && enabledCountdown) {
       setPlaying(false);
       seekTo(currentLoop.from);
@@ -96,6 +107,7 @@ const ProjectPage: FC = () => {
         seekTo,
         getCurrentTime: ref.current?.getCurrentTime,
         isPlayerReady,
+        videoLength,
       }}
     >
       <MetronomeContext.Provider
@@ -139,6 +151,7 @@ const ProjectPage: FC = () => {
                   refCallback={(player: ReactPlayer | null) =>
                     (ref.current = player)
                   }
+                  onDuration={(v) => setVideoLength(v)}
                 />
               </AccordionItem>
 
@@ -165,7 +178,6 @@ const ProjectPage: FC = () => {
                     <span>Timeline</span>
                   </div>
                 }
-                keepContentMounted
               >
                 <Timeline />
               </AccordionItem>

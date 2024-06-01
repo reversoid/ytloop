@@ -3,7 +3,7 @@
 import {
   workspaceCurrentLoopAtom,
   workspaceDeltaAtom,
-  workspaceEnabledCountdown,
+  workspaceEnabledCountdownAtom,
   workspaceIsPlayingAtom,
 } from "@/entities/workspace/model";
 import { PlayButton } from "@/features/play-button";
@@ -39,7 +39,7 @@ export const TimecodesForm = () => {
   const [invalid, setInvalid] = useState(false);
 
   const [tickBeforeStart, setTickBeforeStart] = useAtom(
-    workspaceEnabledCountdown
+    workspaceEnabledCountdownAtom
   );
 
   const metronome = useContext(MetronomeContext);
