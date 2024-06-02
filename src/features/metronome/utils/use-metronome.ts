@@ -1,12 +1,13 @@
 import { projectOptionsAtom } from "@/entities/project/model";
 import { useAtomValue } from "jotai";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const usePlaybackSpeed = () => {
   const projectOptions = useAtomValue(projectOptionsAtom);
   return projectOptions?.videoSpeed ?? 1;
 };
 
+/** Implements all ticking logic about metronome  */
 export const useMetronome = () => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const audioContextRef = useRef<AudioContext | null>(null);
@@ -17,7 +18,7 @@ export const useMetronome = () => {
   const playbackSpeed = usePlaybackSpeed();
 
   const audioUrl = "/metronome-click.mp3";
-  const intervalRef = useRef<number>(0); // seconds per beat
+  const intervalRef = useRef<number>(0);
 
   useEffect(() => {
     const audioContext = new window.AudioContext();
@@ -49,29 +50,39 @@ export const useMetronome = () => {
     };
   }, []);
 
-  const scheduleNote = (
-    clicksToPlay: number | undefined,
-    resolve: () => void
-  ) => {
-    while (
-      nextNoteTimeRef.current <
-      audioContextRef.current!.currentTime + 0.1
-    ) {
-      if (clicksToPlay !== undefined && clickCountRef.current >= clicksToPlay) {
-        stopMetronome();
-        resolve();
-        return;
-      }
-
-      playClick(nextNoteTimeRef.current);
-      nextNoteTimeRef.current += intervalRef.current;
-      clickCountRef.current += 1;
+  const stopMetronome = useCallback(() => {
+    if (timerIDRef.current !== null) {
+      clearTimeout(timerIDRef.current);
     }
-    timerIDRef.current = window.setTimeout(
-      () => scheduleNote(clicksToPlay, resolve),
-      25
-    );
-  };
+    setIsPlaying(false);
+  }, []);
+
+  const scheduleNote = useCallback(
+    (clicksToPlay: number | undefined, resolve: () => void) => {
+      while (
+        nextNoteTimeRef.current <
+        audioContextRef.current!.currentTime + 0.1
+      ) {
+        if (
+          clicksToPlay !== undefined &&
+          clickCountRef.current >= clicksToPlay
+        ) {
+          stopMetronome();
+          resolve();
+          return;
+        }
+
+        playClick(nextNoteTimeRef.current);
+        nextNoteTimeRef.current += intervalRef.current;
+        clickCountRef.current += 1;
+      }
+      timerIDRef.current = window.setTimeout(
+        () => scheduleNote(clicksToPlay, resolve),
+        25
+      );
+    },
+    [stopMetronome]
+  );
 
   const playClick = (time: number) => {
     const source = audioContextRef.current!.createBufferSource();
@@ -80,26 +91,22 @@ export const useMetronome = () => {
     source.start(time);
   };
 
-  const playMetronome = (bpm: number, clicksToPlay?: number): Promise<void> => {
-    if (!audioBufferRef.current) {
-      return Promise.reject("Audio buffer not loaded yet.");
-    }
-    intervalRef.current = 60 / bpm / playbackSpeed;
-    nextNoteTimeRef.current = audioContextRef.current!.currentTime;
-    clickCountRef.current = 0;
-    setIsPlaying(true);
+  const playMetronome = useCallback(
+    (bpm: number, clicksToPlay?: number): Promise<void> => {
+      if (!audioBufferRef.current) {
+        return Promise.reject("Audio buffer not loaded yet.");
+      }
+      intervalRef.current = 60 / bpm / playbackSpeed;
+      nextNoteTimeRef.current = audioContextRef.current!.currentTime;
+      clickCountRef.current = 0;
+      setIsPlaying(true);
 
-    return new Promise<void>((resolve) => {
-      scheduleNote(clicksToPlay, resolve);
-    });
-  };
-
-  const stopMetronome = () => {
-    if (timerIDRef.current !== null) {
-      clearTimeout(timerIDRef.current);
-    }
-    setIsPlaying(false);
-  };
+      return new Promise<void>((resolve) => {
+        scheduleNote(clicksToPlay, resolve);
+      });
+    },
+    [playbackSpeed, scheduleNote]
+  );
 
   return { isPlaying, play: playMetronome, stop: stopMetronome };
 };

@@ -1,14 +1,16 @@
-import { workspaceCurrentVideoPosition } from "@/entities/workspace/model";
+import {
+  playerCurrentVideoPositionAtom,
+  playerVideoLengthAtom,
+} from "@/widgets/player/model";
 import { Progress } from "@nextui-org/react";
 import { useAtomValue } from "jotai";
-import { FC, useContext } from "react";
+import { FC } from "react";
 import styles from "./styles.module.css";
-import { PlayerContext } from "@/shared/utils/player-context";
 
 export const VideoLine: FC = () => {
-  const currentVideoPosition = useAtomValue(workspaceCurrentVideoPosition);
+  const currentVideoPosition = useAtomValue(playerCurrentVideoPositionAtom);
 
-  const { videoLength } = useContext(PlayerContext);
+  const videoLength = useAtomValue(playerVideoLengthAtom);
 
   const progress = ((currentVideoPosition ?? 0) / videoLength) * 100;
 

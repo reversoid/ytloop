@@ -4,23 +4,24 @@ import {
   workspaceCurrentLoopAtom,
   workspaceDeltaAtom,
   workspaceEnabledCountdownAtom,
-  workspaceIsPlayingAtom,
 } from "@/entities/workspace/model";
 import { PlayButton } from "@/features/play-button";
 import { TimecodeInput } from "@/shared/timecode-input";
-import { PlayerContext } from "@/shared/utils/player-context";
 import { Checkbox } from "@nextui-org/react";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { DisabledTickExplanation } from "./disabled-tick-explanation";
-import { MetronomeContext } from "@/features/metronome/utils/metronome-context";
+import {
+  playerGetCurrentTimeFnAtom,
+  playerIsPlayingAtom,
+  playerSeekToFnAtom,
+} from "@/widgets/player/model";
+import { metronomeAtom } from "@/features/metronome";
 
 export const TimecodesForm = () => {
   const [currentLoop, setCurrentLoop] = useAtom(workspaceCurrentLoopAtom);
   const [stepValue, setStepValue] = useAtom(workspaceDeltaAtom);
-  const [isPlaying, setIsPlaying] = useAtom(workspaceIsPlayingAtom);
-
-  const { getCurrentTime, seekTo } = useContext(PlayerContext);
+  const [isPlaying, setIsPlaying] = useAtom(playerIsPlayingAtom);
 
   const setStartValue = useCallback(
     (v: number | null) => {
@@ -42,7 +43,11 @@ export const TimecodesForm = () => {
     workspaceEnabledCountdownAtom
   );
 
-  const metronome = useContext(MetronomeContext);
+  const metronome = useAtomValue(metronomeAtom);
+
+  const getCurrentTime = useAtomValue(playerGetCurrentTimeFnAtom);
+
+  const seekTo = useAtomValue(playerSeekToFnAtom);
 
   useEffect(() => {
     if (!currentLoop?.bpm) {
@@ -131,15 +136,15 @@ export const TimecodesForm = () => {
           }
           onPlay={() => {
             if (tickBeforeStart) {
-              metronome
-                .play(currentLoop?.bpm!, 4)
-                .then(() => setIsPlaying(true));
+              metronome.play!(currentLoop?.bpm!, 4).then(() =>
+                setIsPlaying(true)
+              );
             } else {
               setIsPlaying(true);
             }
           }}
           onStop={() => {
-            metronome.stop();
+            metronome.stop!();
 
             setIsPlaying(false);
             if (currentLoop?.from !== undefined) {

@@ -1,12 +1,13 @@
 import { workspaceCurrentLoopAtom } from "@/entities/workspace/model";
-import { PlayerContext } from "@/shared/utils/player-context";
+import { playerReadyAtom, playerSeekToFnAtom } from "@/widgets/player/model";
 import { useAtomValue } from "jotai";
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 
 export const useAutoSeekStart = () => {
   const currentLoop = useAtomValue(workspaceCurrentLoopAtom);
 
-  const { seekTo, isPlayerReady } = useContext(PlayerContext);
+  const seekTo = useAtomValue(playerSeekToFnAtom);
+  const isPlayerReady = useAtomValue(playerReadyAtom);
 
   useEffect(() => {
     if (isPlayerReady && currentLoop?.from !== undefined) {

@@ -1,2 +1,2 @@
-export { useMetronome } from "./utils/use-metronome";
-export { MetronomeContext } from "./utils/metronome-context";
+export { useInitMetronome } from "./utils/use-init-metronome";
+export * from "./model";

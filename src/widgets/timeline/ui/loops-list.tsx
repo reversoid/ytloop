@@ -1,35 +1,32 @@
-import {
-  Loop,
-  projectLoopsAtom,
-  projectOptionsAtom,
-} from "@/entities/project/model";
-import { ValidLoop, isLoopValid } from "@/entities/project/utils/is-loop-valid";
+import { Loop, projectOptionsAtom } from "@/entities/project/model";
+import { ValidLoop } from "@/entities/project/utils/is-loop-valid";
 import {
   workspaceCurrentLoopAtom,
   workspaceEnabledCountdownAtom,
-  workspaceIsPlayingAtom,
 } from "@/entities/workspace/model";
+import { metronomeAtom } from "@/features/metronome";
 import { loopColorHash } from "@/shared/utils/loop-color-hash";
-import { PlayerContext } from "@/shared/utils/player-context";
+import {
+  playerIsPlayingAtom,
+  playerSeekToFnAtom,
+} from "@/widgets/player/model";
 import { Button } from "@nextui-org/react";
 import { useAtom, useAtomValue } from "jotai";
-import React, { useContext } from "react";
 import { useSortedValidLoops } from "../utils/use-sorted-valid-loops";
-import { MetronomeContext } from "@/features/metronome";
 
 export const LoopsList = () => {
   const loops = useSortedValidLoops();
 
   const [currentLoop, setCurrentLoop] = useAtom(workspaceCurrentLoopAtom);
-  const [isPlaying, setIsPlaying] = useAtom(workspaceIsPlayingAtom);
+  const [isPlaying, setIsPlaying] = useAtom(playerIsPlayingAtom);
 
   const isCountdownEnabled = useAtomValue(workspaceEnabledCountdownAtom);
 
-  const metronome = useContext(MetronomeContext);
+  const metronome = useAtomValue(metronomeAtom);
 
   const projectOptions = useAtomValue(projectOptionsAtom);
 
-  const { seekTo } = useContext(PlayerContext);
+  const seekTo = useAtomValue(playerSeekToFnAtom);
 
   const isSelectedLoop = (loopId: Loop["id"]) => loopId === currentLoop?.id;
 
@@ -37,14 +34,15 @@ export const LoopsList = () => {
     seekTo?.(loop.from);
     setCurrentLoop(loop);
 
-    if (isPlaying) {
+    if (isPlaying && loop.id === currentLoop?.id) {
       setIsPlaying(false);
+      return;
+    }
+
+    if (isCountdownEnabled && projectOptions?.bpm) {
+      metronome.play!(projectOptions.bpm, 4).then(() => setIsPlaying(true));
     } else {
-      if (isCountdownEnabled && projectOptions?.bpm) {
-        metronome.play(projectOptions.bpm, 4).then(() => setIsPlaying(true));
-      } else {
-        setIsPlaying(true);
-      }
+      setIsPlaying(true);
     }
   };
 
