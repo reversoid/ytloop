@@ -35,6 +35,7 @@ export const LoopsList = () => {
     setCurrentLoop(loop);
 
     if (isPlaying && loop.id === currentLoop?.id) {
+      metronome.stop!();
       setIsPlaying(false);
       return;
     }
