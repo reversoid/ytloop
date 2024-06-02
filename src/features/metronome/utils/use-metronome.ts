@@ -57,6 +57,13 @@ export const useMetronome = () => {
     setIsPlaying(false);
   }, []);
 
+  const playClick = (time: number) => {
+    const source = audioContextRef.current!.createBufferSource();
+    source.buffer = audioBufferRef.current;
+    source.connect(audioContextRef.current!.destination);
+    source.start(time);
+  };
+
   const scheduleNote = useCallback(
     (clicksToPlay: number | undefined, resolve: () => void) => {
       while (
@@ -83,13 +90,6 @@ export const useMetronome = () => {
     },
     [stopMetronome]
   );
-
-  const playClick = (time: number) => {
-    const source = audioContextRef.current!.createBufferSource();
-    source.buffer = audioBufferRef.current;
-    source.connect(audioContextRef.current!.destination);
-    source.start(time);
-  };
 
   const playMetronome = useCallback(
     (bpm: number, clicksToPlay?: number): Promise<void> => {
