@@ -13,10 +13,10 @@ export const Timeline: FC = () => {
 
   useEffect(() => {
     return () => setContinuePlaying(false);
-  }, []);
+  }, [setContinuePlaying]);
 
   return (
-    <div className="p-2 pb-3 flex flex-col gap-4">
+    <div className="p-2 pb-3 flex flex-col gap-6">
       <div className="w-full flex flex-col gap-4">
         <VideoLine />
         <LoopsGrid />

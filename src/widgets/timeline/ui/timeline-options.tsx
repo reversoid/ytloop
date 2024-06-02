@@ -15,12 +15,17 @@ export const TimelineOptions = () => {
   );
 
   return (
-    <>
-      <Checkbox isSelected={tickBeforeStart} onValueChange={setTickBeforeStart}>
+    <div className="flex flex-col gap-2">
+      <Checkbox
+        size="lg"
+        isSelected={tickBeforeStart}
+        onValueChange={setTickBeforeStart}
+      >
         Tick before loop starts
       </Checkbox>
 
       <Checkbox
+        size="lg"
         isSelected={continuePlaying}
         onValueChange={(v) => {
           setContinuePlaying(v);
@@ -28,6 +33,6 @@ export const TimelineOptions = () => {
       >
         Continue playing after loop ends
       </Checkbox>
-    </>
+    </div>
   );
 };

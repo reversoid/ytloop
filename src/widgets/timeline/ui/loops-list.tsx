@@ -34,13 +34,14 @@ export const LoopsList = () => {
     seekTo?.(loop.from);
     setCurrentLoop(loop);
 
-    if (isPlaying && loop.id === currentLoop?.id) {
+    if ((isPlaying || metronome.isPlaying) && loop.id === currentLoop?.id) {
       metronome.stop!();
       setIsPlaying(false);
       return;
     }
 
     if (isCountdownEnabled && projectOptions?.bpm) {
+      setIsPlaying(false);
       metronome.play!(projectOptions.bpm, 4).then(() => setIsPlaying(true));
     } else {
       setIsPlaying(true);
@@ -48,33 +49,36 @@ export const LoopsList = () => {
   };
 
   return (
-    <div className="flex flex-col gap-2">
-      {loops?.map((loop) => (
-        <Button
-          disableRipple
-          className="flex justify-start"
-          size="lg"
-          key={loop.id}
-          onClick={() => handleLoopClick(loop)}
-          color={isSelectedLoop(loop.id) ? "primary" : "default"}
-          variant={
-            isPlaying && isSelectedLoop(loop.id)
-              ? "bordered"
-              : isSelectedLoop(loop.id)
-              ? "solid"
-              : "bordered"
-          }
-        >
-          <div className="flex gap-2 items-center">
-            <div
-              style={{ background: loopColorHash.hex(loop.id) }}
-              className="w-2 h-2 rounded-lg"
-            ></div>
+    <div className="flex flex-col gap-3">
+      <b>Play loops</b>
+      <div className="flex flex-col gap-2">
+        {loops?.map((loop) => (
+          <Button
+            disableRipple
+            className="flex justify-start"
+            size="lg"
+            key={loop.id}
+            onClick={() => handleLoopClick(loop)}
+            color={isSelectedLoop(loop.id) ? "primary" : "default"}
+            variant={
+              (isPlaying || metronome.isPlaying) && isSelectedLoop(loop.id)
+                ? "bordered"
+                : isSelectedLoop(loop.id)
+                ? "solid"
+                : "bordered"
+            }
+          >
+            <div className="flex gap-2 items-center">
+              <div
+                style={{ background: loopColorHash.hex(loop.id) }}
+                className="w-2 h-2 rounded-lg"
+              ></div>
 
-            <p>{loop.name}</p>
-          </div>
-        </Button>
-      ))}
+              <p>{loop.name}</p>
+            </div>
+          </Button>
+        ))}
+      </div>
     </div>
   );
 };
