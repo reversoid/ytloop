@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int    @id @default(autoincrement()) @map("id") @db.Integer()
+  publicId String @unique @map("public_id") @db.VarChar(10)
+
+  email        String    @unique @map("email") @db.VarChar(255)
+  passwordHash String    @map("password_hash") @db.Char(80)
+  projects     Project[]
+}
+
+model Project {
+  id       Int    @id @default(autoincrement()) @map("id") @db.Integer()
+  publicId String @unique @map("public_id") @db.VarChar(10)
+
+  name        String   @map("name") @db.VarChar(64)
+  description String?  @map("description") @db.VarChar(512)
+  videoId     String   @map("video_id") @db.VarChar(32)
+  bpm         Int?     @map("bpm") @db.SmallInt
+  videoSpeed  Decimal? @map("video_speed") @db.Decimal(2, 2)
+  loops       Loop[]
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int  @map("user_id") @db.Integer()
+}
+
+model Loop {
+  id Int @id @default(autoincrement()) @map("id") @db.Integer()
+
+  name        String  @map("name") @db.VarChar(64)
+  description String? @map("description") @db.VarChar(512)
+  fromTimeMs  Int?    @map("from_time_ms") @db.Integer
+  toTimeMs    Int?    @map("to_time_ms") @db.Integer
+  bpm         Int?    @map("bpm") @db.SmallInt
+
+  project   Project @relation(fields: [projectId], references: [id])
+  projectId Int     @map("project_id") @db.Integer()
+}
