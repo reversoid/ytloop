@@ -11,31 +11,54 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement()) @map("id") @db.Integer()
-  publicId String @unique @map("public_id") @db.VarChar(10)
+  id String @id @map("id") @db.VarChar(10)
 
-  email        String    @unique @map("email") @db.VarChar(255)
-  passwordHash String    @map("password_hash") @db.Char(80)
-  projects     Project[]
+  email        String @unique @map("email") @db.VarChar(255)
+  username     String @map("username") @db.VarChar(32)
+  passwordHash String @map("password_hash") @db.Char(80)
+
+  projects    Project[]
+  invitations ProjectInvite[]
+
+  @@map("users")
 }
 
 model Project {
-  id       Int    @id @default(autoincrement()) @map("id") @db.Integer()
-  publicId String @unique @map("public_id") @db.VarChar(10)
+  id String @id @map("id") @db.VarChar(10)
 
   name        String   @map("name") @db.VarChar(64)
   description String?  @map("description") @db.VarChar(512)
   videoId     String   @map("video_id") @db.VarChar(32)
   bpm         Int?     @map("bpm") @db.SmallInt
   videoSpeed  Decimal? @map("video_speed") @db.Decimal(2, 2)
-  loops       Loop[]
+  password    String?  @map("password") @db.VarChar(16)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz()
 
-  user   User @relation(fields: [userId], references: [id])
-  userId Int  @map("user_id") @db.Integer()
+  userId String @map("user_id") @db.VarChar(10)
+
+  invites ProjectInvite[]
+  user    User            @relation(fields: [userId], references: [id])
+  loops   Loop[]
+
+  @@map("projects")
+}
+
+model ProjectInvite {
+  id        String   @id @map("id") @db.VarChar(10)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  projectId String @map("project_id") @db.VarChar(10)
+  userId    String @map("user_id") @db.VarChar(10)
+
+  user    User    @relation(fields: [userId], references: [id])
+  project Project @relation(fields: [projectId], references: [id])
+
+  @@unique([userId, projectId])
+  @@map("project_invites")
 }
 
 model Loop {
-  id Int @id @default(autoincrement()) @map("id") @db.Integer()
+  id String @map("id") @db.VarChar(10)
 
   name        String  @map("name") @db.VarChar(64)
   description String? @map("description") @db.VarChar(512)
@@ -43,6 +66,10 @@ model Loop {
   toTimeMs    Int?    @map("to_time_ms") @db.Integer
   bpm         Int?    @map("bpm") @db.SmallInt
 
-  project   Project @relation(fields: [projectId], references: [id])
-  projectId Int     @map("project_id") @db.Integer()
+  projectId String @map("project_id") @db.VarChar(10)
+
+  project Project @relation(fields: [projectId], references: [id])
+
+  @@id([projectId, id])
+  @@map("loops")
 }
