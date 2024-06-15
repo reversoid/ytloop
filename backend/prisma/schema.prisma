@@ -27,13 +27,14 @@ model User {
 model Project {
   id String @id @map("id") @db.VarChar(10)
 
-  name        String   @map("name") @db.VarChar(64)
-  description String?  @map("description") @db.VarChar(512)
-  videoId     String   @map("video_id") @db.VarChar(32)
-  bpm         Int?     @map("bpm") @db.SmallInt
-  videoSpeed  Decimal? @map("video_speed") @db.Decimal(2, 2)
-  password    String?  @map("password") @db.VarChar(16)
-  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  name        String    @map("name") @db.VarChar(64)
+  description String?   @map("description") @db.VarChar(512)
+  videoId     String    @map("video_id") @db.VarChar(32)
+  bpm         Int?      @map("bpm") @db.SmallInt
+  videoSpeed  Decimal?  @map("video_speed") @db.Decimal(2, 2)
+  password    String?   @map("password") @db.VarChar(16)
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  deletedAt   DateTime? @map("deleted_at") @db.Timestamptz()
 
   userId String @map("user_id") @db.VarChar(10)
 
