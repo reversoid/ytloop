@@ -3,9 +3,11 @@ import fastifyRedis from "@fastify/redis";
 
 export default fp(
   async (fastify) => {
-    fastify.register(fastifyRedis, {
-      url: fastify.config.REDIS_URL,
+    await fastify.register(fastifyRedis, {
       closeClient: true,
+      port: fastify.config.REDIS_PORT,
+      name: fastify.config.REDIS_NAME,
+      password: fastify.config.REDIS_PASSWORD,
     });
   },
   { name: "redis", dependencies: ["env"] }

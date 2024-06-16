@@ -3,8 +3,12 @@ import fastifyEnv from "@fastify/env";
 
 const envProperties = {
   PORT: { type: "number" },
-  POSTGRES_URL: { type: "string" },
-  REDIS_URL: { type: "string" },
+
+  REDIS_PORT: { type: "number" },
+  REDIS_PASSWORD: { type: "string" },
+  REDIS_NAME: { type: "string" },
+
+  DATABASE_URL: { type: "string" },
 } as const;
 
 type EnvProperties = {
@@ -31,8 +35,10 @@ export default fp(
         properties: envProperties,
         required: [
           "PORT",
-          "POSTGRES_URL",
-          "REDIS_URL",
+          "DATABASE_URL",
+          "REDIS_NAME",
+          "REDIS_PASSWORD",
+          "REDIS_PORT",
         ] satisfies (keyof typeof envProperties)[],
       },
     });
