@@ -10,6 +10,10 @@ export class ProjectService {
 
   async createProject() {}
 
+  async getProjects() {}
+
+  async getProjectByID() {}
+
   async forkProject() {}
 
   async removeProject() {}

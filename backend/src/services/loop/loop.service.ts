@@ -14,4 +14,6 @@ export class LoopService {
   removeLoop() {}
 
   editLoop() {}
+
+  getLoops() {}
 }

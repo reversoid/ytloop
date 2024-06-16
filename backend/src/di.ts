@@ -31,3 +31,16 @@ export const initDI = () => {
     }),
   });
 };
+
+declare module "@fastify/awilix" {
+  interface Cradle {
+    loopRepository: LoopRepository;
+    loopService: LoopService;
+
+    userRepository: UserRepository;
+    userService: UserService;
+
+    projectRepository: ProjectRepository;
+    projectService: ProjectService;
+  }
+}
