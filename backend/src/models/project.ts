@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { userSchema } from "./user.js";
+import { selectUser, userSchema } from "./user.js";
+import { PrismaSelectEntity } from "../utils/select-entity.js";
 
 export const projectSchema = z.object({
   id: z.string(),
@@ -14,3 +15,17 @@ export const projectSchema = z.object({
 });
 
 export type Project = z.infer<typeof projectSchema>;
+
+export const selectProject: PrismaSelectEntity<Project> = {
+  bpm: true,
+  createdAt: true,
+  description: true,
+  id: true,
+  name: true,
+  password: true,
+  videoId: true,
+  videoSpeed: true,
+  user: {
+    select: selectUser,
+  },
+};

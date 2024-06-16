@@ -1,5 +1,8 @@
 import { UserService } from "../user/user.service.js";
 import { AuthTokenService } from "./auth-token.service.js";
+import { NoUserException, WrongCredentialsException } from "./errors.js";
+import { LoginUserDto, LogoutUserDto, RegisterUserDto } from "./types.js";
+import * as bcrypt from "bcrypt";
 
 export class AuthService {
   private readonly userService: UserService;
@@ -16,22 +19,49 @@ export class AuthService {
     this.authTokenService = authTokenService;
   }
 
-  login() {
-    // find user;
+  async login(dto: LoginUserDto) {
+    const existingUser = await this.userService.UNSAFE_getUserByEmail(
+      dto.email
+    );
 
-    this.authTokenService.generateTokenPair("some-id");
-    this.authTokenService.claimRefreshToken("some-id", "some token");
+    if (!existingUser) {
+      throw new NoUserException();
+    }
+
+    const passwordsAreEqual = await bcrypt.compare(
+      dto.password,
+      existingUser.passwordHash
+    );
+
+    if (!passwordsAreEqual) {
+      throw new WrongCredentialsException();
+    }
+
+    const tokens = this.authTokenService.generateTokenPair(existingUser.id);
+    await this.authTokenService.claimRefreshToken(
+      existingUser.id,
+      tokens.refreshToken
+    );
+
+    return tokens;
   }
 
-  register() {
-    this.userService.createUser();
+  async register(dto: RegisterUserDto) {
+    const user = await this.userService.createUser(dto);
 
-    this.authTokenService.generateTokenPair("some-id");
-    this.authTokenService.claimRefreshToken("some-id", "some token");
+    const tokens = this.authTokenService.generateTokenPair(user.id);
+    await this.authTokenService.claimRefreshToken(user.id, tokens.refreshToken);
+
+    return tokens;
   }
 
-  logout() {
-    // find user
-    this.authTokenService.revokeRefreshToken("some-id", "some token");
+  async logout(dto: LogoutUserDto) {
+    const user = await this.userService.getUserById(dto.userId);
+
+    if (!user) {
+      return;
+    }
+
+    await this.authTokenService.revokeRefreshToken(user.id, dto.refreshToken);
   }
 }

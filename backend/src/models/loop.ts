@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { PrismaSelectEntity } from "../utils/select-entity.js";
 
 export const loopSchema = z.object({
   id: z.string(),
@@ -10,3 +11,12 @@ export const loopSchema = z.object({
 });
 
 export type Loop = z.infer<typeof loopSchema>;
+
+export const selectLoop: PrismaSelectEntity<Loop> = {
+  bpm: true,
+  description: true,
+  fromTimeMs: true,
+  id: true,
+  name: true,
+  toTimeMs: true,
+};

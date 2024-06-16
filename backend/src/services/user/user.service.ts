@@ -1,4 +1,6 @@
-import { UserRepository } from "./user.repository.js";
+import { User } from "../../models/user.js";
+import { UserRepository } from "../../repositories/user/user.repository.js";
+import { CreateUserDto, EditUserDto } from "./types.js";
 
 export class UserService {
   private readonly userRepository: UserRepository;
@@ -8,9 +10,19 @@ export class UserService {
     console.log(typeof this.userRepository);
   }
 
-  async userExists() {}
+  async createUser(dto: CreateUserDto): Promise<User> {
+    return this.userRepository.createUser(dto);
+  }
 
-  async createUser() {}
+  async editUser(userId: User["id"], dto: EditUserDto) {
+    return this.userRepository.editUser(userId, dto);
+  }
 
-  async editUser() {}
+  async getUserById(userId: User["id"]) {
+    return this.userRepository.getUserById(userId);
+  }
+
+  async UNSAFE_getUserByEmail(email: User["email"]) {
+    return this.userRepository.UNSAFE_getUserByEmail(email);
+  }
 }

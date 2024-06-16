@@ -1,4 +1,4 @@
-import { LoopRepository } from "./loop.repository.js";
+import { LoopRepository } from "../../repositories/loop/loop.repository.js";
 
 export class LoopService {
   private readonly loopRepository: LoopRepository;

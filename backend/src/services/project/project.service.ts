@@ -1,4 +1,4 @@
-import { ProjectRepository } from "./project.repository.js";
+import { ProjectRepository } from "../../repositories/project/project.repository.js";
 
 export class ProjectService {
   private readonly projectRepository: ProjectRepository;
