@@ -6,7 +6,7 @@ export const projectInviteSchema = z.object({
   id: z.string(),
   createdAt: z.date(),
   project: projectSchema,
-  user: userSchema,
+  user: userSchema.nullable(),
 });
 
 export type ProjectInvite = z.infer<typeof projectInviteSchema>;
