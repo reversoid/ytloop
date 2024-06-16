@@ -11,7 +11,7 @@ import { UserService } from "../services/user/user.service.js";
 import { AuthService } from "../services/auth/auth.service.js";
 import { AuthTokenService } from "../services/auth/auth-token.service.js";
 import fastifyRedis from "@fastify/redis";
-import fastifyPostgres from "@fastify/postgres";
+import { PrismaClient } from "@prisma/client";
 
 declare module "@fastify/awilix" {
   interface Cradle {
@@ -28,16 +28,16 @@ declare module "@fastify/awilix" {
     authTokenService: AuthTokenService;
 
     redisClient: fastifyRedis.FastifyRedis;
-    postgresClient: fastifyPostgres.PostgresDb;
+    prismaClient: PrismaClient;
   }
 }
 
 const initDI = ({
   redisClient,
-  postgresClient,
+  prismaClient,
 }: {
   redisClient: fastifyRedis.FastifyRedis;
-  postgresClient: fastifyPostgres.PostgresDb;
+  prismaClient: PrismaClient;
 }) => {
   diContainer.register({
     userRepository: asClass(UserRepository, {
@@ -70,7 +70,7 @@ const initDI = ({
     }),
 
     redisClient: asValue(redisClient),
-    postgresClient: asValue(postgresClient),
+    prismaClient: asValue(prismaClient),
   });
 };
 
@@ -82,7 +82,7 @@ export default fp(
       strictBooleanEnforced: true,
     });
 
-    initDI({ redisClient: fastify.redis, postgresClient: fastify.pg });
+    initDI({ redisClient: fastify.redis, prismaClient: fastify.prisma });
   },
   { dependencies: ["redis", "postgres"] }
 );
