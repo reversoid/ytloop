@@ -1,7 +1,12 @@
 import { UserService } from "../user/user.service.js";
 import { AuthTokenService } from "./auth-token.service.js";
 import { NoUserException, WrongCredentialsException } from "./errors.js";
-import { LoginUserDto, LogoutUserDto, RegisterUserDto } from "./types.js";
+import {
+  LoginUserDto,
+  LogoutUserDto,
+  RefreshDto,
+  RegisterUserDto,
+} from "./types.js";
 import * as bcrypt from "bcrypt";
 
 export class AuthService {
@@ -63,5 +68,20 @@ export class AuthService {
     }
 
     await this.authTokenService.revokeRefreshToken(user.id, dto.refreshToken);
+  }
+
+  async refreshTokens(dto: RefreshDto) {
+    const user = await this.userService.getUserById(dto.userId);
+
+    if (!user) {
+      return;
+    }
+
+    await this.authTokenService.revokeRefreshToken(user.id, dto.refreshToken);
+
+    const tokens = this.authTokenService.generateTokenPair(user.id);
+    await this.authTokenService.claimRefreshToken(user.id, tokens.refreshToken);
+
+    return tokens;
   }
 }
