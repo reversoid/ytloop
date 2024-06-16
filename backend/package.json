@@ -20,8 +20,10 @@
   "license": "ISC",
   "dependencies": {
     "@fastify/autoload": "^5.0.0",
+    "@fastify/awilix": "^5.1.0",
     "@fastify/sensible": "^5.0.0",
     "@prisma/client": "^5.15.0",
+    "awilix": "^10.0.2",
     "fastify": "^4.26.1",
     "fastify-cli": "^6.1.1",
     "fastify-plugin": "^4.0.0",
