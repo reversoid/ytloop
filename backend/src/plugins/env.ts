@@ -8,7 +8,7 @@ const envProperties = {
   REDIS_PASSWORD: { type: "string" },
   REDIS_NAME: { type: "string" },
 
-  DATABASE_URL: { type: "string" },
+  POSTGRES_URL: { type: "string" },
 } as const;
 
 type EnvProperties = {
@@ -35,7 +35,7 @@ export default fp(
         properties: envProperties,
         required: [
           "PORT",
-          "DATABASE_URL",
+          "POSTGRES_URL",
           "REDIS_NAME",
           "REDIS_PASSWORD",
           "REDIS_PORT",
