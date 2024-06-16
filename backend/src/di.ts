@@ -6,6 +6,22 @@ import { ProjectRepository } from "./services/project/project.repository.js";
 import { ProjectService } from "./services/project/project.service.js";
 import { UserRepository } from "./services/user/user.repository.js";
 import { UserService } from "./services/user/user.service.js";
+import { AuthService } from "./services/auth/auth.service.js";
+
+declare module "@fastify/awilix" {
+  interface Cradle {
+    loopRepository: LoopRepository;
+    loopService: LoopService;
+
+    userRepository: UserRepository;
+    userService: UserService;
+
+    projectRepository: ProjectRepository;
+    projectService: ProjectService;
+
+    authService: AuthService;
+  }
+}
 
 export const initDI = () => {
   diContainer.register({
@@ -29,18 +45,9 @@ export const initDI = () => {
     projectService: asClass(ProjectService, {
       lifetime: Lifetime.SINGLETON,
     }),
+
+    authService: asClass(AuthService, {
+      lifetime: Lifetime.SINGLETON,
+    }),
   });
 };
-
-declare module "@fastify/awilix" {
-  interface Cradle {
-    loopRepository: LoopRepository;
-    loopService: LoopService;
-
-    userRepository: UserRepository;
-    userService: UserService;
-
-    projectRepository: ProjectRepository;
-    projectService: ProjectService;
-  }
-}

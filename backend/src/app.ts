@@ -1,6 +1,6 @@
 import AutoLoad, { AutoloadPluginOptions } from "@fastify/autoload";
 import { fastifyAwilixPlugin } from "@fastify/awilix";
-import { FastifyPluginAsync, FastifyRequest } from "fastify";
+import { FastifyPluginAsync } from "fastify";
 import * as path from "path";
 import { fileURLToPath } from "url";
 import { initDI } from "./di.js";
