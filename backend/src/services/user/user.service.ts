@@ -5,6 +5,7 @@ export class UserService {
 
   constructor({ userRepository }: { userRepository: UserRepository }) {
     this.userRepository = userRepository;
+    console.log(typeof this.userRepository);
   }
 
   async userExists() {}

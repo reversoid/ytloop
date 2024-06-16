@@ -5,6 +5,7 @@ export class ProjectService {
 
   constructor({ projectRepository }: { projectRepository: ProjectRepository }) {
     this.projectRepository = projectRepository;
+    console.log(typeof this.projectRepository);
   }
 
   async createProject() {}

@@ -7,7 +7,9 @@ export class LoopService {
     this.loopRepository = loopRepository;
   }
 
-  createLoop() {}
+  createLoop() {
+    return typeof this.loopRepository;
+  }
 
   removeLoop() {}
 
