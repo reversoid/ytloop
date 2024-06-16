@@ -7,6 +7,7 @@ import { ProjectService } from "./services/project/project.service.js";
 import { UserRepository } from "./services/user/user.repository.js";
 import { UserService } from "./services/user/user.service.js";
 import { AuthService } from "./services/auth/auth.service.js";
+import { AuthTokenService } from "./services/auth/auth-token.service.js";
 
 declare module "@fastify/awilix" {
   interface Cradle {
@@ -20,6 +21,7 @@ declare module "@fastify/awilix" {
     projectService: ProjectService;
 
     authService: AuthService;
+    authTokenService: AuthTokenService;
   }
 }
 
@@ -47,6 +49,10 @@ export const initDI = () => {
     }),
 
     authService: asClass(AuthService, {
+      lifetime: Lifetime.SINGLETON,
+    }),
+
+    authTokenService: asClass(AuthTokenService, {
       lifetime: Lifetime.SINGLETON,
     }),
   });

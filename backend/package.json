@@ -28,6 +28,7 @@
     "@paralleldrive/cuid2": "^2.2.2",
     "@prisma/client": "^5.15.0",
     "awilix": "^10.0.2",
+    "bcrypt": "^5.1.1",
     "fastify": "^4.26.1",
     "fastify-cli": "^6.1.1",
     "fastify-plugin": "^4.0.0",
