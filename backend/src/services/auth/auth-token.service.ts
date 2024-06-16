@@ -1,5 +1,5 @@
 export class AuthTokenService {
-  generateTokenPair(userId: string) {
+  async generateTokenPair(userId: string) {
     return { accessToken: "", refreshToken: "" };
   }
 
