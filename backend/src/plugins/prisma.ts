@@ -18,5 +18,5 @@ export default fp(
       await server.prisma.$disconnect();
     });
   },
-  { name: "postgres", dependencies: ["env"] }
+  { name: "prisma", dependencies: ["env"] }
 );

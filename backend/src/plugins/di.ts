@@ -84,5 +84,5 @@ export default fp(
 
     initDI({ redisClient: fastify.redis, prismaClient: fastify.prisma });
   },
-  { dependencies: ["redis", "postgres"] }
+  { dependencies: ["redis", "prisma"] }
 );
