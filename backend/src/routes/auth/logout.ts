@@ -1,7 +1,7 @@
 import { FastifyPluginAsync } from "fastify";
 
 const auth: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
-  fastify.post("/logout", async function (request, reply) {
+  fastify.post("/", async function (request, reply) {
     const authService = fastify.diContainer.resolve("authService");
     const lucia = fastify.diContainer.resolve("lucia");
 

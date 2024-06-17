@@ -15,7 +15,7 @@ const login: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
   fastify
     .withTypeProvider<ZodTypeProvider>()
     .post(
-      "/login",
+      "/",
       { schema: { body: loginSchema } },
       async function (request, reply) {
         const authService = fastify.diContainer.resolve("authService");
