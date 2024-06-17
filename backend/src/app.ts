@@ -6,7 +6,6 @@ import { fileURLToPath } from "url";
 import {
   serializerCompiler,
   validatorCompiler,
-  ZodTypeProvider,
 } from "fastify-type-provider-zod";
 
 const __filename = fileURLToPath(import.meta.url);

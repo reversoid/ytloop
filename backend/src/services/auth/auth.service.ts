@@ -1,27 +1,22 @@
+import { Lucia } from "lucia";
 import { UserService } from "../user/user.service.js";
-import { AuthTokenService } from "./auth-token.service.js";
 import { NoUserException, WrongCredentialsException } from "./errors.js";
-import {
-  LoginUserDto,
-  LogoutUserDto,
-  RefreshDto,
-  RegisterUserDto,
-} from "./types.js";
+import { LoginUserDto, LogoutUserDto, RegisterUserDto } from "./types.js";
 import * as bcrypt from "bcrypt";
 
 export class AuthService {
   private readonly userService: UserService;
-  private readonly authTokenService: AuthTokenService;
+  private readonly lucia: Lucia;
 
   constructor({
     userService,
-    authTokenService,
+    lucia,
   }: {
     userService: UserService;
-    authTokenService: AuthTokenService;
+    lucia: Lucia;
   }) {
     this.userService = userService;
-    this.authTokenService = authTokenService;
+    this.lucia = lucia;
   }
 
   async login(dto: LoginUserDto) {
@@ -42,46 +37,20 @@ export class AuthService {
       throw new WrongCredentialsException();
     }
 
-    const tokens = this.authTokenService.generateTokenPair(existingUser.id);
-    await this.authTokenService.claimRefreshToken(
-      existingUser.id,
-      tokens.refreshToken
-    );
+    const session = await this.lucia.createSession(existingUser.id, {});
 
-    return tokens;
+    return { sessionId: session.id };
   }
 
   async register(dto: RegisterUserDto) {
     const user = await this.userService.createUser(dto);
 
-    const tokens = this.authTokenService.generateTokenPair(user.id);
-    await this.authTokenService.claimRefreshToken(user.id, tokens.refreshToken);
+    const session = await this.lucia.createSession(user.id, {});
 
-    return tokens;
+    return { sessionId: session.id };
   }
 
   async logout(dto: LogoutUserDto) {
-    const user = await this.userService.getUserById(dto.userId);
-
-    if (!user) {
-      return;
-    }
-
-    await this.authTokenService.revokeRefreshToken(user.id, dto.refreshToken);
-  }
-
-  async refreshTokens(dto: RefreshDto) {
-    const user = await this.userService.getUserById(dto.userId);
-
-    if (!user) {
-      return;
-    }
-
-    await this.authTokenService.revokeRefreshToken(user.id, dto.refreshToken);
-
-    const tokens = this.authTokenService.generateTokenPair(user.id);
-    await this.authTokenService.claimRefreshToken(user.id, tokens.refreshToken);
-
-    return tokens;
+    await this.lucia.invalidateSession(dto.sessionId);
   }
 }

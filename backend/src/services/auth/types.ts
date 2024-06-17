@@ -12,8 +12,7 @@ export type LoginUserDto = {
 };
 
 export type LogoutUserDto = {
-  userId: User["id"];
-  refreshToken: string;
+  sessionId: string;
 };
 
 export type RefreshDto = {
