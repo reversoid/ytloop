@@ -27,8 +27,8 @@ model User {
 
 model Session {
   id        String   @id @map("id") @db.Text()
-  userId    String   @db.VarChar(10)
-  expiresAt DateTime @db.Timestamptz()
+  userId    String   @map("user_id") @db.VarChar(10)
+  expiresAt DateTime @map("expires_at") @db.Timestamptz()
 
   user User @relation(references: [id], fields: [userId], onDelete: Cascade)
 
