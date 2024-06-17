@@ -12,6 +12,7 @@ import { AuthService } from "../services/auth/auth.service.js";
 import { AuthTokenService } from "../services/auth/auth-token.service.js";
 import fastifyRedis from "@fastify/redis";
 import { PrismaClient } from "@prisma/client";
+import { Lucia } from "lucia";
 
 declare module "@fastify/awilix" {
   interface Cradle {
@@ -29,15 +30,19 @@ declare module "@fastify/awilix" {
 
     redisClient: fastifyRedis.FastifyRedis;
     prismaClient: PrismaClient;
+
+    lucia: Lucia<Record<never, never>, Record<never, never>>;
   }
 }
 
 const initDI = ({
   redisClient,
   prismaClient,
+  lucia,
 }: {
   redisClient: fastifyRedis.FastifyRedis;
   prismaClient: PrismaClient;
+  lucia: Lucia;
 }) => {
   diContainer.register({
     userRepository: asClass(UserRepository, {
@@ -71,6 +76,8 @@ const initDI = ({
 
     redisClient: asValue(redisClient),
     prismaClient: asValue(prismaClient),
+
+    lucia: asValue(lucia),
   });
 };
 
@@ -82,7 +89,11 @@ export default fp(
       strictBooleanEnforced: true,
     });
 
-    initDI({ redisClient: fastify.redis, prismaClient: fastify.prisma });
+    initDI({
+      redisClient: fastify.redis,
+      prismaClient: fastify.prisma,
+      lucia: fastify.lucia,
+    });
   },
-  { dependencies: ["redis", "prisma"] }
+  { dependencies: ["redis", "prisma", "lucia"] }
 );

@@ -1,7 +1,10 @@
 import { FastifyPluginAsync } from "fastify";
 
 const auth: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
-  fastify.post("/login", async function (request, reply) {});
+  fastify.post("/login", async function (request, reply) {
+    const authService = fastify.diContainer.resolve("authService");
+    // TODO body validation
+  });
 
   fastify.post("/register", async function (request, reply) {});
 
