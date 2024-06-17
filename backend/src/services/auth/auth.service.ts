@@ -1,6 +1,10 @@
 import { Lucia } from "lucia";
 import { UserService } from "../user/user.service.js";
-import { NoUserException, WrongCredentialsException } from "./errors.js";
+import {
+  NoUserException,
+  UserAlreadyExtistsException,
+  WrongCredentialsException,
+} from "./errors.js";
 import { LoginUserDto, LogoutUserDto, RegisterUserDto } from "./types.js";
 import * as bcrypt from "bcrypt";
 
@@ -43,6 +47,12 @@ export class AuthService {
   }
 
   async register(dto: RegisterUserDto) {
+    const existingUser = await this.userService.getUserByEmail(dto.email);
+
+    if (existingUser) {
+      throw new UserAlreadyExtistsException();
+    }
+
     const user = await this.userService.createUser(dto);
 
     const session = await this.lucia.createSession(user.id, {});

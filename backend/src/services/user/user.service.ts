@@ -25,4 +25,8 @@ export class UserService {
   async UNSAFE_getUserByEmail(email: User["email"]) {
     return this.userRepository.UNSAFE_getUserByEmail(email);
   }
+
+  async getUserByEmail(email: User["email"]) {
+    return this.userRepository.getUserByEmail(email);
+  }
 }

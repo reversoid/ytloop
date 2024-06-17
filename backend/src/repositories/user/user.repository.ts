@@ -47,4 +47,11 @@ export class UserRepository {
       where: { email },
     });
   }
+
+  async getUserByEmail(email: User["email"]) {
+    return await this.prismaClient.user.findFirst({
+      where: { email },
+      select: selectUser,
+    });
+  }
 }

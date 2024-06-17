@@ -9,3 +9,9 @@ export class WrongCredentialsException extends Error {
     super("WRONG_CREDENTIALS");
   }
 }
+
+export class UserAlreadyExtistsException extends Error {
+  constructor() {
+    super("ALREADY_EXISTS");
+  }
+}
