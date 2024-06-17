@@ -10,7 +10,7 @@ const envProperties = {
 
   POSTGRES_URL: { type: "string" },
 
-  MODE: { type: "string", oneOf: ["dev", "stage", "prod"] },
+  MODE: { type: "string" },
 } as const;
 
 type EnvProperties = {
