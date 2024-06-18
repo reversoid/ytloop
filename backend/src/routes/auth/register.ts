@@ -10,38 +10,38 @@ export const registerSchema = z.object({
 });
 
 const register: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
-  fastify
-    .withTypeProvider<ZodTypeProvider>()
-    .post(
-      "/register",
-      { schema: { body: registerSchema } },
-      async function (request, reply) {
-        const authService = fastify.diContainer.resolve("authService");
-        const lucia = fastify.diContainer.resolve("lucia");
+  fastify.withTypeProvider<ZodTypeProvider>().post(
+    "/register",
+    {
+      schema: { body: registerSchema },
+    },
+    async function (request, reply) {
+      const authService = fastify.diContainer.resolve("authService");
+      const lucia = fastify.diContainer.resolve("lucia");
 
-        const { email, password, username } = request.body;
+      const { email, password, username } = request.body;
 
-        try {
-          const { sessionId } = await authService.register({
-            email,
-            password,
-            username,
-          });
-          const cookie = lucia.createSessionCookie(sessionId);
+      try {
+        const { sessionId } = await authService.register({
+          email,
+          password,
+          username,
+        });
+        const cookie = lucia.createSessionCookie(sessionId);
 
-          reply.setCookie(cookie.name, cookie.value, {
-            ...cookie.attributes,
-            signed: true,
-          });
+        reply.setCookie(cookie.name, cookie.value, {
+          ...cookie.attributes,
+          signed: true,
+        });
 
-          return {};
-        } catch (error) {
-          if (error instanceof UserAlreadyExtistsException) {
-            return reply.badRequest("USER_ALREADY_EXISTS");
-          }
+        return {};
+      } catch (error) {
+        if (error instanceof UserAlreadyExtistsException) {
+          return reply.badRequest("USER_ALREADY_EXISTS");
         }
       }
-    );
+    }
+  );
 };
 
 export default register;
