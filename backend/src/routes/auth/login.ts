@@ -15,7 +15,7 @@ const login: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
   fastify
     .withTypeProvider<ZodTypeProvider>()
     .post(
-      "/",
+      "/login",
       { schema: { body: loginSchema } },
       async function (request, reply) {
         const authService = fastify.diContainer.resolve("authService");
@@ -26,7 +26,11 @@ const login: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
         try {
           const { sessionId } = await authService.login({ email, password });
           const cookie = lucia.createSessionCookie(sessionId);
-          return reply.setCookie(cookie.name, cookie.value, cookie.attributes);
+          reply.setCookie(cookie.name, cookie.value, {
+            ...cookie.attributes,
+            signed: true,
+          });
+          return {};
         } catch (error) {
           if (
             error instanceof WrongCredentialsException ||

@@ -3,6 +3,8 @@ import { Lucia, TimeSpan } from "lucia";
 import { prismaClient } from "../db/prisma-client.js";
 import fastifyPlugin from "fastify-plugin";
 
+export const SESSION_COOKIE_NAME = "ssid";
+
 export default fastifyPlugin(
   async (fastify) => {
     const dbAdapter = new PrismaAdapter(
@@ -12,7 +14,7 @@ export default fastifyPlugin(
 
     const lucia = new Lucia(dbAdapter, {
       sessionCookie: {
-        name: "session",
+        name: SESSION_COOKIE_NAME,
         expires: false,
         attributes: {
           secure: fastify.config.MODE !== "dev",

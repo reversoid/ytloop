@@ -11,6 +11,8 @@ const envProperties = {
   POSTGRES_URL: { type: "string" },
 
   MODE: { type: "string" },
+
+  COOKIE_SECRET: { type: "string" },
 } as const;
 
 type EnvProperties = {
@@ -42,6 +44,7 @@ export default fp(
           "REDIS_PASSWORD",
           "REDIS_PORT",
           "MODE",
+          "COOKIE_SECRET",
         ] satisfies (keyof typeof envProperties)[],
       },
     });

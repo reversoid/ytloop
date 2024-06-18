@@ -1,30 +1,50 @@
-import fastifySecureSession from "@fastify/secure-session";
-import fp from "fastify-plugin";
-import { ExtractJwt, Strategy as JWTStrategy } from "passport-jwt";
-import fastifyPassport from "@fastify/passport";
+import fastifyPlugin from "fastify-plugin";
+import { type Session, type User } from "lucia";
+import { SESSION_COOKIE_NAME } from "./lucia.js";
 
-export default fp(async (fastify) => {
-  fastify.register(fastifySecureSession, {
-    key: Buffer.allocUnsafe(32),
-    cookieName: "access_token",
-  });
-  fastify.register(fastifyPassport.default.initialize());
-  fastify.register(fastifyPassport.default.secureSession());
+export default fastifyPlugin(
+  async (fastify) => {
+    fastify.addHook("preHandler", async (request, reply) => {
+      const lucia = fastify.lucia;
 
-  fastifyPassport.default.use(
-    "jwt",
-    new JWTStrategy(
-      {
-        secretOrKey: "some-jwt-secret",
-        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      },
-      async (x, done) => {
-        if ("good") {
-          return done(null, { user: "super" });
-        }
+      const { value: sessionId, valid } = request.unsignCookie(
+        request.cookies[SESSION_COOKIE_NAME] ?? ""
+      );
 
-        return done(null, false);
+      if (!valid || !sessionId) {
+        request.user = null;
+        request.session = null;
+        return;
       }
-    )
-  );
-});
+
+      const { session, user } = await lucia.validateSession(sessionId);
+
+      if (session && session.fresh) {
+        const cookie = lucia.createSessionCookie(session.id);
+        reply.setCookie(cookie.name, cookie.value, cookie.attributes);
+      }
+
+      if (!session) {
+        const blankCookie = lucia.createBlankSessionCookie();
+        reply.setCookie(
+          blankCookie.name,
+          blankCookie.value,
+          blankCookie.attributes
+        );
+      }
+
+      request.user = user;
+      request.session = session;
+    });
+  },
+  {
+    name: "auth",
+  }
+);
+
+declare module "fastify" {
+  export interface FastifyRequest {
+    user: User | null;
+    session: Session | null;
+  }
+}

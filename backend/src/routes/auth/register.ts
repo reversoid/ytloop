@@ -13,7 +13,7 @@ const register: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
   fastify
     .withTypeProvider<ZodTypeProvider>()
     .post(
-      "/",
+      "/register",
       { schema: { body: registerSchema } },
       async function (request, reply) {
         const authService = fastify.diContainer.resolve("authService");
@@ -28,7 +28,13 @@ const register: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
             username,
           });
           const cookie = lucia.createSessionCookie(sessionId);
-          return reply.setCookie(cookie.name, cookie.value, cookie.attributes);
+
+          reply.setCookie(cookie.name, cookie.value, {
+            ...cookie.attributes,
+            signed: true,
+          });
+
+          return {};
         } catch (error) {
           if (error instanceof UserAlreadyExtistsException) {
             return reply.badRequest("USER_ALREADY_EXISTS");
