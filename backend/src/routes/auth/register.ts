@@ -1,5 +1,4 @@
-import { FastifyPluginAsync } from "fastify";
-import { ZodTypeProvider } from "fastify-type-provider-zod";
+import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { z } from "zod";
 import { UserAlreadyExtistsException } from "../../services/auth/errors.js";
 
@@ -9,8 +8,8 @@ export const registerSchema = z.object({
   password: z.string().min(8),
 });
 
-const register: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
-  fastify.withTypeProvider<ZodTypeProvider>().post(
+const register: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
+  fastify.post(
     "/register",
     {
       schema: { body: registerSchema },
@@ -34,7 +33,7 @@ const register: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
           signed: true,
         });
 
-        return {};
+        return;
       } catch (error) {
         if (error instanceof UserAlreadyExtistsException) {
           return reply.conflict("USER_ALREADY_EXISTS");

@@ -15,7 +15,7 @@ const projects: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
       const projectId = request.params.projectId;
       await projectService.removeProject(projectId);
 
-      reply.code(204);
+      return reply.code(204);
     }
   );
 };

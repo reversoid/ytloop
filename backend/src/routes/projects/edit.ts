@@ -32,7 +32,7 @@ const editProject: FastifyPluginAsyncZod = async (fastify) => {
         videoSpeed,
       });
 
-      reply.send({ project });
+      return reply.send({ project });
     }
   );
 };

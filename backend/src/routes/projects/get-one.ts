@@ -16,7 +16,7 @@ const getOne: FastifyPluginAsyncZod = async (fastify) => {
       }
 
       // TODO also send loops
-      reply.send({ project });
+      return reply.send({ project });
     }
   );
 };

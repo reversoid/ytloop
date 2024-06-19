@@ -47,10 +47,10 @@ const createProject: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
           password,
           videoSpeed,
         });
-        reply.code(201).send({ project });
+        return reply.code(201).send({ project });
       } catch (error) {
         if (error instanceof ProjectExistsException) {
-          reply.conflict("PROJECT_ALREADY_EXISTS");
+          return reply.conflict("PROJECT_ALREADY_EXISTS");
         }
         throw error;
       }

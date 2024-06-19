@@ -14,7 +14,7 @@ const getUserProjects: FastifyPluginAsyncZod = async (fastify) => {
 
       const projects = await projectService.getProjects(userId);
 
-      reply.send({ projects });
+      return reply.send({ projects });
     }
   );
 };

@@ -1,5 +1,4 @@
-import { FastifyPluginAsync } from "fastify";
-import { ZodTypeProvider } from "fastify-type-provider-zod";
+import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { z } from "zod";
 import {
   NoUserException,
@@ -11,36 +10,34 @@ export const loginSchema = z.object({
   password: z.string(),
 });
 
-const login: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
-  fastify
-    .withTypeProvider<ZodTypeProvider>()
-    .post(
-      "/login",
-      { schema: { body: loginSchema } },
-      async function (request, reply) {
-        const authService = fastify.diContainer.resolve("authService");
-        const lucia = fastify.diContainer.resolve("lucia");
+const login: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
+  fastify.post(
+    "/login",
+    { schema: { body: loginSchema } },
+    async function (request, reply) {
+      const authService = fastify.diContainer.resolve("authService");
+      const lucia = fastify.diContainer.resolve("lucia");
 
-        const { email, password } = request.body;
+      const { email, password } = request.body;
 
-        try {
-          const { sessionId } = await authService.login({ email, password });
-          const cookie = lucia.createSessionCookie(sessionId);
-          reply.setCookie(cookie.name, cookie.value, {
-            ...cookie.attributes,
-            signed: true,
-          });
-          return {};
-        } catch (error) {
-          if (
-            error instanceof WrongCredentialsException ||
-            error instanceof NoUserException
-          ) {
-            return reply.badRequest("WRONG_CREDENTIALS");
-          }
+      try {
+        const { sessionId } = await authService.login({ email, password });
+        const cookie = lucia.createSessionCookie(sessionId);
+        reply.setCookie(cookie.name, cookie.value, {
+          ...cookie.attributes,
+          signed: true,
+        });
+        return;
+      } catch (error) {
+        if (
+          error instanceof WrongCredentialsException ||
+          error instanceof NoUserException
+        ) {
+          return reply.badRequest("WRONG_CREDENTIALS");
         }
       }
-    );
+    }
+  );
 };
 
 export default login;
