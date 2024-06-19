@@ -1,14 +1,15 @@
 import { z } from "zod";
 import { selectUser, userSchema } from "./user.js";
 import { PrismaSelectEntity } from "../utils/select-entity.js";
+import { Prisma } from "@prisma/client";
 
 export const projectSchema = z.object({
   id: z.string(),
   name: z.string(),
   description: z.string().nullable(),
   videoId: z.string(),
-  bpm: z.number().int(),
-  videoSpeed: z.string(),
+  bpm: z.number().int().nullable(),
+  videoSpeed: z.custom((v) => new Prisma.Decimal(v)),
   password: z.string().nullable(),
   createdAt: z.date(),
   user: userSchema,

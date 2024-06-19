@@ -1,22 +1,78 @@
+import { Project } from "../../models/project.js";
+import { User } from "../../models/user.js";
 import { ProjectRepository } from "../../repositories/project/project.repository.js";
+import { ProjectExistsException } from "./errors.js";
+import { CreateProjectDto, EditProjectDto } from "./types.js";
 
 export class ProjectService {
   private readonly projectRepository: ProjectRepository;
 
   constructor({ projectRepository }: { projectRepository: ProjectRepository }) {
     this.projectRepository = projectRepository;
-    console.log(typeof this.projectRepository);
   }
 
-  async createProject() {}
+  async createProject(dto: CreateProjectDto): Promise<Project> {
+    if (dto.id && (await this.projectRepository.getProject(dto.id))) {
+      throw new ProjectExistsException();
+    }
 
-  async getProjects() {}
+    const newProject = await this.projectRepository.createProject({
+      id: dto.id,
+      name: dto.name,
+      userId: dto.userId,
+      videoId: dto.videoId,
+      bpm: dto.bpm,
+      description: dto.description,
+      password: dto.password,
+      videoSpeed: dto.videoSpeed,
+    });
 
-  async getProjectByID() {}
+    return newProject;
+  }
 
-  async forkProject() {}
+  async getProjects(userId: User["id"]): Promise<Project[]> {
+    return this.projectRepository.getUserProjects(userId);
+  }
 
-  async removeProject() {}
+  async getProjectByID(id: Project["id"]): Promise<Project | null> {
+    return this.projectRepository.getProject(id);
+  }
 
-  async editProject() {}
+  async forkProject(
+    id: Project["id"],
+    userId: User["id"]
+  ): Promise<Project | null> {
+    const existingProject = await this.getProjectByID(id);
+
+    if (!existingProject) {
+      return null;
+    }
+
+    return this.createProject({
+      userId,
+      name: existingProject.name,
+      videoId: existingProject.videoId,
+      bpm: existingProject.bpm ?? undefined,
+      description: existingProject.description ?? undefined,
+      password: existingProject.password ?? undefined,
+      videoSpeed: existingProject.videoSpeed,
+    });
+  }
+
+  async removeProject(id: Project["id"]): Promise<void> {
+    await this.projectRepository.deleteProject(id);
+  }
+
+  async editProject(
+    projectId: Project["id"],
+    dto: EditProjectDto
+  ): Promise<Project | null> {
+    return this.projectRepository.editProject(projectId, {
+      name: dto.name,
+      bpm: dto.bpm,
+      description: dto.description,
+      password: dto.password,
+      videoSpeed: dto.videoSpeed,
+    });
+  }
 }
