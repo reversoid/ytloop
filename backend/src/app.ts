@@ -20,6 +20,16 @@ const app: FastifyPluginAsync<AppOptions> = async (
   // Some code here
 
   fastify.setErrorHandler((error, _request, reply) => {
+    if (error.statusCode === 400) {
+      try {
+        const errorsObjects = JSON.parse(error.message);
+        return reply.code(400).send({
+          message: "BAD_REQUEST",
+          errors: errorsObjects,
+        });
+      } catch (error) {}
+    }
+
     const isInternalError = error.statusCode === undefined;
 
     if (isInternalError) {
