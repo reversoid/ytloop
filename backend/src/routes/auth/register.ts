@@ -37,7 +37,7 @@ const register: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
         return {};
       } catch (error) {
         if (error instanceof UserAlreadyExtistsException) {
-          return reply.badRequest("USER_ALREADY_EXISTS");
+          return reply.conflict("USER_ALREADY_EXISTS");
         }
       }
     }
