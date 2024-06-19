@@ -7,7 +7,12 @@ export const authHook = (
 ) => {
   if (!request.session?.id) {
     reply.status(401);
-    done(new Error("UNAUTHORIZED"));
+    done({
+      code: "401",
+      message: "UNAUTHORIZED",
+      name: "AUTH",
+      statusCode: 401,
+    });
   }
   done();
 };

@@ -20,7 +20,15 @@ const app: FastifyPluginAsync<AppOptions> = async (
   // Some code here
 
   fastify.setErrorHandler((error, _request, reply) => {
-    reply.send({ message: error.message });
+    const isInternalError = error.statusCode === undefined;
+
+    if (isInternalError) {
+      return reply.code(500).send({ message: "INTERNAL_ERROR" });
+    }
+
+    const message = error.message.toLocaleUpperCase().split(" ").join("_");
+
+    reply.code(error.statusCode ?? 500).send({ message });
   });
 
   // Do not touch the following lines
