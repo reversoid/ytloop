@@ -1,7 +1,12 @@
 import { FastifyPluginAsync } from "fastify";
+import { authHook } from "../../utils/auth-hook.js";
 
 const projects: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
-  fastify.post("/", async function (request, reply) {});
+  fastify.post(
+    "/",
+    { preHandler: authHook },
+    async function (request, reply) {}
+  );
 
   fastify.get("/", async function (request, reply) {});
 

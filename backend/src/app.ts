@@ -19,6 +19,10 @@ const app: FastifyPluginAsync<AppOptions> = async (
 ): Promise<void> => {
   // Some code here
 
+  fastify.setErrorHandler((error, _request, reply) => {
+    reply.send({ message: error.message });
+  });
+
   // Do not touch the following lines
 
   // This loads all plugins defined in plugins
