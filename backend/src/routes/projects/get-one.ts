@@ -1,7 +1,7 @@
 import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { z } from "zod";
 
-const getOne: FastifyPluginAsyncZod = async (fastify) => {
+const getOneProject: FastifyPluginAsyncZod = async (fastify) => {
   const projectService = fastify.diContainer.resolve("projectService");
 
   fastify.get(
@@ -21,4 +21,4 @@ const getOne: FastifyPluginAsyncZod = async (fastify) => {
   );
 };
 
-export default getOne;
+export default getOneProject;

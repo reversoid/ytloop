@@ -2,7 +2,7 @@ import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { z } from "zod";
 import { authHook } from "../../utils/auth-hook.js";
 
-const projects: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
+const deleteProject: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
   const projectService = fastify.diContainer.resolve("projectService");
 
   fastify.delete(
@@ -20,4 +20,4 @@ const projects: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
   );
 };
 
-export default projects;
+export default deleteProject;
