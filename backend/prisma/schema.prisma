@@ -60,8 +60,10 @@ model ProjectInvite {
   id        String   @id @map("id") @db.VarChar(10)
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
 
-  projectId String  @map("project_id") @db.VarChar(10)
-  userId    String? @map("user_id") @db.VarChar(10)
+  projectId String @map("project_id") @db.VarChar(10)
+  userId    String @map("user_id") @db.VarChar(10)
+
+  acceptedAt DateTime? @map("accepted_at") @db.Timestamptz()
 
   user    User?   @relation(fields: [userId], references: [id])
   project Project @relation(fields: [projectId], references: [id])

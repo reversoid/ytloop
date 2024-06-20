@@ -1,6 +1,6 @@
 import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { z } from "zod";
-import { authHook } from "../../utils/auth-hook.js";
+import { authHook } from "../../utils/auth.hook.js";
 
 const deleteProject: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
   const projectService = fastify.diContainer.resolve("projectService");

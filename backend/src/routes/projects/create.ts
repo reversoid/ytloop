@@ -1,5 +1,5 @@
 import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
-import { authHook } from "../../utils/auth-hook.js";
+import { authHook } from "../../utils/auth.hook.js";
 import { z } from "zod";
 import { userSchema } from "../../models/user.js";
 import { ProjectExistsException } from "../../services/project/errors.js";

@@ -1,5 +1,5 @@
 import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
-import { authHook } from "../../utils/auth-hook.js";
+import { authHook } from "../../utils/auth.hook.js";
 
 const getUserProjects: FastifyPluginAsyncZod = async (fastify) => {
   const projectService = fastify.diContainer.resolve("projectService");

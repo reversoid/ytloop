@@ -1,7 +1,7 @@
 import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { projectSchema } from "../../models/project.js";
 import { z } from "zod";
-import { authHook } from "../../utils/auth-hook.js";
+import { authHook } from "../../utils/auth.hook.js";
 
 const editProjectSchema = z.object({
   id: projectSchema.shape.id,
