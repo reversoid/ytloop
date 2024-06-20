@@ -1,13 +1,13 @@
 import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
-import { authHook } from "../../utils/auth-hook.js";
-import { canAccessProjectHook } from "../../utils/can-access-project.js";
+import { authHook } from "../../../../utils/auth-hook.js";
+import { canAccessProjectHook } from "../../../../utils/can-access-project.js";
 import { z } from "zod";
 
-const getManyLoops: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
+const editLoop: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
   //   const loopService = fastify.diContainer.resolve("loopService");
 
-  fastify.get(
-    "/:projectId/loops",
+  fastify.patch(
+    "/:loopId",
     {
       preHandler: [authHook, canAccessProjectHook],
       schema: { params: z.object({}) },
@@ -18,4 +18,4 @@ const getManyLoops: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
   );
 };
 
-export default getManyLoops;
+export default editLoop;
