@@ -2,7 +2,7 @@ import { z } from "zod";
 import { PrismaSelectEntity } from "../utils/select-entity.js";
 
 export const loopSchema = z.object({
-  id: z.string(),
+  id: z.number().int(),
   name: z.string(),
   description: z.string().nullable(),
   fromTimeMs: z.number().int().nullable(),

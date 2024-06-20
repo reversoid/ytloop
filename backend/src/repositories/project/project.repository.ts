@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { createIdGenerator } from "../../utils/create-id.js";
+import { IdGenerator } from "../../utils/create-id.js";
 import { CreateProjectDto, EditProjectDto } from "./types.js";
 import { Project, selectProject } from "../../models/project.js";
 import { User } from "../../models/user.js";
@@ -7,7 +7,7 @@ import { User } from "../../models/user.js";
 export class ProjectRepository {
   private readonly prismaClient: PrismaClient;
 
-  private generateId = createIdGenerator("project");
+  private idGenerator = new IdGenerator("project");
 
   constructor({ prismaClient }: { prismaClient: PrismaClient }) {
     this.prismaClient = prismaClient;
@@ -17,7 +17,7 @@ export class ProjectRepository {
     return this.prismaClient.project.create({
       select: selectProject,
       data: {
-        id: dto.id ?? this.generateId(),
+        id: dto.id ?? this.idGenerator.generateId(),
         name: dto.name,
         videoId: dto.videoId,
         bpm: dto.bpm,

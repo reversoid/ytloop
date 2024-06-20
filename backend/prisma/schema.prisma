@@ -71,7 +71,7 @@ model ProjectInvite {
 }
 
 model Loop {
-  id String @map("id") @db.VarChar(10)
+  id Int @map("id") @db.Integer
 
   name        String  @map("name") @db.VarChar(64)
   description String? @map("description") @db.VarChar(512)

@@ -1,20 +1,20 @@
 import { PrismaClient } from "@prisma/client";
-import { createIdGenerator } from "../../utils/create-id.js";
 import { CreateUserDto, EditUserDto } from "./types.js";
 import * as bcrypt from "bcrypt";
 import { User, selectUser } from "../../models/user.js";
+import { IdGenerator } from "../../utils/create-id.js";
 
 export class UserRepository {
   private readonly prismaClient: PrismaClient;
 
-  private generateId = createIdGenerator("user");
+  private idGenerator = new IdGenerator("user");
 
   constructor({ prismaClient }: { prismaClient: PrismaClient }) {
     this.prismaClient = prismaClient;
   }
 
   async createUser(dto: CreateUserDto): Promise<User> {
-    const id = this.generateId();
+    const id = this.idGenerator.generateId();
     const passwordHash = await bcrypt.hash(dto.password, 12);
 
     const user = await this.prismaClient.user.create({
