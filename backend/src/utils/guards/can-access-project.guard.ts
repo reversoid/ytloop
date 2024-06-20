@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify";
 
-export const canAccessProjectHook = (
+export const canAccessProjectGuard = (
   request: FastifyRequest,
   reply: FastifyReply,
   done: HookHandlerDoneFunction

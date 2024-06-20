@@ -1,7 +1,7 @@
 import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { projectSchema } from "../../models/project.js";
 import { z } from "zod";
-import { authHook } from "../../utils/auth.hook.js";
+import { authGuard } from "../../utils/guards/auth.guard.js";
 
 const editProjectSchema = z.object({
   id: projectSchema.shape.id,
@@ -18,7 +18,7 @@ const editProject: FastifyPluginAsyncZod = async (fastify) => {
   fastify.patch(
     "/:projectId",
     {
-      preHandler: authHook,
+      preHandler: authGuard,
       schema: { body: editProjectSchema },
     },
     async function (request, reply) {

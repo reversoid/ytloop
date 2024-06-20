@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { IdGenerator } from "../../utils/create-id.js";
+import { IdGenerator } from "../../utils/db/create-id.js";
 import { CreateProjectDto, EditProjectDto } from "./types.js";
 import { Project, selectProject } from "../../models/project.js";
 import { User } from "../../models/user.js";

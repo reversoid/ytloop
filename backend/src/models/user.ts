@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { PrismaSelectEntity } from "../utils/select-entity.js";
+import { PrismaSelectEntity } from "../utils/db/select-entity.js";
 
 export const userSchema = z.object({
   id: z.string(),

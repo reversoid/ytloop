@@ -1,5 +1,5 @@
 import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
-import { authHook } from "../../utils/auth.hook.js";
+import { authGuard } from "../../utils/guards/auth.guard.js";
 import { z } from "zod";
 
 const forkProject: FastifyPluginAsyncZod = async (fastify) => {
@@ -8,7 +8,7 @@ const forkProject: FastifyPluginAsyncZod = async (fastify) => {
   fastify.post(
     "/:projectId/fork",
     {
-      preHandler: authHook,
+      preHandler: authGuard,
       schema: { params: z.object({ projectId: z.string().min(1) }) },
     },
     async function (request, reply) {

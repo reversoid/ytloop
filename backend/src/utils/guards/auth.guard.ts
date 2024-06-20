@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify";
 
-export const authHook = (
+export const authGuard = (
   request: FastifyRequest,
   reply: FastifyReply,
   done: HookHandlerDoneFunction

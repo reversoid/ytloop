@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { CreateUserDto, EditUserDto } from "./types.js";
 import * as bcrypt from "bcrypt";
 import { User, selectUser } from "../../models/user.js";
-import { IdGenerator } from "../../utils/create-id.js";
+import { IdGenerator } from "../../utils/db/create-id.js";
 
 export class UserRepository {
   private readonly prismaClient: PrismaClient;

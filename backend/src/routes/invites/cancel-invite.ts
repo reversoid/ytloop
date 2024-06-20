@@ -1,13 +1,13 @@
 import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
-import { authHook } from "../../utils/auth.hook.js";
-import { canAccessProjectHook } from "../../utils/can-access-project.hook.js";
+import { authGuard } from "../../utils/guards/auth.guard.js";
+import { canAccessProjectGuard } from "../../utils/guards/can-access-project.guard.js";
 import { z } from "zod";
 
 const deleteInvite: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
   fastify.delete(
     "/",
     {
-      preHandler: [authHook, canAccessProjectHook],
+      preHandler: [authGuard, canAccessProjectGuard],
       schema: { params: z.object({}) },
     },
     async function (request, reply) {

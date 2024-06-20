@@ -1,5 +1,5 @@
 import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
-import { authHook } from "../../utils/auth.hook.js";
+import { authGuard } from "../../utils/guards/auth.guard.js";
 import { z } from "zod";
 import { userSchema } from "../../models/user.js";
 import { ProjectExistsException } from "../../services/project/errors.js";
@@ -21,7 +21,7 @@ const createProject: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
   fastify.post(
     "/",
     {
-      preHandler: authHook,
+      preHandler: authGuard,
       schema: { body: createProjectSchema },
     },
     async function (request, reply) {

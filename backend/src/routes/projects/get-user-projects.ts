@@ -1,5 +1,5 @@
 import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
-import { authHook } from "../../utils/auth.hook.js";
+import { authGuard } from "../../utils/guards/auth.guard.js";
 
 const getUserProjects: FastifyPluginAsyncZod = async (fastify) => {
   const projectService = fastify.diContainer.resolve("projectService");
@@ -7,7 +7,7 @@ const getUserProjects: FastifyPluginAsyncZod = async (fastify) => {
   fastify.get(
     "/",
     {
-      preHandler: authHook,
+      preHandler: authGuard,
     },
     async function (request, reply) {
       const userId = request.session!.userId;

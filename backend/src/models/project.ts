@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { selectUser, userSchema } from "./user.js";
-import { PrismaSelectEntity } from "../utils/select-entity.js";
+import { PrismaSelectEntity } from "../utils/db/select-entity.js";
 import { Prisma } from "@prisma/client";
 
 export const projectSchema = z.object({
