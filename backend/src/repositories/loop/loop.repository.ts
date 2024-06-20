@@ -41,18 +41,20 @@ export class LoopRepository {
     id: Loop["id"],
     projectId: Project["id"],
     dto: EditLoopDto
-  ): Promise<Loop> {
-    return this.prismaClient.loop.update({
-      where: { projectId_id: { id, projectId } },
-      data: {
-        name: dto.name,
-        bpm: dto.bpm,
-        description: dto.description,
-        fromTimeMs: dto.fromTimeMs,
-        toTimeMs: dto.toTimeMs,
-      },
-      select: selectLoop,
-    });
+  ): Promise<Loop | null> {
+    return this.prismaClient.loop
+      .update({
+        where: { projectId_id: { id, projectId } },
+        data: {
+          name: dto.name,
+          bpm: dto.bpm,
+          description: dto.description,
+          fromTimeMs: dto.fromTimeMs,
+          toTimeMs: dto.toTimeMs,
+        },
+        select: selectLoop,
+      })
+      .catch(() => null);
   }
 
   async deleteLoop(id: Loop["id"], projectId: Project["id"]) {
@@ -61,7 +63,7 @@ export class LoopRepository {
     });
   }
 
-  async getLoops(projectId: Project["id"]): Promise<Loop[]> {
+  async getProjectLoops(projectId: Project["id"]): Promise<Loop[]> {
     return this.prismaClient.loop.findMany({
       where: { projectId },
       orderBy: { id: "asc" },
