@@ -21,7 +21,7 @@ const createProject: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
   fastify.post(
     "/",
     {
-      preHandler: authGuard,
+      preHandler: [authGuard],
       schema: { body: createProjectSchema },
     },
     async function (request, reply) {

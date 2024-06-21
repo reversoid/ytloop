@@ -39,6 +39,7 @@ const editLoop: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
         toTimeMs,
         name,
       });
+
       return reply.send(loop);
     }
   );

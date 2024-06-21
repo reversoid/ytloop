@@ -2,6 +2,7 @@ import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { projectSchema } from "../../models/project.js";
 import { z } from "zod";
 import { authGuard } from "../../utils/guards/auth.guard.js";
+import { canAccessProjectGuard } from "../../utils/guards/can-access-project.guard.js";
 
 const editProjectSchema = z.object({
   id: projectSchema.shape.id,
@@ -18,8 +19,11 @@ const editProject: FastifyPluginAsyncZod = async (fastify) => {
   fastify.patch(
     "/:projectId",
     {
-      preHandler: authGuard,
-      schema: { body: editProjectSchema },
+      preHandler: [authGuard, canAccessProjectGuard],
+      schema: {
+        params: z.object({ projectId: z.string().min(10).max(10) }),
+        body: editProjectSchema,
+      },
     },
     async function (request, reply) {
       const { id, bpm, description, name, password, videoSpeed } = request.body;

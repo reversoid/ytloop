@@ -3,10 +3,14 @@ import { z } from "zod";
 
 const getOneProject: FastifyPluginAsyncZod = async (fastify) => {
   const projectService = fastify.diContainer.resolve("projectService");
+  const loopService = fastify.diContainer.resolve("loopService");
 
   fastify.get(
     "/:projectId",
-    { schema: { params: z.object({ projectId: z.string().min(1) }) } },
+    {
+      schema: { params: z.object({ projectId: z.string().min(10).max(10) }) },
+      preHandler: [],
+    },
     async function (request, reply) {
       const projectId = request.params.projectId;
       const project = await projectService.getProjectByID(projectId);
@@ -15,8 +19,9 @@ const getOneProject: FastifyPluginAsyncZod = async (fastify) => {
         return reply.notFound();
       }
 
-      // TODO also send loops
-      return reply.send({ project });
+      const loops = await loopService.getLoops(project.id);
+
+      return reply.send({ project, loops });
     }
   );
 };

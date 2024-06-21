@@ -15,7 +15,7 @@ export const canAccessProjectGuard = async (
 
   if (!projectId) {
     throw new Error(
-      "No projectId in request. This hook must be called inside route with ':projectId' parameter."
+      "No projectId in request params. This hook must be called inside route with ':projectId' parameter."
     );
   }
 
