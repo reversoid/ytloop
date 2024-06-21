@@ -3,7 +3,7 @@ import { authGuard } from "../../../utils/guards/auth.guard.js";
 import { canAccessProjectGuard } from "../../../utils/guards/can-access-project.guard.js";
 import { z } from "zod";
 
-const declineInvite: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
+const rejectInvite: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
   fastify.patch(
     "/",
     {
@@ -16,4 +16,4 @@ const declineInvite: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
   );
 };
 
-export default declineInvite;
+export default rejectInvite;

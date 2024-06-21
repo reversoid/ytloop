@@ -26,30 +26,31 @@ export class InviteRepository {
     });
   }
 
-  async acceptInvite(
-    userId: User["id"],
-    inviteId: Invite["id"]
-  ): Promise<Invite> {
+  async getInvite(id: Invite["id"]): Promise<Invite | null> {
+    return this.prismaClient.projectInvite.findUnique({
+      where: { id },
+      select: selectInvite,
+    });
+  }
+
+  async acceptInvite(inviteId: Invite["id"]): Promise<Invite> {
     return this.prismaClient.projectInvite.update({
       data: {
         acceptedAt: new Date(),
         rejectedAt: null,
       },
-      where: { id: inviteId, userId },
+      where: { id: inviteId },
       select: selectInvite,
     });
   }
 
-  async rejectInvite(
-    userId: User["id"],
-    inviteId: Invite["id"]
-  ): Promise<Invite> {
+  async rejectInvite(inviteId: Invite["id"]): Promise<Invite> {
     return this.prismaClient.projectInvite.update({
       data: {
         acceptedAt: null,
         rejectedAt: new Date(),
       },
-      where: { id: inviteId, userId },
+      where: { id: inviteId },
       select: selectInvite,
     });
   }
