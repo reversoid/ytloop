@@ -7,7 +7,7 @@ const getInvites: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
   fastify.delete(
     "/:inviteId",
     {
-      preHandler: [authGuard, canAccessProjectGuard],
+      preHandler: [authGuard, canAccessProjectGuard("FULL")],
       schema: { params: z.object({}) },
     },
     async function (request, reply) {
