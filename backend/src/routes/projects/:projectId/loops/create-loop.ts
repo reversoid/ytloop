@@ -2,6 +2,16 @@ import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { authGuard } from "../../../../utils/guards/auth.guard.js";
 import { canAccessProjectGuard } from "../../../../utils/guards/can-access-project.guard.js";
 import { z } from "zod";
+import { projectSchema } from "../../../../models/project.js";
+
+const createLoopSchema = z.object({
+  name: z.string(),
+  projectId: projectSchema.shape.id,
+  bpm: z.number().int().optional(),
+  description: z.string().optional(),
+  fromTimeMs: z.number().int().optional(),
+  toTimeMs: z.number().int().optional(),
+});
 
 const createLoop: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
   const loopService = fastify.diContainer.resolve("loopService");
@@ -10,10 +20,25 @@ const createLoop: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
     "/",
     {
       preHandler: [authGuard, canAccessProjectGuard],
-      schema: { params: z.object({}) },
+      schema: {
+        params: z.object({ projectId: z.string().min(10).max(10) }),
+        body: createLoopSchema,
+      },
     },
     async function (request, reply) {
-      return reply.notImplemented();
+      const { name, projectId, bpm, description, fromTimeMs, toTimeMs } =
+        request.body;
+
+      const loop = await loopService.createLoop({
+        name,
+        projectId,
+        bpm,
+        description,
+        fromTimeMs,
+        toTimeMs,
+      });
+
+      return reply.status(201).send({ loop });
     }
   );
 };

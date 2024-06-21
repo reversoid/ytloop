@@ -37,7 +37,7 @@ export class LoopRepository {
     });
   }
 
-  editLoop(
+  async editLoop(
     id: Loop["id"],
     projectId: Project["id"],
     dto: EditLoopDto

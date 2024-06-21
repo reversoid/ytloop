@@ -11,8 +11,8 @@ export type CreateLoopDto = {
 
 export type EditLoopDto = {
   name?: string;
-  bpm?: number;
-  description?: string;
-  fromTimeMs?: number;
-  toTimeMs?: number;
+  bpm?: number | null;
+  description?: string | null;
+  fromTimeMs?: number | null;
+  toTimeMs?: number | null;
 };

@@ -4,16 +4,24 @@ import { canAccessProjectGuard } from "../../../../utils/guards/can-access-proje
 import { z } from "zod";
 
 const deleteLoop: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
-  //   const loopService = fastify.diContainer.resolve("loopService");
+  const loopService = fastify.diContainer.resolve("loopService");
 
   fastify.delete(
     "/:loopId",
     {
       preHandler: [authGuard, canAccessProjectGuard],
-      schema: { params: z.object({}) },
+      schema: {
+        params: z.object({
+          projectId: z.string().min(10).max(10),
+          loopId: z.coerce.number().int(),
+        }),
+      },
     },
     async function (request, reply) {
-      return reply.notImplemented();
+      const { loopId, projectId } = request.params;
+      await loopService.removeLoop(loopId, projectId);
+
+      return reply.status(204);
     }
   );
 };
