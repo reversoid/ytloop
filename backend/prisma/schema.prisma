@@ -61,11 +61,11 @@ model Project {
 }
 
 model ProjectCode {
-  code           String             @map("code") @db.VarChar(16)
-  codePermission ProjectPermissions @map("code_permission")
+  code       String             @map("code") @db.VarChar(16)
+  permission ProjectPermissions @map("permission")
 
   Project   Project @relation(fields: [projectId], references: [id])
-  projectId String  @unique @db.VarChar(10)
+  projectId String  @id @unique @map("project_id") @db.VarChar(10)
 
   @@map("project_codes")
 }
