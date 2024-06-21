@@ -1,9 +1,84 @@
 import { FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify";
 import { forbidden } from "./utils.js";
 import { ProjectPermission } from "../../models/project-code.js";
+import { Project } from "../../models/project.js";
+
+type AllPermissions = ProjectPermission | "OWNER" | "NONE";
+
+const permissionStrength: Record<AllPermissions, number> = {
+  NONE: 0,
+  R: 1,
+  RW: 2,
+  FULL: 3,
+  OWNER: 4,
+};
+
+const getPermission = async (
+  request: FastifyRequest,
+  project: Project
+): Promise<AllPermissions> => {
+  const projectService = request.diScope.resolve("projectService");
+  const inviteService = request.diScope.resolve("inviteService");
+
+  if (!request.session?.userId) {
+    return project.isPrivate ? "NONE" : "R";
+  }
+
+  const userId = request.session.userId;
+
+  if (userId === project.user.id) {
+    return "OWNER";
+  }
+
+  type PermissionGetter = () => Promise<ProjectPermission | "OWNER" | "NONE">;
+
+  const getPermissionFromInvite: PermissionGetter = async () => {
+    const userInvite = await inviteService.getUserProjectInvite(
+      userId,
+      project.id
+    );
+    return userInvite?.permission ?? "NONE";
+  };
+
+  const getPermissionFromCode: PermissionGetter = async () => {
+    const providedCode = (request.query as { code?: string })["code"];
+
+    if (!providedCode) {
+      return "NONE";
+    }
+
+    const realProjectCode = await projectService.getProjectCode(project.id);
+    if (!realProjectCode) {
+      return "NONE";
+    }
+
+    const { code, permission } = realProjectCode;
+    if (code === providedCode) {
+      return permission;
+    }
+
+    return "NONE";
+  };
+
+  let permission: ProjectPermission | "OWNER" | "NONE" = "NONE";
+
+  for (const getPermission of [
+    getPermissionFromCode,
+    getPermissionFromInvite,
+  ]) {
+    const currentPermission = await getPermission();
+    if (
+      permissionStrength[permission] < permissionStrength[currentPermission]
+    ) {
+      permission = currentPermission;
+    }
+  }
+
+  return permission;
+};
 
 export const canAccessProjectGuard =
-  (accessType: ProjectPermission | "OWNER") =>
+  (accessType: Exclude<AllPermissions, "NONE">) =>
   async (
     request: FastifyRequest,
     reply: FastifyReply,
@@ -12,7 +87,6 @@ export const canAccessProjectGuard =
     const projectId = request.params as { projectId?: string }["projectId"];
 
     const projectService = request.diScope.resolve("projectService");
-    const inviteService = request.diScope.resolve("inviteService");
 
     if (!projectId) {
       throw new Error(
@@ -25,41 +99,13 @@ export const canAccessProjectGuard =
       return forbidden(done);
     }
 
-    const providedCode = (request.query as { code?: string })["code"];
-    if (providedCode) {
-      const realProjectCode = await projectService.getProjectCode(project.id);
-      if (realProjectCode) {
-        const { code, permission } = realProjectCode;
+    const currentPermission = await getPermission(request, project);
 
-        if (code === providedCode && permission === accessType) {
-          return done();
-        }
-      }
-    }
-
-    if (!request.session?.userId) {
-      if (!project.isPrivate && accessType === "R") {
-        return done();
-      }
-      return forbidden(done);
-    }
-
-    const userId = request.session.userId;
-
-    if (accessType === "OWNER") {
-      if (project.user.id === userId) {
-        return done();
-      }
-      return forbidden(done);
-    }
-
-    const userInvite = await inviteService.getUserProjectInvite(
-      userId,
-      project.id
-    );
-    if (userInvite?.permission === accessType) {
+    if (
+      permissionStrength[currentPermission] >= permissionStrength[accessType]
+    ) {
       return done();
     }
 
-    return forbidden(done);
+    forbidden(done);
   };
