@@ -17,7 +17,7 @@ const editLoop: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
   fastify.patch(
     "/:loopId",
     {
-      preHandler: [authGuard, canAccessProjectGuard],
+      preHandler: [authGuard, canAccessProjectGuard("RW")],
       schema: {
         params: z.object({
           projectId: z.string().min(10).max(10),

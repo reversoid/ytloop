@@ -9,7 +9,7 @@ const getManyLoops: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
   fastify.get(
     "/",
     {
-      preHandler: [authGuard, canAccessProjectGuard],
+      preHandler: [authGuard, canAccessProjectGuard("R")],
       schema: {
         params: z.object({
           projectId: z.string().min(10).max(10),

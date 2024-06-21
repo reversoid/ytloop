@@ -19,7 +19,7 @@ const createLoop: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
   fastify.post(
     "/",
     {
-      preHandler: [authGuard, canAccessProjectGuard],
+      preHandler: [authGuard, canAccessProjectGuard("RW")],
       schema: {
         params: z.object({ projectId: z.string().min(10).max(10) }),
         body: createLoopSchema,

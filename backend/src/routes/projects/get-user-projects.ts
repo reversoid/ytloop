@@ -7,7 +7,7 @@ const getUserProjects: FastifyPluginAsyncZod = async (fastify) => {
   fastify.get(
     "/",
     {
-      preHandler: authGuard,
+      preHandler: [authGuard],
     },
     async function (request, reply) {
       const userId = request.session!.userId;

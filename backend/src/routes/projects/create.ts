@@ -12,7 +12,12 @@ const createProjectSchema = z.object({
   description: z.string().optional(),
   bpm: z.number().int().optional(),
   videoSpeed: z.string().optional(),
-  password: z.string().optional(),
+  code: z
+    .object({
+      value: z.string().min(4).max(16),
+      permission: z.enum(["R", "RW", "FULL"]),
+    })
+    .optional(),
 });
 
 const createProject: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
@@ -25,16 +30,8 @@ const createProject: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
       schema: { body: createProjectSchema },
     },
     async function (request, reply) {
-      const {
-        name,
-        userId,
-        videoId,
-        bpm,
-        description,
-        id,
-        password,
-        videoSpeed,
-      } = request.body;
+      const { name, userId, videoId, bpm, description, id, videoSpeed, code } =
+        request.body;
 
       try {
         const project = await projectService.createProject({
@@ -44,7 +41,7 @@ const createProject: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
           bpm,
           description,
           id,
-          code: password,
+          code,
           videoSpeed,
         });
         return reply.code(201).send({ project });

@@ -9,7 +9,7 @@ const forkProject: FastifyPluginAsyncZod = async (fastify) => {
   fastify.post(
     "/:projectId/fork",
     {
-      preHandler: [authGuard, canAccessProjectGuard],
+      preHandler: [authGuard, canAccessProjectGuard("R")],
       schema: { params: z.object({ projectId: z.string().min(1) }) },
     },
     async function (request, reply) {

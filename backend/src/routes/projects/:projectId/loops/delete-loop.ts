@@ -9,7 +9,7 @@ const deleteLoop: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
   fastify.delete(
     "/:loopId",
     {
-      preHandler: [authGuard, canAccessProjectGuard],
+      preHandler: [authGuard, canAccessProjectGuard("RW")],
       schema: {
         params: z.object({
           projectId: z.string().min(10).max(10),

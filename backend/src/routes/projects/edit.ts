@@ -10,7 +10,10 @@ const editProjectSchema = z.object({
   description: z.string().nullish(),
   bpm: z.number().int().nullish(),
   videoSpeed: z.string().optional(),
-  password: z.string().nullish(),
+  code: z.object({
+    value: z.string().min(4).max(16),
+    permission: z.enum(["R", "RW", "FULL"]),
+  }),
 });
 
 const editProject: FastifyPluginAsyncZod = async (fastify) => {
@@ -19,20 +22,20 @@ const editProject: FastifyPluginAsyncZod = async (fastify) => {
   fastify.patch(
     "/:projectId",
     {
-      preHandler: [authGuard, canAccessProjectGuard],
+      preHandler: [authGuard, canAccessProjectGuard("FULL")],
       schema: {
         params: z.object({ projectId: z.string().min(10).max(10) }),
         body: editProjectSchema,
       },
     },
     async function (request, reply) {
-      const { id, bpm, description, name, password, videoSpeed } = request.body;
+      const { id, bpm, description, name, code, videoSpeed } = request.body;
 
       const project = await projectService.editProject(id, {
         bpm,
         description,
         name,
-        code: password,
+        code,
         videoSpeed,
       });
 
