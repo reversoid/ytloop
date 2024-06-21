@@ -1,3 +1,4 @@
+import { ProjectCode } from "../../models/project-code.js";
 import { Project } from "../../models/project.js";
 import { User } from "../../models/user.js";
 import { ProjectRepository } from "../../repositories/project/project.repository.js";
@@ -39,7 +40,7 @@ export class ProjectService {
     return this.projectRepository.getProject(id);
   }
 
-  async getProjectCode(id: Project["id"]): Promise<string | null> {
+  async getProjectCode(id: Project["id"]): Promise<ProjectCode | null> {
     return this.projectRepository.getProjectCode(id);
   }
 

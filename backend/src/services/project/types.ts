@@ -1,3 +1,4 @@
+import { ProjectPermission } from "../../models/project-code.js";
 import { User } from "../../models/user.js";
 
 export type CreateProjectDto = {
@@ -8,7 +9,10 @@ export type CreateProjectDto = {
   id?: string;
   bpm?: number;
   description?: string;
-  code?: string;
+  code?: {
+    value: string;
+    permission: ProjectPermission;
+  };
   isPrivate?: boolean;
   videoSpeed?: string;
 };
@@ -17,7 +21,10 @@ export type EditProjectDto = {
   name?: string;
   bpm?: number | null;
   description?: string | null;
-  code?: string | null;
+  code?: {
+    value: string;
+    permission: ProjectPermission;
+  };
   videoSpeed?: string;
   isPrivate?: boolean;
 };
