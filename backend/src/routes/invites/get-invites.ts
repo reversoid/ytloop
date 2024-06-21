@@ -1,6 +1,6 @@
 import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
-import { authGuard } from "../../../utils/guards/auth.guard.js";
 import { z } from "zod";
+import { authGuard } from "../../utils/guards/auth.guard.js";
 
 const getInvites: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
   fastify.patch(
