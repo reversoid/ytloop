@@ -43,7 +43,7 @@ model Project {
   videoId     String    @map("video_id") @db.VarChar(32)
   bpm         Int?      @map("bpm") @db.SmallInt
   videoSpeed  Decimal?  @map("video_speed") @db.Decimal(2, 2)
-  password    String?   @map("password") @db.VarChar(16)
+  code        String?   @map("code") @db.VarChar(16)
   createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz()
   deletedAt   DateTime? @map("deleted_at") @db.Timestamptz()
 
@@ -65,7 +65,9 @@ model ProjectInvite {
 
   acceptedAt DateTime? @map("accepted_at") @db.Timestamptz()
 
-  user    User?   @relation(fields: [userId], references: [id])
+  rejectedAt DateTime? @map("rejected_at") @db.Timestamptz()
+
+  user    User    @relation(fields: [userId], references: [id])
   project Project @relation(fields: [projectId], references: [id])
 
   @@unique([userId, projectId])

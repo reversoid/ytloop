@@ -10,7 +10,6 @@ export const projectSchema = z.object({
   videoId: z.string(),
   bpm: z.number().int().nullable(),
   videoSpeed: z.custom((v) => new Prisma.Decimal(v)),
-  password: z.string().nullable(),
   createdAt: z.date(),
   user: userSchema,
 });
@@ -23,7 +22,6 @@ export const selectProject: PrismaSelectEntity<Project> = {
   description: true,
   id: true,
   name: true,
-  password: true,
   videoId: true,
   videoSpeed: true,
   user: {

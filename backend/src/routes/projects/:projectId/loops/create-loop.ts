@@ -4,7 +4,7 @@ import { canAccessProjectGuard } from "../../../../utils/guards/can-access-proje
 import { z } from "zod";
 
 const createLoop: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
-  // const loopService = fastify.diContainer.resolve("loopService");
+  const loopService = fastify.diContainer.resolve("loopService");
 
   fastify.post(
     "/",

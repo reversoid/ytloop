@@ -12,6 +12,8 @@ import { AuthService } from "../services/auth/auth.service.js";
 import fastifyRedis from "@fastify/redis";
 import { PrismaClient } from "@prisma/client";
 import { Lucia } from "lucia";
+import { InviteRepository } from "../repositories/invite/invite.repository.js";
+import { InviteService } from "../services/invite/invite.service.js";
 
 declare module "@fastify/awilix" {
   interface Cradle {
@@ -23,6 +25,9 @@ declare module "@fastify/awilix" {
 
     projectRepository: ProjectRepository;
     projectService: ProjectService;
+
+    inviteService: InviteService;
+    inviteRepository: InviteRepository;
 
     authService: AuthService;
 
@@ -65,6 +70,14 @@ const initDI = ({
     }),
 
     authService: asClass(AuthService, {
+      lifetime: Lifetime.SINGLETON,
+    }),
+
+    inviteRepository: asClass(InviteRepository, {
+      lifetime: Lifetime.SINGLETON,
+    }),
+
+    inviteService: asClass(InviteService, {
       lifetime: Lifetime.SINGLETON,
     }),
 

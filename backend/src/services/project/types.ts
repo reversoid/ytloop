@@ -8,7 +8,7 @@ export type CreateProjectDto = {
   id?: string;
   bpm?: number;
   description?: string;
-  password?: string;
+  code?: string;
   videoSpeed?: string;
 };
 
@@ -16,6 +16,6 @@ export type EditProjectDto = {
   name?: string;
   bpm?: number | null;
   description?: string | null;
-  password?: string | null;
+  code?: string | null;
   videoSpeed?: string;
 };

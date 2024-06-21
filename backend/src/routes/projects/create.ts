@@ -44,7 +44,7 @@ const createProject: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
           bpm,
           description,
           id,
-          password,
+          code: password,
           videoSpeed,
         });
         return reply.code(201).send({ project });

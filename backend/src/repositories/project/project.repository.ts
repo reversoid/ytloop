@@ -22,7 +22,7 @@ export class ProjectRepository {
         videoId: dto.videoId,
         bpm: dto.bpm,
         description: dto.description,
-        password: dto.password,
+        code: dto.code,
         userId: dto.userId,
         videoSpeed: dto.videoSpeed,
       },
@@ -39,7 +39,7 @@ export class ProjectRepository {
         description: dto.description,
         name: dto.name,
         videoSpeed: dto.videoSpeed,
-        password: dto.password,
+        code: dto.code,
       },
       where: { id },
       select: selectProject,
@@ -58,6 +58,17 @@ export class ProjectRepository {
       where: { id },
       select: selectProject,
     });
+  }
+
+  async getProjectCode(id: Project["id"]): Promise<string | null> {
+    return (
+      (
+        await this.prismaClient.project.findUnique({
+          where: { id },
+          select: { code: true },
+        })
+      )?.code ?? null
+    );
   }
 
   async getUserProjects(userId: User["id"]): Promise<Project[]> {

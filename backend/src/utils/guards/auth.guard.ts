@@ -6,7 +6,6 @@ export const authGuard = (
   done: HookHandlerDoneFunction
 ) => {
   if (!request.session?.id) {
-    reply.status(401);
     done({
       code: "401",
       message: "UNAUTHORIZED",

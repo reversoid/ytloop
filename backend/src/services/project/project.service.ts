@@ -23,7 +23,7 @@ export class ProjectService {
       videoId: dto.videoId,
       bpm: dto.bpm,
       description: dto.description,
-      password: dto.password,
+      code: dto.code,
       videoSpeed: dto.videoSpeed,
     });
 
@@ -36,6 +36,10 @@ export class ProjectService {
 
   async getProjectByID(id: Project["id"]): Promise<Project | null> {
     return this.projectRepository.getProject(id);
+  }
+
+  async getProjectCode(id: Project["id"]): Promise<string | null> {
+    return this.projectRepository.getProjectCode(id);
   }
 
   async forkProject(
@@ -54,7 +58,6 @@ export class ProjectService {
       videoId: existingProject.videoId,
       bpm: existingProject.bpm ?? undefined,
       description: existingProject.description ?? undefined,
-      password: existingProject.password ?? undefined,
       videoSpeed: existingProject.videoSpeed,
     });
   }
@@ -71,7 +74,7 @@ export class ProjectService {
       name: dto.name,
       bpm: dto.bpm,
       description: dto.description,
-      password: dto.password,
+      code: dto.code,
       videoSpeed: dto.videoSpeed,
     });
   }

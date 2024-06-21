@@ -28,7 +28,7 @@ const editProject: FastifyPluginAsyncZod = async (fastify) => {
         bpm,
         description,
         name,
-        password,
+        code: password,
         videoSpeed,
       });
 
