@@ -1,8 +1,9 @@
 import { FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify";
 import { forbidden } from "./utils.js";
+import { ProjectPermission } from "../../models/project-code.js";
 
 export const canAccessProjectGuard =
-  (accessType: "R" | "RW" | "FULL" | "OWNER") =>
+  (accessType: ProjectPermission | "OWNER") =>
   async (
     request: FastifyRequest,
     reply: FastifyReply,
@@ -24,57 +25,41 @@ export const canAccessProjectGuard =
       return forbidden(done);
     }
 
-    if (!request.session?.userId) {
-      if (!project.isPrivate) {
-        return done();
-      }
-
-      const providedCode = (request.query as { code?: string })["code"];
-      if (!providedCode) {
-        return forbidden(done);
-      }
-
+    const providedCode = (request.query as { code?: string })["code"];
+    if (providedCode) {
       const realProjectCode = await projectService.getProjectCode(project.id);
-      if (realProjectCode === providedCode) {
+      if (realProjectCode) {
+        const { code, permission } = realProjectCode;
+
+        if (code === providedCode && permission === accessType) {
+          return done();
+        }
+      }
+    }
+
+    if (!request.session?.userId) {
+      if (!project.isPrivate && accessType === "R") {
         return done();
       }
-
       return forbidden(done);
     }
 
     const userId = request.session.userId;
 
-    type CanFn = () => Promise<boolean>;
-
-    const userIsProjectCreator: CanFn = async () => {
-      return project.user.id === userId;
-    };
-
-    const validProjectCode: CanFn = async () => {
-      const providedCode = (request.query as { code?: string })["code"];
-      if (!providedCode) {
-        return false;
+    if (accessType === "OWNER") {
+      if (project.user.id === userId) {
+        return done();
       }
-      const realProjectCode = await projectService.getProjectCode(project.id);
-      return realProjectCode === providedCode;
-    };
-
-    const userHasInvite: CanFn = async () => {
-      const userInvites = await inviteService.getUserAcceptedInvites(userId);
-      return userInvites.some((invite) => invite.projectId === projectId);
-    };
-
-    for (const validator of [
-      userIsProjectCreator,
-      validProjectCode,
-      userHasInvite,
-    ]) {
-      const can = await validator();
-
-      if (can) {
-        done();
-      }
+      return forbidden(done);
     }
 
-    return forbidden();
+    const userInvite = await inviteService.getUserProjectInvite(
+      userId,
+      project.id
+    );
+    if (userInvite?.permission === accessType) {
+      return done();
+    }
+
+    return forbidden(done);
   };
