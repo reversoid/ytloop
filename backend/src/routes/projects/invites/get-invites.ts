@@ -1,10 +1,10 @@
 import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
-import { authGuard } from "../../utils/guards/auth.guard.js";
-import { canAccessProjectGuard } from "../../utils/guards/can-access-project.guard.js";
+import { authGuard } from "../../../utils/guards/auth.guard.js";
+import { canAccessProjectGuard } from "../../../utils/guards/can-access-project.guard.js";
 import { z } from "zod";
 
-const createInvite: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
-  fastify.patch(
+const getInvites: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
+  fastify.get(
     "/",
     {
       preHandler: [authGuard, canAccessProjectGuard],
@@ -16,4 +16,4 @@ const createInvite: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
   );
 };
 
-export default createInvite;
+export default getInvites;
