@@ -25,6 +25,7 @@ export class ProjectService {
       description: dto.description,
       code: dto.code,
       videoSpeed: dto.videoSpeed,
+      isPrivate: dto.isPrivate,
     });
 
     return newProject;
@@ -76,6 +77,7 @@ export class ProjectService {
       description: dto.description,
       code: dto.code,
       videoSpeed: dto.videoSpeed,
+      isPrivate: dto.isPrivate,
     });
   }
 }

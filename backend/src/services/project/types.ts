@@ -9,6 +9,7 @@ export type CreateProjectDto = {
   bpm?: number;
   description?: string;
   code?: string;
+  isPrivate?: boolean;
   videoSpeed?: string;
 };
 
@@ -18,4 +19,5 @@ export type EditProjectDto = {
   description?: string | null;
   code?: string | null;
   videoSpeed?: string;
+  isPrivate?: boolean;
 };

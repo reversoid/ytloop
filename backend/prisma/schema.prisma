@@ -38,14 +38,16 @@ model Session {
 model Project {
   id String @id @map("id") @db.VarChar(10)
 
-  name        String    @map("name") @db.VarChar(64)
-  description String?   @map("description") @db.VarChar(512)
-  videoId     String    @map("video_id") @db.VarChar(32)
-  bpm         Int?      @map("bpm") @db.SmallInt
-  videoSpeed  Decimal?  @map("video_speed") @db.Decimal(2, 2)
-  code        String?   @map("code") @db.VarChar(16)
-  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz()
-  deletedAt   DateTime? @map("deleted_at") @db.Timestamptz()
+  name        String   @map("name") @db.VarChar(64)
+  description String?  @map("description") @db.VarChar(512)
+  videoId     String   @map("video_id") @db.VarChar(32)
+  bpm         Int?     @map("bpm") @db.SmallInt
+  videoSpeed  Decimal? @map("video_speed") @db.Decimal(2, 2)
+  code        String?  @map("code") @db.VarChar(16)
+  isPrivate   Boolean  @default(false) @map("is_private") @db.Boolean
+
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz()
 
   userId String @map("user_id") @db.VarChar(10)
 
@@ -64,14 +66,24 @@ model ProjectInvite {
   userId    String @map("user_id") @db.VarChar(10)
 
   acceptedAt DateTime? @map("accepted_at") @db.Timestamptz()
-
   rejectedAt DateTime? @map("rejected_at") @db.Timestamptz()
+
+  permission InvitePermissions
 
   user    User    @relation(fields: [userId], references: [id])
   project Project @relation(fields: [projectId], references: [id])
 
   @@unique([userId, projectId])
   @@map("project_invites")
+}
+
+enum InvitePermissions {
+  R
+  W
+  RW
+  FULL
+
+  @@map("invite_permissions")
 }
 
 model Loop {

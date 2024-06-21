@@ -25,6 +25,7 @@ export class ProjectRepository {
         code: dto.code,
         userId: dto.userId,
         videoSpeed: dto.videoSpeed,
+        isPrivate: dto.isPrivate,
       },
     });
   }
@@ -40,6 +41,7 @@ export class ProjectRepository {
         name: dto.name,
         videoSpeed: dto.videoSpeed,
         code: dto.code,
+        isPrivate: dto.isPrivate,
       },
       where: { id },
       select: selectProject,

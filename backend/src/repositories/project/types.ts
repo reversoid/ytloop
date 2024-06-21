@@ -11,6 +11,7 @@ export type CreateProjectDto = {
   description?: string;
   code?: string;
   videoSpeed?: string;
+  isPrivate?: boolean;
 };
 
 export type EditProjectDto = {
@@ -19,4 +20,5 @@ export type EditProjectDto = {
   description?: string | null;
   code?: string | null;
   videoSpeed?: string;
+  isPrivate?: boolean;
 };
