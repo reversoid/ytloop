@@ -79,7 +79,6 @@ model ProjectInvite {
 
 enum InvitePermissions {
   R
-  W
   RW
   FULL
 

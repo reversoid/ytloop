@@ -9,6 +9,7 @@ export const inviteSchema = z.object({
   createdAt: z.date(),
   acceptedAt: z.date().nullable(),
   rejectedAt: z.date().nullable(),
+  permission: z.enum(["R", "W", "RW", "FULL"]),
 });
 
 export type Invite = z.infer<typeof inviteSchema>;
@@ -20,4 +21,5 @@ export const selectInvite: PrismaSelectEntity<Invite> = {
   createdAt: true,
   acceptedAt: true,
   rejectedAt: true,
+  permission: true,
 };

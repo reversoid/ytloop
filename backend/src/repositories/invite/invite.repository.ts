@@ -20,6 +20,7 @@ export class InviteRepository {
         id: this.idGenerator.generateId(),
         projectId: dto.projectId,
         userId: dto.userId,
+        permission: dto.permission,
       },
       select: selectInvite,
     });
