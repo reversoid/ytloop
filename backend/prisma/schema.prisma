@@ -43,8 +43,8 @@ model Project {
   videoId     String   @map("video_id") @db.VarChar(32)
   bpm         Int?     @map("bpm") @db.SmallInt
   videoSpeed  Decimal? @map("video_speed") @db.Decimal(2, 2)
-  code        String?  @map("code") @db.VarChar(16)
-  isPrivate   Boolean  @default(false) @map("is_private") @db.Boolean
+
+  isPrivate Boolean @default(false) @map("is_private") @db.Boolean
 
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz()
   deletedAt DateTime? @map("deleted_at") @db.Timestamptz()
@@ -55,7 +55,19 @@ model Project {
   user    User            @relation(fields: [userId], references: [id])
   loops   Loop[]
 
+  code ProjectCode?
+
   @@map("projects")
+}
+
+model ProjectCode {
+  code           String             @map("code") @db.VarChar(16)
+  codePermission ProjectPermissions @map("code_permission")
+
+  Project   Project @relation(fields: [projectId], references: [id])
+  projectId String  @unique @db.VarChar(10)
+
+  @@map("project_codes")
 }
 
 model ProjectInvite {
@@ -68,7 +80,7 @@ model ProjectInvite {
   acceptedAt DateTime? @map("accepted_at") @db.Timestamptz()
   rejectedAt DateTime? @map("rejected_at") @db.Timestamptz()
 
-  permission InvitePermissions
+  permission ProjectPermissions @map("permission")
 
   user    User    @relation(fields: [userId], references: [id])
   project Project @relation(fields: [projectId], references: [id])
@@ -77,12 +89,12 @@ model ProjectInvite {
   @@map("project_invites")
 }
 
-enum InvitePermissions {
+enum ProjectPermissions {
   R
   RW
   FULL
 
-  @@map("invite_permissions")
+  @@map("project_permissions")
 }
 
 model Loop {
