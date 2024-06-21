@@ -7,7 +7,7 @@ const createInvite: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
   fastify.put(
     "/",
     {
-      preHandler: [authGuard, canAccessProjectGuard],
+      preHandler: [authGuard, canAccessProjectGuard("FULL")],
       schema: { params: z.object({}) },
     },
     async function (request, reply) {

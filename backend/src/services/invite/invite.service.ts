@@ -41,6 +41,13 @@ export class InviteService {
     return this.inviteRepository.getInvite(inviteId);
   }
 
+  async removeUserProjectInvite(
+    userId: User["id"],
+    projectId: Project["id"]
+  ): Promise<void> {
+    await this.inviteRepository.removeUserProjectInvite(userId, projectId);
+  }
+
   async acceptInvite(inviteId: Invite["id"]): Promise<Invite | null> {
     const invite = await this.inviteRepository.getInvite(inviteId);
     if (!invite || invite.rejectedAt !== null) {

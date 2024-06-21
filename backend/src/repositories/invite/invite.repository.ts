@@ -61,6 +61,12 @@ export class InviteRepository {
     });
   }
 
+  async removeUserProjectInvite(userId: User["id"], projectId: Project["id"]) {
+    await this.prismaClient.projectInvite.delete({
+      where: { userId_projectId: { userId, projectId } },
+    });
+  }
+
   async getUserInviteToProject(
     userId: User["id"],
     projectId: Project["id"]

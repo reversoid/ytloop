@@ -5,7 +5,7 @@ import { z } from "zod";
 
 const getInvites: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
   fastify.delete(
-    "/",
+    "/:inviteId",
     {
       preHandler: [authGuard, canAccessProjectGuard],
       schema: { params: z.object({}) },
