@@ -37,6 +37,10 @@ export class InviteService {
     await this.inviteRepository.removeInvite(inviteId);
   }
 
+  async getInvite(inviteId: Invite["id"]): Promise<Invite | null> {
+    return this.inviteRepository.getInvite(inviteId);
+  }
+
   async acceptInvite(inviteId: Invite["id"]): Promise<Invite | null> {
     const invite = await this.inviteRepository.getInvite(inviteId);
     if (!invite || invite.rejectedAt !== null) {
