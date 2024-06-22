@@ -98,4 +98,13 @@ export class ProjectRepository {
       select: selectProject,
     });
   }
+
+  async getSharedUserProjects(userId: User["id"]): Promise<Project[]> {
+    return this.prismaClient.projectInvite
+      .findMany({
+        where: { userId, acceptedAt: { not: null } },
+        select: { project: { select: selectProject } },
+      })
+      .then((r) => r.map((invite) => invite.project));
+  }
 }

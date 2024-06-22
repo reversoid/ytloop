@@ -17,7 +17,7 @@ const getOneProject: FastifyPluginAsyncZod = async (fastify) => {
       const project = await projectService.getProjectByID(projectId);
 
       if (!project) {
-        return reply.notFound();
+        return reply.forbidden("FORBIDDEN");
       }
 
       const loops = await loopService.getLoops(project.id);
