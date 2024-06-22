@@ -10,14 +10,14 @@ const deleteProject: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
   fastify.delete(
     "/:projectId",
     {
-      preHandler: [authGuard, canAccessProjectGuard("OWNER")],
+      preHandler: [authGuard, canAccessProjectGuard("OWNER", true)],
       schema: { params: z.object({ projectId: projectIdSchema }) },
     },
     async function (request, reply) {
       const projectId = request.params.projectId;
       await projectService.removeProject(projectId);
 
-      return reply.code(204);
+      return reply.code(204).send();
     }
   );
 };

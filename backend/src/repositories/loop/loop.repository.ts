@@ -58,8 +58,8 @@ export class LoopRepository {
   }
 
   async deleteLoop(id: Loop["id"], projectId: Project["id"]) {
-    await this.prismaClient.loop.delete({
-      where: { projectId_id: { id, projectId } },
+    await this.prismaClient.loop.deleteMany({
+      where: { id, projectId },
     });
   }
 

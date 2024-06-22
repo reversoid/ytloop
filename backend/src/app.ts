@@ -33,6 +33,8 @@ const app: FastifyPluginAsync<AppOptions> = async (
     const isInternalError = error.statusCode === undefined;
 
     if (isInternalError) {
+      console.error(error);
+
       return reply.code(500).send({ message: "INTERNAL_ERROR" });
     }
 

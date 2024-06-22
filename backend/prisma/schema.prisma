@@ -42,9 +42,8 @@ model Project {
   description String?  @map("description") @db.VarChar(512)
   videoId     String   @map("video_id") @db.VarChar(32)
   bpm         Int?     @map("bpm") @db.SmallInt
-  videoSpeed  Decimal? @map("video_speed") @db.Decimal(2, 2)
-
-  isPrivate Boolean @default(false) @map("is_private") @db.Boolean
+  videoSpeed  Decimal? @map("video_speed") @db.Decimal(3, 2)
+  isPrivate   Boolean  @default(false) @map("is_private") @db.Boolean
 
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz()
   deletedAt DateTime? @map("deleted_at") @db.Timestamptz()

@@ -25,7 +25,7 @@ const deleteLoop: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
       const { loopId, projectId } = request.params;
       await loopService.removeLoop(loopId, projectId);
 
-      return reply.status(204);
+      return reply.status(204).send();
     }
   );
 };

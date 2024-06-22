@@ -66,14 +66,14 @@ export class ProjectRepository {
           videoSpeed: dto.videoSpeed,
           isPrivate: dto.isPrivate,
         },
-        where: { id },
+        where: { id, deletedAt: null },
         select: selectProject,
       });
     });
   }
 
   async deleteProject(id: Project["id"]) {
-    await this.prismaClient.project.updateMany({
+    await this.prismaClient.project.update({
       where: { id },
       data: { deletedAt: new Date() },
     });

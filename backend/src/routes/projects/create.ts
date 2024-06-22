@@ -1,17 +1,15 @@
 import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { authGuard } from "../../utils/guards/auth.guard.js";
 import { z } from "zod";
-import { userSchema } from "../../models/user.js";
 import { ProjectExistsException } from "../../services/project/errors.js";
 
 const createProjectSchema = z.object({
   name: z.string(),
   videoId: z.string(),
-  userId: userSchema.shape.id,
   id: z.string().optional(),
   description: z.string().optional(),
   bpm: z.number().int().optional(),
-  videoSpeed: z.string().optional(),
+  videoSpeed: z.string().regex(/\d\.\d\d/, "Must be N.NN format"),
   code: z
     .object({
       value: z.string().min(4).max(16),
@@ -30,8 +28,10 @@ const createProject: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
       schema: { body: createProjectSchema },
     },
     async function (request, reply) {
-      const { name, userId, videoId, bpm, description, id, videoSpeed, code } =
+      const { name, videoId, bpm, description, id, videoSpeed, code } =
         request.body;
+
+      const userId = request.session!.userId;
 
       try {
         const project = await projectService.createProject({

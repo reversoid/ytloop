@@ -11,10 +11,11 @@ const getOneProject: FastifyPluginAsyncZod = async (fastify) => {
     "/:projectId",
     {
       schema: { params: z.object({ projectId: projectIdSchema }) },
-      preHandler: [canAccessProjectGuard("R")],
+      preHandler: [canAccessProjectGuard("R", true)],
     },
     async function (request, reply) {
       const projectId = request.params.projectId;
+
       const project = await projectService.getProjectByID(projectId);
 
       if (!project) {

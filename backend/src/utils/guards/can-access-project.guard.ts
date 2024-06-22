@@ -19,10 +19,15 @@ const permissionStrength: Record<AllPermissions, number> = {
 
 const getPermission = async (
   request: FastifyRequest,
-  project: Project
+  project: Project,
+  canBeDeleted: boolean
 ): Promise<AllPermissions> => {
   const projectService = request.diScope.resolve("projectService");
   const inviteService = request.diScope.resolve("inviteService");
+
+  if (project.deletedAt && !canBeDeleted) {
+    return "NONE";
+  }
 
   if (!request.session?.userId) {
     return project.isPrivate ? "NONE" : "R";
@@ -82,9 +87,12 @@ const getPermission = async (
 };
 
 export const canAccessProjectGuard =
-  (accessType: Exclude<AllPermissions, "NONE">): preHandlerAsyncHookHandler =>
+  (
+    accessType: Exclude<AllPermissions, "NONE">,
+    canBeDeleted: boolean = false
+  ): preHandlerAsyncHookHandler =>
   async (request: FastifyRequest, reply: FastifyReply) => {
-    const projectId = request.params as { projectId?: string }["projectId"];
+    const projectId = (request.params as { projectId?: string })["projectId"];
 
     const projectService = request.diScope.resolve("projectService");
 
@@ -99,7 +107,11 @@ export const canAccessProjectGuard =
       throw new ForbiddenException();
     }
 
-    const currentPermission = await getPermission(request, project);
+    const currentPermission = await getPermission(
+      request,
+      project,
+      canBeDeleted
+    );
 
     if (
       permissionStrength[currentPermission] >= permissionStrength[accessType]
