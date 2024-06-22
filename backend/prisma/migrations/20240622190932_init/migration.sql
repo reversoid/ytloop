@@ -6,7 +6,7 @@ CREATE TABLE "users" (
     "id" VARCHAR(10) NOT NULL,
     "email" VARCHAR(255) NOT NULL,
     "username" VARCHAR(32) NOT NULL,
-    "password_hash" CHAR(80) NOT NULL,
+    "password_hash" VARCHAR(80) NOT NULL,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
@@ -28,7 +28,7 @@ CREATE TABLE "projects" (
     "description" VARCHAR(512),
     "video_id" VARCHAR(32) NOT NULL,
     "bpm" SMALLINT,
-    "video_speed" DECIMAL(2,2),
+    "video_speed" DECIMAL(3,2),
     "is_private" BOOLEAN NOT NULL DEFAULT false,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "deleted_at" TIMESTAMPTZ,
