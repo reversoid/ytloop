@@ -2,6 +2,7 @@ import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { authGuard } from "../../utils/guards/auth.guard.js";
 import { z } from "zod";
 import { canAccessProjectGuard } from "../../utils/guards/can-access-project.guard.js";
+import { projectIdSchema } from "../../utils/route-params-schemas/index.js";
 
 const forkProject: FastifyPluginAsyncZod = async (fastify) => {
   const projectService = fastify.diContainer.resolve("projectService");
@@ -10,7 +11,7 @@ const forkProject: FastifyPluginAsyncZod = async (fastify) => {
     "/:projectId/fork",
     {
       preHandler: [authGuard, canAccessProjectGuard("R")],
-      schema: { params: z.object({ projectId: z.string().min(1) }) },
+      schema: { params: z.object({ projectId: projectIdSchema }) },
     },
     async function (request, reply) {
       const projectId = request.params.projectId;

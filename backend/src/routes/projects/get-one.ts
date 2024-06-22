@@ -1,6 +1,7 @@
 import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { z } from "zod";
 import { canAccessProjectGuard } from "../../utils/guards/can-access-project.guard.js";
+import { projectIdSchema } from "../../utils/route-params-schemas/index.js";
 
 const getOneProject: FastifyPluginAsyncZod = async (fastify) => {
   const projectService = fastify.diContainer.resolve("projectService");
@@ -9,7 +10,7 @@ const getOneProject: FastifyPluginAsyncZod = async (fastify) => {
   fastify.get(
     "/:projectId",
     {
-      schema: { params: z.object({ projectId: z.string().min(10).max(10) }) },
+      schema: { params: z.object({ projectId: projectIdSchema }) },
       preHandler: [canAccessProjectGuard("R")],
     },
     async function (request, reply) {

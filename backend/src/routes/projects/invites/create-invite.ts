@@ -3,6 +3,7 @@ import { authGuard } from "../../../utils/guards/auth.guard.js";
 import { canAccessProjectGuard } from "../../../utils/guards/can-access-project.guard.js";
 import { z } from "zod";
 import { projectPermissionSchema } from "../../../models/project-code.js";
+import { projectIdSchema } from "../../../utils/route-params-schemas/index.js";
 
 const createInviteSchema = z.object({
   userEmail: z.string(),
@@ -17,7 +18,7 @@ const createInvite: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
     {
       preHandler: [authGuard, canAccessProjectGuard("FULL")],
       schema: {
-        params: z.object({ projectId: z.string().min(10).max(10) }),
+        params: z.object({ projectId: projectIdSchema }),
         body: createInviteSchema,
       },
     },

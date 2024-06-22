@@ -2,6 +2,10 @@ import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { authGuard } from "../../../../utils/guards/auth.guard.js";
 import { canAccessProjectGuard } from "../../../../utils/guards/can-access-project.guard.js";
 import { z } from "zod";
+import {
+  loopIdSchema,
+  projectIdSchema,
+} from "../../../../utils/route-params-schemas/index.js";
 
 const editLoopSchema = z.object({
   name: z.string().optional(),
@@ -20,8 +24,8 @@ const editLoop: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
       preHandler: [authGuard, canAccessProjectGuard("RW")],
       schema: {
         params: z.object({
-          projectId: z.string().min(10).max(10),
-          loopId: z.coerce.number().int(),
+          projectId: projectIdSchema,
+          loopId: loopIdSchema,
         }),
         body: editLoopSchema,
       },

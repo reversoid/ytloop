@@ -3,6 +3,7 @@ import { projectSchema } from "../../models/project.js";
 import { z } from "zod";
 import { authGuard } from "../../utils/guards/auth.guard.js";
 import { canAccessProjectGuard } from "../../utils/guards/can-access-project.guard.js";
+import { projectIdSchema } from "../../utils/route-params-schemas/index.js";
 
 const editProjectSchema = z.object({
   id: projectSchema.shape.id,
@@ -24,7 +25,7 @@ const editProject: FastifyPluginAsyncZod = async (fastify) => {
     {
       preHandler: [authGuard, canAccessProjectGuard("FULL")],
       schema: {
-        params: z.object({ projectId: z.string().min(10).max(10) }),
+        params: z.object({ projectId: projectIdSchema }),
         body: editProjectSchema,
       },
     },

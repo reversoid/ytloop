@@ -2,6 +2,7 @@ import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { authGuard } from "../../../../utils/guards/auth.guard.js";
 import { canAccessProjectGuard } from "../../../../utils/guards/can-access-project.guard.js";
 import { z } from "zod";
+import { projectIdSchema } from "../../../../utils/route-params-schemas/index.js";
 
 const getManyLoops: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
   const loopService = fastify.diContainer.resolve("loopService");
@@ -12,7 +13,7 @@ const getManyLoops: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
       preHandler: [authGuard, canAccessProjectGuard("R")],
       schema: {
         params: z.object({
-          projectId: z.string().min(10).max(10),
+          projectId: projectIdSchema,
         }),
       },
     },
