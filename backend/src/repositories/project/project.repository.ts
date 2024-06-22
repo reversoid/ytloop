@@ -99,6 +99,15 @@ export class ProjectRepository {
     });
   }
 
+  async getManyProjects(
+    ...projectsIds: Array<Project["id"]>
+  ): Promise<Project[]> {
+    return this.prismaClient.project.findMany({
+      where: { id: { in: projectsIds } },
+      select: selectProject,
+    });
+  }
+
   async getSharedUserProjects(userId: User["id"]): Promise<Project[]> {
     return this.prismaClient.projectInvite
       .findMany({

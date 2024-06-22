@@ -36,6 +36,12 @@ export class ProjectService {
     return this.projectRepository.getUserProjects(userId);
   }
 
+  async getProjectsByIds(
+    ...projectIds: Array<Project["id"]>
+  ): Promise<Project[]> {
+    return this.projectRepository.getManyProjects(...projectIds);
+  }
+
   async getSharedProjects(userId: User["id"]): Promise<Project[]> {
     return this.projectRepository.getSharedUserProjects(userId);
   }
