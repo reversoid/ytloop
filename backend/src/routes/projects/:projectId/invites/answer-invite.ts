@@ -1,8 +1,8 @@
 import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
-import { authGuard } from "../../../utils/guards/auth.guard.js";
+import { authGuard } from "../../../../utils/guards/auth.guard.js";
 import { z } from "zod";
-import { canAccessInviteGuard } from "../../../utils/guards/can-access-invite.guard.js";
-import { inivteIdSchema } from "../../../utils/route-params-schemas/index.js";
+import { canAccessInviteGuard } from "../../../../utils/guards/can-access-invite.guard.js";
+import { inivteIdSchema } from "../../../../utils/route-params-schemas/index.js";
 
 const answerInviteSchema = z.object({
   answer: z.enum(["ACCEPT", "REJECT"]),
