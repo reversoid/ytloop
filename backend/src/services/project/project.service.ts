@@ -1,3 +1,4 @@
+import { Invite } from "../../models/invite.js";
 import { ProjectCode } from "../../models/project-code.js";
 import { Project } from "../../models/project.js";
 import { User } from "../../models/user.js";
@@ -40,6 +41,12 @@ export class ProjectService {
     ...projectIds: Array<Project["id"]>
   ): Promise<Project[]> {
     return this.projectRepository.getManyProjects(...projectIds);
+  }
+
+  async getUserWaitingProjects(
+    userId: User["id"]
+  ): Promise<Array<{ invite: Invite; project: Project }>> {
+    return this.projectRepository.getUserWaitingProjectsWithInvites(userId);
   }
 
   async getSharedProjects(userId: User["id"]): Promise<Project[]> {

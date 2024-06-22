@@ -4,6 +4,7 @@ import { CreateProjectDto, EditProjectDto } from "./types.js";
 import { Project, selectProject } from "../../models/project.js";
 import { User } from "../../models/user.js";
 import { ProjectCode } from "../../models/project-code.js";
+import { Invite, selectInvite } from "../../models/invite.js";
 
 export class ProjectRepository {
   private readonly prismaClient: PrismaClient;
@@ -105,6 +106,27 @@ export class ProjectRepository {
     return this.prismaClient.project.findMany({
       where: { id: { in: projectsIds } },
       select: selectProject,
+    });
+  }
+
+  async getUserWaitingProjectsWithInvites(
+    userId: User["id"]
+  ): Promise<Array<{ invite: Invite; project: Project }>> {
+    const result = await this.prismaClient.projectInvite.findMany({
+      where: { userId, acceptedAt: null, rejectedAt: null },
+      select: {
+        project: { select: selectProject },
+        ...selectInvite,
+      },
+    });
+
+    return result.map((r) => {
+      const project = r.project;
+
+      const invite = { ...r };
+      delete ({ ...r } as Invite & { project?: Project })["project"];
+
+      return { invite, project };
     });
   }
 
