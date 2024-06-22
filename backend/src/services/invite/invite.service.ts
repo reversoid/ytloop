@@ -4,6 +4,7 @@ import { User } from "../../models/user.js";
 import { InviteRepository } from "../../repositories/invite/invite.repository.js";
 import { UserService } from "../user/user.service.js";
 import { CreateInviteDto } from "./types.js";
+import { InviteExistsException } from "./errors.js";
 
 export class InviteService {
   private readonly inviteRepository: InviteRepository;
@@ -24,6 +25,11 @@ export class InviteService {
     const user = await this.userService.getUserByEmail(dto.userEmail);
     if (!user) {
       return null;
+    }
+    const invite = await this.getUserProjectInvite(user.id, dto.projectId);
+
+    if (invite) {
+      throw new InviteExistsException();
     }
 
     return this.inviteRepository.createInvite({

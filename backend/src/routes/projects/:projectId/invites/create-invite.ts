@@ -26,13 +26,17 @@ const createInvite: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
       const { permission, userEmail } = request.body;
       const projectId = request.params.projectId;
 
-      const invite = await inviteService.createInvite({
-        userEmail,
-        permission,
-        projectId,
-      });
+      try {
+        const invite = await inviteService.createInvite({
+          userEmail,
+          permission,
+          projectId,
+        });
 
-      return reply.code(201).send({ invite });
+        return reply.code(201).send({ invite });
+      } catch (error) {
+        return reply.conflict("INVITE_ALREADY_SENT");
+      }
     }
   );
 };

@@ -56,14 +56,14 @@ export class InviteRepository {
   }
 
   async removeInvite(id: Invite["id"]) {
-    await this.prismaClient.projectInvite.delete({
+    await this.prismaClient.projectInvite.deleteMany({
       where: { id },
     });
   }
 
   async removeUserProjectInvite(userId: User["id"], projectId: Project["id"]) {
-    await this.prismaClient.projectInvite.delete({
-      where: { userId_projectId: { userId, projectId } },
+    await this.prismaClient.projectInvite.deleteMany({
+      where: { userId, projectId },
     });
   }
 
