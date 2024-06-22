@@ -15,7 +15,7 @@ model User {
 
   email        String   @unique @map("email") @db.VarChar(255)
   username     String   @map("username") @db.VarChar(32)
-  passwordHash String   @map("password_hash") @db.Char(80)
+  passwordHash String   @map("password_hash") @db.VarChar(80)
   createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz()
 
   projects    Project[]

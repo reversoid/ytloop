@@ -11,13 +11,13 @@ export const loginSchema = z.object({
 });
 
 const login: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
+  const authService = fastify.diContainer.resolve("authService");
+  const lucia = fastify.diContainer.resolve("lucia");
+
   fastify.post(
     "/login",
     { schema: { body: loginSchema } },
     async function (request, reply) {
-      const authService = fastify.diContainer.resolve("authService");
-      const lucia = fastify.diContainer.resolve("lucia");
-
       const { email, password } = request.body;
 
       try {

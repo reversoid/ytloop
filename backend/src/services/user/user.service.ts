@@ -11,7 +11,11 @@ export class UserService {
   }
 
   async createUser(dto: CreateUserDto): Promise<User> {
-    return this.userRepository.createUser(dto);
+    return this.userRepository.createUser({
+      email: dto.email,
+      username: dto.username,
+      password: dto.password,
+    });
   }
 
   async editUser(userId: User["id"], dto: EditUserDto) {

@@ -53,7 +53,11 @@ export class AuthService {
       throw new UserAlreadyExtistsException();
     }
 
-    const user = await this.userService.createUser(dto);
+    const user = await this.userService.createUser({
+      email: dto.email,
+      username: dto.username,
+      password: dto.password,
+    });
 
     const session = await this.lucia.createSession(user.id, {});
 
