@@ -1,10 +1,6 @@
-import { FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify";
+import { preHandlerHookHandler } from "fastify";
 
-export const authGuard = (
-  request: FastifyRequest,
-  reply: FastifyReply,
-  done: HookHandlerDoneFunction
-) => {
+export const authGuard: preHandlerHookHandler = (request, response, done) => {
   if (!request.session?.id) {
     done({
       code: "401",

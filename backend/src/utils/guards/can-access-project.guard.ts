@@ -1,7 +1,11 @@
-import { FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify";
-import { forbidden } from "./utils.js";
+import {
+  FastifyReply,
+  FastifyRequest,
+  preHandlerAsyncHookHandler,
+} from "fastify";
 import { ProjectPermission } from "../../models/project-code.js";
 import { Project } from "../../models/project.js";
+import { ForbiddenException } from "./utils.js";
 
 type AllPermissions = ProjectPermission | "OWNER" | "NONE";
 
@@ -78,12 +82,8 @@ const getPermission = async (
 };
 
 export const canAccessProjectGuard =
-  (accessType: Exclude<AllPermissions, "NONE">) =>
-  async (
-    request: FastifyRequest,
-    reply: FastifyReply,
-    done: HookHandlerDoneFunction
-  ) => {
+  (accessType: Exclude<AllPermissions, "NONE">): preHandlerAsyncHookHandler =>
+  async (request: FastifyRequest, reply: FastifyReply) => {
     const projectId = request.params as { projectId?: string }["projectId"];
 
     const projectService = request.diScope.resolve("projectService");
@@ -96,7 +96,7 @@ export const canAccessProjectGuard =
 
     const project = await projectService.getProjectByID(projectId);
     if (!project) {
-      return forbidden(done);
+      throw new ForbiddenException();
     }
 
     const currentPermission = await getPermission(request, project);
@@ -104,8 +104,8 @@ export const canAccessProjectGuard =
     if (
       permissionStrength[currentPermission] >= permissionStrength[accessType]
     ) {
-      return done();
+      return;
     }
 
-    forbidden(done);
+    throw new ForbiddenException();
   };

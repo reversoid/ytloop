@@ -1,10 +1,13 @@
-import { FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify";
-import { forbidden } from "./utils.js";
+import {
+  FastifyReply,
+  FastifyRequest,
+  preHandlerAsyncHookHandler,
+} from "fastify";
+import { ForbiddenException } from "./utils.js";
 
-export const canAccessInviteGuard = async (
+export const canAccessInviteGuard: preHandlerAsyncHookHandler = async (
   request: FastifyRequest,
-  reply: FastifyReply,
-  done: HookHandlerDoneFunction
+  reply: FastifyReply
 ) => {
   if (!request.session?.userId) {
     throw new Error(
@@ -27,8 +30,8 @@ export const canAccessInviteGuard = async (
   const invite = await inviteService.getInvite(inviteId);
 
   if (invite?.user.id === userId) {
-    return done();
+    return;
   }
 
-  return forbidden(done);
+  throw new ForbiddenException();
 };

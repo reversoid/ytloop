@@ -9,3 +9,11 @@ export const forbidden = (doneFn: HookHandlerDoneFunction) => {
     statusCode: 403,
   });
 };
+
+export class ForbiddenException extends Error {
+  constructor() {
+    super("FORBIDDEN");
+  }
+
+  statusCode = 403;
+}
