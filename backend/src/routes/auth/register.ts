@@ -9,15 +9,15 @@ export const registerSchema = z.object({
 });
 
 const register: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
+  const authService = fastify.diContainer.resolve("authService");
+  const lucia = fastify.diContainer.resolve("lucia");
+
   fastify.post(
     "/register",
     {
       schema: { body: registerSchema },
     },
     async function (request, reply) {
-      const authService = fastify.diContainer.resolve("authService");
-      const lucia = fastify.diContainer.resolve("lucia");
-
       const { email, password, username } = request.body;
 
       try {
