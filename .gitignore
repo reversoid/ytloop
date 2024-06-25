@@ -1,1 +1,11 @@
 node_modules
+/.nx
+
+
+
+.nx/cache
+.nx/workspace-data
+
+# Next.js
+.next
+out

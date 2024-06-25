@@ -1,4 +1,5 @@
 {
+  "private": true,
   "type": "module",
   "name": "ytloop-api",
   "description": "This project was bootstrapped with Fastify-CLI.",
