@@ -28,7 +28,6 @@
     "@fastify/awilix": "^5.1.0",
     "@fastify/cookie": "^9.3.1",
     "@fastify/env": "^4.3.0",
-    "@fastify/redis": "^6.2.0",
     "@fastify/secure-session": "^7.5.1",
     "@fastify/sensible": "^5.0.0",
     "@lucia-auth/adapter-prisma": "^4.0.1",

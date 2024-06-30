@@ -9,7 +9,6 @@ import { ProjectService } from "../services/project/project.service.js";
 import { UserRepository } from "../repositories/user/user.repository.js";
 import { UserService } from "../services/user/user.service.js";
 import { AuthService } from "../services/auth/auth.service.js";
-import fastifyRedis from "@fastify/redis";
 import { PrismaClient } from "@prisma/client";
 import { Lucia } from "lucia";
 import { InviteRepository } from "../repositories/invite/invite.repository.js";
@@ -31,7 +30,6 @@ declare module "@fastify/awilix" {
 
     authService: AuthService;
 
-    redisClient: fastifyRedis.FastifyRedis;
     prismaClient: PrismaClient;
 
     lucia: Lucia<Record<never, never>, Record<never, never>>;
@@ -39,11 +37,9 @@ declare module "@fastify/awilix" {
 }
 
 const initDI = ({
-  redisClient,
   prismaClient,
   lucia,
 }: {
-  redisClient: fastifyRedis.FastifyRedis;
   prismaClient: PrismaClient;
   lucia: Lucia;
 }) => {
@@ -81,7 +77,6 @@ const initDI = ({
       lifetime: Lifetime.SINGLETON,
     }),
 
-    redisClient: asValue(redisClient),
     prismaClient: asValue(prismaClient),
 
     lucia: asValue(lucia),
@@ -97,10 +92,9 @@ export default fp(
     });
 
     initDI({
-      redisClient: fastify.redis,
       prismaClient: fastify.prisma,
       lucia: fastify.lucia,
     });
   },
-  { dependencies: ["redis", "prisma", "lucia"] }
+  { dependencies: ["prisma", "lucia"] }
 );
