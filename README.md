@@ -1,1 +1,1 @@
-run api: npx nx start:dev ytloop-api
+run api: `npx nx start:dev ytloop-api`

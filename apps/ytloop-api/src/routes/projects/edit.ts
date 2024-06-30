@@ -9,6 +9,7 @@ const editProjectSchema = z.object({
   description: z.string().nullish(),
   bpm: z.number().int().nullish(),
   videoSpeed: z.string().optional(),
+  isPrivate: z.boolean().optional(),
   code: z.object({
     value: z.string().min(4).max(16),
     permission: z.enum(["R", "RW", "FULL"]),
@@ -28,7 +29,8 @@ const editProject: FastifyPluginAsyncZod = async (fastify) => {
       },
     },
     async function (request, reply) {
-      const { bpm, description, name, code, videoSpeed } = request.body;
+      const { bpm, description, name, code, videoSpeed, isPrivate } =
+        request.body;
 
       const projectId = request.params.projectId;
       const project = await projectService.editProject(projectId, {
@@ -37,6 +39,7 @@ const editProject: FastifyPluginAsyncZod = async (fastify) => {
         name,
         code,
         videoSpeed,
+        isPrivate,
       });
 
       return reply.send({ project });
