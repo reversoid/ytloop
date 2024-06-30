@@ -17,8 +17,12 @@ const forkProject: FastifyPluginAsyncZod = async (fastify) => {
       const projectId = request.params.projectId;
       const userId = request.session!.userId;
 
-      const project = await projectService.forkProject(projectId, userId);
-      return reply.code(201).send({ project });
+      const { loops, project } = (await projectService.forkProject(
+        projectId,
+        userId
+      ))!;
+
+      return reply.code(201).send({ project, loops });
     }
   );
 };

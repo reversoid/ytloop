@@ -1,16 +1,26 @@
 import { Invite } from "../../models/invite.js";
+import { Loop } from "../../models/loop.js";
 import { ProjectCode } from "../../models/project-code.js";
 import { Project } from "../../models/project.js";
 import { User } from "../../models/user.js";
 import { ProjectRepository } from "../../repositories/project/project.repository.js";
+import { LoopService } from "../loop/loop.service.js";
 import { ProjectExistsException } from "./errors.js";
 import { CreateProjectDto, EditProjectDto } from "./types.js";
 
 export class ProjectService {
   private readonly projectRepository: ProjectRepository;
+  private readonly loopService: LoopService;
 
-  constructor({ projectRepository }: { projectRepository: ProjectRepository }) {
+  constructor({
+    projectRepository,
+    loopService,
+  }: {
+    projectRepository: ProjectRepository;
+    loopService: LoopService;
+  }) {
     this.projectRepository = projectRepository;
+    this.loopService = loopService;
   }
 
   async createProject(dto: CreateProjectDto): Promise<Project> {
@@ -64,14 +74,14 @@ export class ProjectService {
   async forkProject(
     id: Project["id"],
     userId: User["id"]
-  ): Promise<Project | null> {
+  ): Promise<{ project: Project; loops: Loop[] } | null> {
     const existingProject = await this.getProjectByID(id);
 
     if (!existingProject) {
       return null;
     }
 
-    return this.createProject({
+    const newProject = await this.createProject({
       userId,
       name: existingProject.name,
       videoId: existingProject.videoId,
@@ -79,6 +89,21 @@ export class ProjectService {
       description: existingProject.description ?? undefined,
       videoSpeed: existingProject.videoSpeed,
     });
+
+    const loops = await this.loopService.getLoops(newProject.id);
+
+    for (const loop of loops) {
+      this.loopService.createLoop({
+        name: loop.name,
+        projectId: newProject.id,
+        bpm: loop.bpm ?? undefined,
+        description: loop.description ?? undefined,
+        fromTimeMs: loop.fromTimeMs ?? undefined,
+        toTimeMs: loop.toTimeMs ?? undefined,
+      });
+    }
+
+    return { project: newProject, loops };
   }
 
   async removeProject(id: Project["id"]): Promise<void> {
