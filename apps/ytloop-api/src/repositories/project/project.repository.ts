@@ -1,9 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 import { IdGenerator } from "../../utils/db/create-id.js";
-import { CreateProjectDto, EditProjectDto } from "./types.js";
+import { CreateProjectDto, EditProjectCode, EditProjectDto } from "./types.js";
 import { Project, selectProject } from "../../models/project.js";
 import { User } from "../../models/user.js";
-import { ProjectCode } from "../../models/project-code.js";
+import { ProjectCode, selectProjectCode } from "../../models/project-code.js";
 import { Invite, selectInvite } from "../../models/invite.js";
 
 export class ProjectRepository {
@@ -90,6 +90,18 @@ export class ProjectRepository {
   async getProjectCode(id: Project["id"]): Promise<ProjectCode | null> {
     return this.prismaClient.projectCode.findUnique({
       where: { projectId: id },
+    });
+  }
+
+  async editProjectCode(
+    projectId: Project["id"],
+    dto: EditProjectCode
+  ): Promise<ProjectCode> {
+    return this.prismaClient.projectCode.upsert({
+      create: { code: dto.value, permission: dto.permission, projectId },
+      update: { code: dto.value, permission: dto.permission },
+      where: { projectId },
+      select: selectProjectCode,
     });
   }
 

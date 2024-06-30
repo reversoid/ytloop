@@ -6,7 +6,7 @@ import { User } from "../../models/user.js";
 import { ProjectRepository } from "../../repositories/project/project.repository.js";
 import { LoopService } from "../loop/loop.service.js";
 import { ProjectExistsException } from "./errors.js";
-import { CreateProjectDto, EditProjectDto } from "./types.js";
+import { CreateProjectDto, EditProjectCode, EditProjectDto } from "./types.js";
 
 export class ProjectService {
   private readonly projectRepository: ProjectRepository;
@@ -69,6 +69,16 @@ export class ProjectService {
 
   async getProjectCode(id: Project["id"]): Promise<ProjectCode | null> {
     return this.projectRepository.getProjectCode(id);
+  }
+
+  async editProjectCode(
+    projectId: Project["id"],
+    dto: EditProjectCode
+  ): Promise<ProjectCode> {
+    return this.projectRepository.editProjectCode(projectId, {
+      permission: dto.permission,
+      value: dto.value,
+    });
   }
 
   async forkProject(

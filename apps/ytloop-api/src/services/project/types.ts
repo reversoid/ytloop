@@ -28,3 +28,8 @@ export type EditProjectDto = {
   videoSpeed?: string;
   isPrivate?: boolean;
 };
+
+export type EditProjectCode = {
+  value: string;
+  permission: ProjectPermission;
+};
