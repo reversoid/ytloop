@@ -3,13 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "nx next:dev",
-    "build": "nx next:build",
-    "start": "nx next:start",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
     "@nextui-org/react": "^2.3.6",
+    "@nextui-org/theme": "^2.2.6",
     "@tabler/icons-react": "^3.3.0",
     "color-hash": "^2.0.2",
     "framer-motion": "^11.2.0",
@@ -24,6 +25,7 @@
     "react-player": "^2.16.0",
     "use-mask-input": "^3.3.7",
     "usehooks-ts": "^3.1.0",
+    "ytloop-frontend": "workspace:^",
     "zod": "^3.23.8"
   },
   "devDependencies": {

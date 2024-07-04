@@ -84,10 +84,6 @@ const Player: FC<PlayerProps> = memo(({ url }) => {
     }
   };
 
-  useEffect(() => {
-    console.log("huh?");
-  }, []);
-
   return (
     <div className="pb-3 px-0.5 flex flex-col sm:flex-row justify-between gap-5">
       <div

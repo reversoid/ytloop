@@ -1,7 +1,6 @@
 "use client";
 
 import { Button, Input } from "@nextui-org/react";
-import Link from "next/link";
 import { useState } from "react";
 
 const useVideoId = (str: string) => {
