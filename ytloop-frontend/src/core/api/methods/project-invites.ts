@@ -6,8 +6,15 @@ type CreateInviteDto = {
   permission: Invite["permission"];
 };
 
-export const getInvites = (projectId: Project["id"]) =>
-  ky.delete(`projects/${projectId}/invites`).json<{ invites: Invite[] }>();
+export const getAcceptedInvites = (projectId: Project["id"]) =>
+  ky
+    .delete(`projects/${projectId}/invites/accepted`)
+    .json<{ invites: Invite[] }>();
+
+export const getWaitingInvites = (projectId: Project["id"]) =>
+  ky
+    .delete(`projects/${projectId}/invites/waiting`)
+    .json<{ invites: Invite[] }>();
 
 export const createInvite = (projectId: Project["id"], dto: CreateInviteDto) =>
   ky
