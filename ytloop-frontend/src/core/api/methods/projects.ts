@@ -1,4 +1,4 @@
-import { Loop, Project } from "@/core/models";
+import { Loop, Project, ProjectCode } from "@/core/models";
 import { ky } from "../uitls/ky";
 
 type CreateProjectDto = {
@@ -12,11 +12,10 @@ type EditProjectDto = {
   bpm?: number | null;
   videoSpeed?: `${number}.${number}${number}`;
   isPrivate?: boolean;
-  code?: {
-    value: string;
-    permission: "R" | "RW" | "FULL";
-  };
+  code?: ProjectCode;
 };
+
+type EditProjectCodeDto = ProjectCode;
 
 type ProjectWithLoops = {
   project: Project;
@@ -44,3 +43,14 @@ export const deleteProject = (
   ky
     .delete(`projects/${projectId}`, { json: dto })
     .json<{ project: Project }>();
+
+export const getProjectCode = (projectId: Project["id"]) =>
+  ky.get(`projects/${projectId}/code`).json<{ code: ProjectCode }>();
+
+export const updateProjectCode = (
+  projectId: Project["id"],
+  dto: EditProjectCodeDto
+) =>
+  ky
+    .get(`projects/${projectId}/code`, { json: dto })
+    .json<{ code: ProjectCode }>();
