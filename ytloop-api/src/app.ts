@@ -20,7 +20,7 @@ const app: FastifyPluginAsync<AppOptions> = async (
 ): Promise<void> => {
   // Some code here
 
-  fastify.register(cors, {});
+  fastify.register(cors, { credentials: true, origin: true });
 
   fastify.setErrorHandler((error, _request, reply) => {
     if (error.statusCode === 400) {
