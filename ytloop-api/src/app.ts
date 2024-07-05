@@ -2,6 +2,7 @@ import AutoLoad, { AutoloadPluginOptions } from "@fastify/autoload";
 import { FastifyPluginAsync } from "fastify";
 import * as path from "path";
 import { fileURLToPath } from "url";
+import cors from "@fastify/cors";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -18,6 +19,8 @@ const app: FastifyPluginAsync<AppOptions> = async (
   opts
 ): Promise<void> => {
   // Some code here
+
+  fastify.register(cors, {});
 
   fastify.setErrorHandler((error, _request, reply) => {
     if (error.statusCode === 400) {
