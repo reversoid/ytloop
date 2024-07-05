@@ -1,5 +1,5 @@
 import Logo from "@/assets/logo";
-import { AppProviders } from "@/core/app-providers";
+import { AppProviders } from "@/core/providers/app-providers";
 import { ThemeSwitcher } from "@/shared/theme-switcher";
 import { Button, Link } from "@nextui-org/react";
 import { IconAt, IconBrandGithub } from "@tabler/icons-react";

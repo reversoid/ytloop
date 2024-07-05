@@ -15,6 +15,7 @@
     "color-hash": "^2.0.2",
     "framer-motion": "^11.2.0",
     "jotai": "^2.8.0",
+    "ky": "^1.4.0",
     "nanoid": "^5.0.7",
     "next": "14.2.3",
     "next-themes": "^0.3.0",
