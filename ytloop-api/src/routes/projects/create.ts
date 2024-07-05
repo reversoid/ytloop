@@ -9,7 +9,10 @@ const createProjectSchema = z.object({
   id: z.string().optional(),
   description: z.string().optional(),
   bpm: z.number().int().optional(),
-  videoSpeed: z.string().regex(/\d\.\d\d/, "Must be N.NN format"),
+  videoSpeed: z
+    .string()
+    .regex(/\d\.\d\d/, "Must be N.NN format")
+    .optional(),
   code: z
     .object({
       value: z.string().min(4).max(16),

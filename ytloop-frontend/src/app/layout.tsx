@@ -1,11 +1,10 @@
-import Logo from "@/assets/logo";
 import { AppProviders } from "@/core/providers/app-providers";
-import { ThemeSwitcher } from "@/shared/theme-switcher";
 import { Button, Link } from "@nextui-org/react";
 import { IconAt, IconBrandGithub } from "@tabler/icons-react";
 import type { Metadata } from "next";
-import NextLink from "next/link";
 import "./globals.css";
+import { Header } from "@/core/layout/header";
+
 export const metadata: Metadata = {
   title: "YTLoop",
   description: "Loop youtube video",
@@ -21,17 +20,7 @@ export default function RootLayout({
       <body>
         <AppProviders>
           <div className="flex flex-col h-full">
-            <header className="h-16 border-b-1 border-foreground-200 shrink-0 flex justify-center">
-              <div className="px-2 h-16 grow flex justify-between items-center max-w-screen-xl">
-                <div className="">
-                  <NextLink className="w-fit" href={"/"}>
-                    <Logo />
-                  </NextLink>
-                </div>
-
-                <ThemeSwitcher />
-              </div>
-            </header>
+            <Header />
 
             <main className="flex-grow">{children}</main>
 
