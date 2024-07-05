@@ -1,4 +1,19 @@
-import { ky } from "../uitls/ky";
+import { ApiError } from "next/dist/server/api-utils";
+import { ky as _ky } from "../uitls/ky";
+
+const ky = _ky.extend({
+  hooks: {
+    afterResponse: [
+      (req, options, res) => {
+        return res;
+      },
+
+      async (req, options, res) => {
+        return res;
+      },
+    ],
+  },
+});
 
 type LoginDto = {
   email: string;

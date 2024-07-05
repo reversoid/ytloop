@@ -5,3 +5,7 @@ export const ky = _ky.create({
   json: {},
   credentials: "include",
 });
+
+export type ApiError = {
+  message: string;
+};
