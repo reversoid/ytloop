@@ -6,18 +6,20 @@ import { createNewProject } from "@/entities/project/utils/create-new-project";
 import { workspaceCurrentLoopAtom } from "@/entities/workspace/model";
 import { queryToProject } from "@/features/sync-project-with-query/utils/transform";
 import { useHydrateAtoms } from "jotai/utils";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useMemo } from "react";
 
 const PageContent = () => {
   const router = useRouter();
-  const params = useSearchParams();
-  const videoId = params?.get("videoId");
+  const searchparams = useSearchParams();
+
+  const params = useParams();
+  const videoId = searchparams?.get("videoId");
 
   const project = useMemo(
     () => {
       return (
-        queryToProject(params?.toString() ?? "") ||
+        queryToProject(searchparams?.toString() ?? "") ||
         createNewProject(videoId ?? "")
       );
     },
@@ -30,15 +32,19 @@ const PageContent = () => {
     [workspaceCurrentLoopAtom, project.loops[0]],
   ]);
 
-  if (!videoId) {
-    router.replace("/");
-    return <></>;
-  }
+  // if (!videoId) {
+  //   router.replace("/");
+  //   return <></>;
+  // }
 
   return <ProjectScreen />;
 };
 
-export default function Page() {
+export default async function Page() {
+  await new Promise<string>((resolve) =>
+    setTimeout(() => resolve("bober"), 10_000)
+  );
+
   return (
     <Suspense>
       <PageContent />

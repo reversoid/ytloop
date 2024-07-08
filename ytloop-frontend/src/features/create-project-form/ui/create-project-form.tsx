@@ -21,13 +21,16 @@ export const CreateProjectForm: FC = () => {
     <form
       className="flex flex-col gap-5"
       onSubmit={handleSubmit(async ({ videoUrl }) => {
+        // TODO check for authorization
+        // IF AUTHORIZED THEN APPLY ONE STRATEGY ELSE ANOTHER
+
         const videoId = extractVideoIdFromUrl(videoUrl)!;
         const { project } = await createProject({
           videoId,
           name: "New project",
         });
 
-        router.push(`/projects/${project.id}`);
+        router.push(`/project/${project.id}`);
       })}
     >
       <Input
