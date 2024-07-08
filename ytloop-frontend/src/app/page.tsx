@@ -1,22 +1,6 @@
-"use client";
-
-import { Button, Input } from "@nextui-org/react";
-import { useState } from "react";
-
-const useVideoId = (str: string) => {
-  const regex =
-    /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\s*[^\/\n\s]+\/|embed\/|v\/|watch\?v=)|youtu\.be\/)([^"&?\/\s]{11})/gi;
-
-  const match = regex.exec(str);
-
-  return match ? match[1] : null;
-};
+import { CreateProjectForm } from "@/features/create-project-form";
 
 export default function Home() {
-  const [inputValue, setInputValue] = useState("");
-
-  const videoId = useVideoId(inputValue);
-
   return (
     <section className="h-full">
       <div className="flex items-center justify-center h-full">
@@ -27,24 +11,7 @@ export default function Home() {
             to loop specific parts of YouTube video.
           </p>
 
-          <Input
-            size="lg"
-            placeholder="Video URL"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-          />
-
-          <Button
-            href={`/project?videoId=${videoId}`}
-            isDisabled={!(inputValue && videoId)}
-            color="primary"
-            className="mt-5"
-            fullWidth
-            size="lg"
-            as={"a"}
-          >
-            Start
-          </Button>
+          <CreateProjectForm />
         </div>
       </div>
     </section>
