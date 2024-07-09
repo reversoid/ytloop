@@ -1,4 +1,4 @@
-import { projectOptionsAtom } from "@/entities/project/model";
+import { projectAtom } from "@/entities/project/model";
 import { Select, SelectItem } from "@nextui-org/react";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { FC, memo, useCallback, useEffect, useState } from "react";
@@ -35,10 +35,10 @@ const Player: FC<PlayerProps> = memo(({ url }) => {
 
   const setCurrentTimeGetter = useSetAtom(playerGetCurrentTimeFnAtom);
 
-  const [projectOptions, setProjectOptions] = useAtom(projectOptionsAtom);
+  const [project, setProject] = useAtom(projectAtom);
 
   const [playbackRate, setPlaybackRate] = useState(
-    new Set([projectOptions?.videoSpeed ?? 1])
+    new Set([project ? Number(project?.videoSpeed) : 1])
   );
 
   const setCurrentVideoPosition = useSetAtom(playerCurrentVideoPositionAtom);
@@ -64,7 +64,10 @@ const Player: FC<PlayerProps> = memo(({ url }) => {
       return;
     }
 
-    if (playedSeconds >= currentLoop.from && playedSeconds < currentLoop.to) {
+    if (
+      playedSeconds >= currentLoop.fromTimeMs &&
+      playedSeconds < currentLoop.toTimeMs
+    ) {
       return;
     }
 
@@ -74,12 +77,12 @@ const Player: FC<PlayerProps> = memo(({ url }) => {
 
     if (currentLoop.bpm && enabledCountdown) {
       setPlaying(false);
-      seekTo!(currentLoop.from);
+      seekTo!(currentLoop.fromTimeMs);
       playMetronome!(currentLoop.bpm, 4).then(() => {
         setPlaying(true);
       });
     } else {
-      seekTo!(currentLoop.from);
+      seekTo!(currentLoop.toTimeMs);
       setPlaying(true);
     }
   };
@@ -123,7 +126,13 @@ const Player: FC<PlayerProps> = memo(({ url }) => {
               prev.clear();
               const newSpeed = Number(e.target.value);
               prev.add(newSpeed);
-              setProjectOptions((o) => ({ ...o, videoSpeed: newSpeed }));
+              setProject((o) => {
+                if (!o) {
+                  return null;
+                }
+
+                return { ...o, videoSpeed: newSpeed.toFixed(2) };
+              });
               return new Set(prev);
             })
           }

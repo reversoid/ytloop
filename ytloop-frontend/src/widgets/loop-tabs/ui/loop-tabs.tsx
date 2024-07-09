@@ -1,5 +1,5 @@
-import { projectLoopsAtom, projectOptionsAtom } from "@/entities/project/model";
-import { createNewLoop } from "@/entities/project/utils/create-new-loop";
+import { projectLoopsAtom, projectAtom } from "@/entities/project/model";
+import { generateNewLoop } from "@/entities/project/utils/generate-new-loop";
 import { workspaceCurrentLoopAtom } from "@/entities/workspace/model";
 import { useAtom, useAtomValue } from "jotai";
 import { LoopBlock } from "./loop-block";
@@ -12,7 +12,7 @@ import { loopColorHash } from "@/shared/utils/loop-color-hash";
 
 export const LoopTabs = () => {
   const [projectLoops, setProjectLoops] = useAtom(projectLoopsAtom);
-  const projectOptions = useAtomValue(projectOptionsAtom);
+  const project = useAtomValue(projectAtom);
   const [currentLoop, setCurrentLoop] = useAtom(workspaceCurrentLoopAtom);
 
   const newTabKey = useId();
@@ -21,9 +21,9 @@ export const LoopTabs = () => {
   useAutoSeekStart();
 
   const handleNewLoop = () => {
-    const newLoop = createNewLoop({
-      postfixNumber: (projectLoops?.length ?? 0) + 1,
-      bpm: projectOptions?.bpm,
+    const newLoop = generateNewLoop({
+      id: (projectLoops?.length ?? 0) + 1,
+      bpm: project?.bpm,
     });
 
     setProjectLoops((loops) => {
@@ -55,7 +55,7 @@ export const LoopTabs = () => {
           title={
             <div className="flex gap-2 items-center">
               <div
-                style={{ background: loopColorHash.hex(loop.id) }}
+                style={{ background: loopColorHash.hex(String(loop.id)) }}
                 className="w-2 h-2 rounded-lg"
               ></div>
               {loop.name}

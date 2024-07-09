@@ -1,4 +1,4 @@
-import { projectAtom, projectLoopsAtom } from "@/entities/project/model";
+import { projectLoopsAtom } from "@/entities/project/model";
 import { workspaceCurrentLoopAtom } from "@/entities/workspace/model";
 import { useAtomValue } from "jotai";
 import { useSetAtom } from "jotai";

@@ -1,4 +1,4 @@
-import { projectAtom } from "@/entities/project/model";
+import { projectAtom, projectLoopsAtom } from "@/entities/project/model";
 import { projectToQuery } from "@/features/sync-project-with-query/utils/transform";
 import { Checkbox, Tab, Tabs } from "@nextui-org/react";
 import { useAtomValue } from "jotai";
@@ -10,9 +10,10 @@ export interface ShareTabsProps {
 
 export const ShareTabs: FC<ShareTabsProps> = ({ onSetLink }) => {
   const project = useAtomValue(projectAtom);
+  const loops = useAtomValue(projectLoopsAtom);
 
   const [selectedLoops, setSelectedLoops] = useState(
-    new Set([...(project?.loops ?? []).map((l) => l.id)])
+    new Set([...(loops ?? []).map((l) => l.id)])
   );
 
   const getLinkToFullProject = () => {
@@ -20,16 +21,16 @@ export const ShareTabs: FC<ShareTabsProps> = ({ onSetLink }) => {
   };
 
   const getLinkToSelectedProjectLoops = useCallback(() => {
-    if (!project) {
+    if (!(project && loops)) {
       return null;
     }
 
     const host = window.location.host;
     const pathname = window.location.pathname;
-    const query = projectToQuery({
-      ...project,
-      loops: project.loops.filter((l) => selectedLoops.has(l.id)),
-    });
+    const query = projectToQuery(
+      project,
+      loops?.filter((l) => selectedLoops.has(l.id))
+    );
 
     const url = `${host}${pathname}?${query}`;
 
@@ -65,7 +66,7 @@ export const ShareTabs: FC<ShareTabsProps> = ({ onSetLink }) => {
 
           <form className="mt-4 flex flex-col gap-4 max-w-sm">
             <div className="flex flex-col gap-1 loops">
-              {project?.loops.map((loop) => (
+              {loops?.map((loop) => (
                 <div
                   key={loop.id}
                   className="form-control max-w-sm bg-base-200 rounded-md px-1"

@@ -1,10 +1,10 @@
-import { projectOptionsAtom } from "@/entities/project/model";
+import { projectAtom } from "@/entities/project/model";
 import { useAtomValue } from "jotai";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 const usePlaybackSpeed = () => {
-  const projectOptions = useAtomValue(projectOptionsAtom);
-  return projectOptions?.videoSpeed ?? 1;
+  const project = useAtomValue(projectAtom);
+  return project?.videoSpeed ? Number(project.videoSpeed) : 1;
 };
 
 /** Implements all ticking logic about metronome  */

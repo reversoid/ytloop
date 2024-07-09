@@ -4,7 +4,7 @@ import { loopColorHash } from "@/shared/utils/loop-color-hash";
 import { playerVideoLengthAtom } from "@/widgets/player/model";
 import { Tooltip } from "@nextui-org/react";
 import { useAtomValue, useSetAtom } from "jotai";
-import { FC, useContext } from "react";
+import { FC } from "react";
 
 export interface TimelineLoopProps {
   loop: ValidLoop;
@@ -13,8 +13,9 @@ export interface TimelineLoopProps {
 export const TimelineBlock: FC<TimelineLoopProps> = ({ loop }) => {
   const videoLength = useAtomValue(playerVideoLengthAtom);
 
-  const widthPercentage = ((loop.to - loop.from) / videoLength) * 100;
-  const leftPercentage = (loop.from / videoLength) * 100;
+  const widthPercentage =
+    ((loop.toTimeMs - loop.fromTimeMs) / videoLength) * 100;
+  const leftPercentage = (loop.fromTimeMs / videoLength) * 100;
 
   const setCurrentLoop = useSetAtom(workspaceCurrentLoopAtom);
 
@@ -22,7 +23,7 @@ export const TimelineBlock: FC<TimelineLoopProps> = ({ loop }) => {
     <Tooltip content={loop.name} showArrow>
       <button
         style={{
-          background: loopColorHash.hex(loop.id),
+          background: loopColorHash.hex(String(loop.id)),
           width: `${widthPercentage}%`,
           left: `${leftPercentage}%`,
         }}

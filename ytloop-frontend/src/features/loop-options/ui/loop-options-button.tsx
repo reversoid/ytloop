@@ -1,7 +1,4 @@
-import { projectLoopsAtom } from "@/entities/project/model";
-import { workspaceCurrentLoopAtom } from "@/entities/workspace/model";
 import { Button } from "@nextui-org/react";
-import { IconSettings } from "@tabler/icons-react";
 import { useRef, useState } from "react";
 import { OptionsModal } from "./loop-options-modal";
 

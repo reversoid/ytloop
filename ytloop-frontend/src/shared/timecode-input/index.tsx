@@ -2,9 +2,8 @@ import { IconArrowBadgeDown, IconMinus, IconPlus } from "@tabler/icons-react";
 import { FC, useEffect } from "react";
 import { timecodeToSeconds } from "./utils/transform";
 import { useTimecodeDisplayValue } from "./utils/use-timecode-value";
-import ReactInputMask from "react-input-mask";
 import { Button, Input, Tooltip } from "@nextui-org/react";
-import { useInputMask, withMask } from "use-mask-input";
+import { useInputMask } from "use-mask-input";
 
 export interface TimecodeInputProps {
   value: number | null;
@@ -33,6 +32,7 @@ export const TimecodeInput: FC<TimecodeInputProps> = ({
     onChange(seconds ?? -1);
   }, [displayValue, onChange]);
 
+  // TODO do i really need jit?
   const maskRef = useInputMask({
     mask: "99:99.999",
     options: { placeholder: "", jitMasking: true, showMaskOnHover: false },

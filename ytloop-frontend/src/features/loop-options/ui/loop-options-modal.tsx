@@ -63,10 +63,10 @@ export const OptionsModal: FC<OptionsModalProps> = ({ isOpen, onClose }) => {
         name,
         description,
         bpm: !bpm
-          ? undefined
+          ? null
           : numbericBpm > 0
           ? numbericBpm
-          : currentLoop?.bpm,
+          : currentLoop?.bpm ?? null,
       };
     });
   };

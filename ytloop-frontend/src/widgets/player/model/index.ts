@@ -1,4 +1,4 @@
-import { atom, useAtom } from "jotai";
+import { atom } from "jotai";
 
 type SeekToFn = (to: number) => void;
 type GetCurrentTimeFn = () => number;

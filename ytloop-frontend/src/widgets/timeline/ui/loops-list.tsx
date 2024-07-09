@@ -1,4 +1,4 @@
-import { Loop, projectOptionsAtom } from "@/entities/project/model";
+import { projectAtom } from "@/entities/project/model";
 import { ValidLoop } from "@/entities/project/utils/is-loop-valid";
 import {
   workspaceCurrentLoopAtom,
@@ -13,6 +13,7 @@ import {
 import { Button } from "@nextui-org/react";
 import { useAtom, useAtomValue } from "jotai";
 import { useSortedValidLoops } from "../utils/use-sorted-valid-loops";
+import { Loop } from "@/core/models";
 
 export const LoopsList = () => {
   const loops = useSortedValidLoops();
@@ -24,14 +25,14 @@ export const LoopsList = () => {
 
   const metronome = useAtomValue(metronomeAtom);
 
-  const projectOptions = useAtomValue(projectOptionsAtom);
+  const project = useAtomValue(projectAtom);
 
   const seekTo = useAtomValue(playerSeekToFnAtom);
 
   const isSelectedLoop = (loopId: Loop["id"]) => loopId === currentLoop?.id;
 
   const handleLoopClick = (loop: ValidLoop) => {
-    seekTo?.(loop.from);
+    seekTo?.(loop.fromTimeMs);
     setCurrentLoop(loop);
 
     if ((isPlaying || metronome.isPlaying) && loop.id === currentLoop?.id) {
@@ -40,9 +41,9 @@ export const LoopsList = () => {
       return;
     }
 
-    if (isCountdownEnabled && projectOptions?.bpm) {
+    if (isCountdownEnabled && project?.bpm) {
       setIsPlaying(false);
-      metronome.play!(projectOptions.bpm, 4).then(() => setIsPlaying(true));
+      metronome.play!(project.bpm, 4).then(() => setIsPlaying(true));
     } else {
       setIsPlaying(true);
     }
@@ -70,7 +71,7 @@ export const LoopsList = () => {
           >
             <div className="flex gap-2 items-center">
               <div
-                style={{ background: loopColorHash.hex(loop.id) }}
+                style={{ background: loopColorHash.hex(String(loop.id)) }}
                 className="w-2 h-2 rounded-lg"
               ></div>
 

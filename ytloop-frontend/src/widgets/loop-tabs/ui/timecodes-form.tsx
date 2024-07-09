@@ -64,7 +64,7 @@ export const TimecodesForm = () => {
     >
       <TimecodeInput
         label="Start"
-        value={currentLoop?.from || null}
+        value={currentLoop?.fromTimeMs || null}
         onChange={useCallback(
           (v) => {
             if (v === -1) {
@@ -87,7 +87,7 @@ export const TimecodesForm = () => {
 
       <TimecodeInput
         label="End"
-        value={currentLoop?.to || null}
+        value={currentLoop?.toTimeMs || null}
         onChange={useCallback(
           (v) => {
             if (v === -1) {
@@ -131,8 +131,8 @@ export const TimecodesForm = () => {
           isPlaying={isPlaying || metronome.isPlaying}
           disabled={
             invalid ||
-            currentLoop?.from === undefined ||
-            currentLoop.to === undefined
+            currentLoop?.fromTimeMs === null ||
+            currentLoop?.toTimeMs === null
           }
           onPlay={() => {
             if (tickBeforeStart) {
@@ -146,9 +146,13 @@ export const TimecodesForm = () => {
           onStop={() => {
             metronome.stop!();
 
+            if (!currentLoop) {
+              return;
+            }
+
             setIsPlaying(false);
-            if (currentLoop?.from !== undefined) {
-              seekTo?.(currentLoop?.from);
+            if (currentLoop.fromTimeMs !== null) {
+              seekTo?.(currentLoop.fromTimeMs);
             }
           }}
         />

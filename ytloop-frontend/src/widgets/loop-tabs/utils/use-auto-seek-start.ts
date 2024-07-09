@@ -10,8 +10,8 @@ export const useAutoSeekStart = () => {
   const isPlayerReady = useAtomValue(playerReadyAtom);
 
   useEffect(() => {
-    if (isPlayerReady && currentLoop?.from !== undefined) {
-      seekTo?.(currentLoop?.from);
+    if (isPlayerReady && currentLoop && currentLoop?.fromTimeMs !== null) {
+      seekTo?.(currentLoop?.fromTimeMs);
     }
   }, [isPlayerReady, currentLoop, seekTo]);
 };

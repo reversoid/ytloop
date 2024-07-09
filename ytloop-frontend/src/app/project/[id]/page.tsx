@@ -2,7 +2,7 @@
 
 import ProjectScreen from "@/screens/project-screen";
 import { projectAtom } from "@/entities/project/model";
-import { createNewProject } from "@/entities/project/utils/create-new-project";
+import { createNewProject } from "@/entities/project/utils/generate-new-project";
 import { workspaceCurrentLoopAtom } from "@/entities/workspace/model";
 import { queryToProject } from "@/features/sync-project-with-query/utils/transform";
 import { useHydrateAtoms } from "jotai/utils";
