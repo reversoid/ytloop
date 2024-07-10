@@ -25,6 +25,9 @@ export const CreateProjectForm: FC = () => {
         // IF AUTHORIZED THEN APPLY ONE STRATEGY ELSE ANOTHER
 
         const videoId = extractVideoIdFromUrl(videoUrl)!;
+
+        // return router.push(`/project?videoId=${videoId}`);
+
         const { project } = await createProject({
           videoId,
           name: "New project",

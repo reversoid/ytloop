@@ -1,7 +1,7 @@
 "use client";
 import { FC } from "react";
 
-import { projectAtom } from "@/entities/project/model";
+import { projectAtom, projectLoopsAtom } from "@/entities/project/model";
 import { ExportProjectButton } from "@/features/export-project";
 import { useInitMetronome } from "@/features/metronome";
 import { ProjectSettingsButton } from "@/features/project-settings";
@@ -17,12 +17,24 @@ import {
 import { useAtomValue } from "jotai";
 import dynamic from "next/dynamic";
 import styles from "./ui/styles.module.css";
+import { Loop, Project } from "@/core/models";
+import { useHydrateAtoms } from "jotai/utils";
+import { workspaceCurrentLoopAtom } from "@/entities/workspace/model";
 
 const Player = dynamic(() => import("../../widgets/player/ui/player"), {
   ssr: false,
 });
 
-const ProjectPage: FC = () => {
+const ProjectScreen: FC<{ project: Project; loops: Loop[] }> = ({
+  loops: inLoops,
+  project: inProject,
+}) => {
+  useHydrateAtoms([
+    [projectAtom, inProject],
+    [projectLoopsAtom, inLoops],
+    [workspaceCurrentLoopAtom, inLoops[0]],
+  ]);
+
   const project = useAtomValue(projectAtom)!;
 
   useSyncProjectWithQueryParams(project);
@@ -93,6 +105,6 @@ const ProjectPage: FC = () => {
   );
 };
 
-ProjectPage.displayName = "ProjectPage";
+ProjectScreen.displayName = "ProjectPage";
 
-export default ProjectPage;
+export default ProjectScreen;

@@ -1,7 +1,7 @@
 import { getProject } from "@/core/api";
 import { Suspense } from "react";
-import { PageContent } from "./_page-content";
 import { notFound } from "next/navigation";
+import ProjectScreen from "@/screens/project-screen";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const result = await getProject(params.id).catch(() => null);
@@ -12,7 +12,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   return (
     <Suspense>
-      <PageContent project={result.project} loops={result.loops} />;
+      <ProjectScreen project={result.project} loops={result.loops} />;
     </Suspense>
   );
 }
