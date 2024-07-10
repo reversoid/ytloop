@@ -5,7 +5,7 @@ import { FC } from "react";
 import { useForm } from "react-hook-form";
 import { extractVideoIdFromUrl } from "../utils/extract-video-id";
 import { YT_VIDEO_PATTERN } from "../utils/video-id-pattern";
-import { createProject } from "@/core/api";
+import { createLoop, createProject } from "@/core/api";
 import { useRouter } from "next/navigation";
 
 export const CreateProjectForm: FC = () => {
@@ -29,6 +29,8 @@ export const CreateProjectForm: FC = () => {
           videoId,
           name: "New project",
         });
+
+        await createLoop(project.id, { name: "New Loop 1" });
 
         router.push(`/project/${project.id}`);
       })}

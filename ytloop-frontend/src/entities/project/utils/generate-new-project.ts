@@ -2,7 +2,7 @@ import { createId } from "@/shared/utils/create-id";
 import { Project } from "@/core/models";
 
 /** Generates project for local use */
-export const createNewProject = (videoId: string): Project => {
+export const generateNewProject = (videoId: string): Project => {
   return {
     id: createId(),
     name: "My Project",
