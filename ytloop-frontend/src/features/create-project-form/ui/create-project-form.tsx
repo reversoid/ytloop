@@ -7,6 +7,8 @@ import { extractVideoIdFromUrl } from "../utils/extract-video-id";
 import { YT_VIDEO_PATTERN } from "../utils/video-id-pattern";
 import { createLoop, createProject } from "@/core/api";
 import { useRouter } from "next/navigation";
+import { useAtomValue } from "jotai";
+import { currentUserAtom } from "@/entities/user";
 
 export const CreateProjectForm: FC = () => {
   const {
@@ -17,25 +19,26 @@ export const CreateProjectForm: FC = () => {
 
   const router = useRouter();
 
+  const currentUser = useAtomValue(currentUserAtom);
+
   return (
     <form
       className="flex flex-col gap-5"
       onSubmit={handleSubmit(async ({ videoUrl }) => {
-        // TODO check for authorization
-        // IF AUTHORIZED THEN APPLY ONE STRATEGY ELSE ANOTHER
-
         const videoId = extractVideoIdFromUrl(videoUrl)!;
 
-        // return router.push(`/project?videoId=${videoId}`);
+        if (currentUser === null) {
+          return router.push(`/project?videoId=${videoId}`);
+        } else if (currentUser) {
+          const { project } = await createProject({
+            videoId,
+            name: "New project",
+          });
 
-        const { project } = await createProject({
-          videoId,
-          name: "New project",
-        });
+          await createLoop(project.id, { name: "New Loop 1" });
 
-        await createLoop(project.id, { name: "New Loop 1" });
-
-        router.push(`/project/${project.id}`);
+          router.push(`/project/${project.id}`);
+        }
       })}
     >
       <Input
