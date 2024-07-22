@@ -17,7 +17,7 @@ export const Header: FC = () => {
           </NextLink>
         </div>
         <div className="flex gap-2">
-          <AuthButton />
+          {<AuthButton />}
           <ThemeSwitcher />
         </div>
       </div>

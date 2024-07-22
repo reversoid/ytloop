@@ -7,6 +7,7 @@ import {
 } from "./errors.js";
 import { LoginUserDto, LogoutUserDto, RegisterUserDto } from "./types.js";
 import * as bcrypt from "bcrypt";
+import { userSchema } from "../../models/user.js";
 
 export class AuthService {
   private readonly userService: UserService;
@@ -43,7 +44,7 @@ export class AuthService {
 
     const session = await this.lucia.createSession(existingUser.id, {});
 
-    return { sessionId: session.id };
+    return { sessionId: session.id, user: userSchema.parse(existingUser) };
   }
 
   async register(dto: RegisterUserDto) {
@@ -61,7 +62,7 @@ export class AuthService {
 
     const session = await this.lucia.createSession(user.id, {});
 
-    return { sessionId: session.id };
+    return { sessionId: session.id, user };
   }
 
   async logout(dto: LogoutUserDto) {

@@ -17,6 +17,8 @@ import {
   login as loginFn,
   register as registerFn,
 } from "@/core/api/methods/auth";
+import { useSetAtom } from "jotai";
+import { currentUserAtom } from "@/entities/user";
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -34,6 +36,7 @@ export const AuthModal: FC<AuthModalProps> = ({ isOpen, onClose }) => {
   const { value: isVisible, toggle: toggleVisibility } = useBoolean();
   const [isSignUp, toggleSignUp] = useToggle(true);
   const formId = useId();
+  const setCurrentUser = useSetAtom(currentUserAtom);
 
   const {
     register,
@@ -43,14 +46,16 @@ export const AuthModal: FC<AuthModalProps> = ({ isOpen, onClose }) => {
 
   const registerMutation = useMutation({
     mutationFn: registerFn,
-    onSuccess() {
+    onSuccess({ user }) {
+      setCurrentUser(user);
       onClose();
     },
   });
 
   const loginMutation = useMutation({
     mutationFn: loginFn,
-    onSuccess() {
+    onSuccess({ user }) {
+      setCurrentUser(user);
       onClose();
     },
   });

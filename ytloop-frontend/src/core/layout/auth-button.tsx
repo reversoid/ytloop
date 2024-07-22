@@ -1,7 +1,10 @@
 "use client";
+import { currentUserAtom } from "@/entities/user";
+import { useGetCurrentUser } from "@/features/auth";
 import { AuthModal } from "@/features/auth/ui/auth-modal";
 import { Button } from "@nextui-org/react";
 import { IconLogin2 } from "@tabler/icons-react";
+import { useAtomValue } from "jotai";
 import { FC } from "react";
 import { useBoolean } from "usehooks-ts";
 
@@ -11,6 +14,14 @@ export const AuthButton: FC = () => {
     setTrue: openAuthModal,
     setFalse: closeAuthModal,
   } = useBoolean();
+
+  useGetCurrentUser();
+
+  const currentUser = useAtomValue(currentUserAtom);
+
+  if (currentUser || currentUser === undefined) {
+    return null;
+  }
 
   return (
     <>

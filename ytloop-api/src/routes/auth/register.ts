@@ -21,7 +21,7 @@ const register: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
       const { email, password, username } = request.body;
 
       try {
-        const { sessionId } = await authService.register({
+        const { sessionId, user } = await authService.register({
           email,
           password,
           username,
@@ -33,7 +33,7 @@ const register: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
           signed: true,
         });
 
-        return;
+        return reply.send({ user });
       } catch (error) {
         if (error instanceof UserAlreadyExtistsException) {
           return reply.conflict("USER_ALREADY_EXISTS");

@@ -21,13 +21,17 @@ const login: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
       const { email, password } = request.body;
 
       try {
-        const { sessionId } = await authService.login({ email, password });
+        const { sessionId, user } = await authService.login({
+          email,
+          password,
+        });
         const cookie = lucia.createSessionCookie(sessionId);
         reply.setCookie(cookie.name, cookie.value, {
           ...cookie.attributes,
           signed: true,
         });
-        return;
+
+        return reply.send({ user });
       } catch (error) {
         if (
           error instanceof WrongCredentialsException ||
