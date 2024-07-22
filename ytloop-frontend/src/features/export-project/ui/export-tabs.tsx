@@ -1,5 +1,5 @@
 import { projectAtom, projectLoopsAtom } from "@/entities/project/model";
-import { projectToQuery } from "@/features/sync-project-with-query/utils/transform";
+import { projectToQuery } from "@/features/sync-project/utils/query-transforms";
 import { Checkbox, Tab, Tabs } from "@nextui-org/react";
 import { useAtomValue } from "jotai";
 import { FC, useCallback, useEffect, useState } from "react";

@@ -3,7 +3,7 @@
 import { Loop, Project } from "@/core/models";
 import { generateNewLoop } from "@/entities/project/utils/generate-new-loop";
 import { generateNewProject } from "@/entities/project/utils/generate-new-project";
-import { queryToProject } from "@/features/sync-project-with-query/utils/transform";
+import { queryToProject } from "@/features/sync-project/utils/query-transforms";
 import ProjectScreen from "@/screens/project-screen";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FC, useMemo, useRef } from "react";

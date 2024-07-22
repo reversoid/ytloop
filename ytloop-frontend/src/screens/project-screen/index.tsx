@@ -5,7 +5,7 @@ import { projectAtom, projectLoopsAtom } from "@/entities/project/model";
 import { ExportProjectButton } from "@/features/export-project";
 import { useInitMetronome } from "@/features/metronome";
 import { ProjectSettingsButton } from "@/features/project-settings";
-import { useSyncProjectWithQueryParams } from "@/features/sync-project-with-query/utils/use-sync-project-with-query-params";
+import { useSyncProject } from "@/features/sync-project/utils/use-sync-project";
 import { LoopTabs } from "@/widgets/loop-tabs/ui/loop-tabs";
 import { Timeline } from "@/widgets/timeline";
 import { Accordion, AccordionItem } from "@nextui-org/react";
@@ -35,9 +35,15 @@ const ProjectScreen: FC<{ project: Project; loops: Loop[] }> = ({
     [workspaceCurrentLoopAtom, inLoops[0]],
   ]);
 
+  // TODO implement
+  const isLocalProject = useIsLocalProject();
+  const canEditProject = useCanEditRemoteProject();
+
   const project = useAtomValue(projectAtom)!;
 
-  useSyncProjectWithQueryParams(project);
+  useSyncProject({
+    strategy: isLocalProject ? "local" : canEditProject ? "remote" : false,
+  });
   useInitMetronome();
 
   return (
