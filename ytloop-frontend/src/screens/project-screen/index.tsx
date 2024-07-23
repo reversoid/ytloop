@@ -20,6 +20,8 @@ import styles from "./ui/styles.module.css";
 import { Loop, Project } from "@/core/models";
 import { useHydrateAtoms } from "jotai/utils";
 import { workspaceCurrentLoopAtom } from "@/entities/workspace/model";
+import { useProjectPermission } from "./utils/use-project-permission";
+import { useIsRemoteProject } from "./utils/use-is-local-project";
 
 const Player = dynamic(() => import("../../widgets/player/ui/player"), {
   ssr: false,
@@ -35,15 +37,18 @@ const ProjectScreen: FC<{ project: Project; loops: Loop[] }> = ({
     [workspaceCurrentLoopAtom, inLoops[0]],
   ]);
 
-  // TODO implement
-  const isLocalProject = useIsLocalProject();
-  const canEditProject = useCanEditProject();
-
   const project = useAtomValue(projectAtom)!;
 
+  const isRemoteProject = useIsRemoteProject();
+  const permission = useProjectPermission(project.id);
+
+  // TODO can be done better
+  const canEditProject = permission === "RW" || permission === "FULL";
+
   useSyncProject({
-    strategy: isLocalProject ? "local" : canEditProject ? "remote" : false,
+    strategy: !isRemoteProject ? "local" : canEditProject ? "remote" : false,
   });
+
   useInitMetronome();
 
   return (

@@ -1,14 +1,14 @@
 import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
-import { authGuard } from "../../../utils/guards/auth.guard.js";
-import { canAccessProjectGuard } from "../../../utils/guards/can-access-project.guard.js";
+import { authGuard } from "../../utils/guards/auth.guard.js";
+import { canAccessProjectGuard } from "../../utils/guards/can-access-project.guard.js";
 import { z } from "zod";
-import { projectIdSchema } from "../../../utils/route-params-schemas/index.js";
+import { projectIdSchema } from "../../utils/route-params-schemas/index.js";
 
 const getPermission: FastifyPluginAsyncZod = async (fastify): Promise<void> => {
   const inviteService = fastify.diContainer.resolve("inviteService");
 
   fastify.get(
-    "/permission",
+    "/:projectId/permission",
     {
       preHandler: [authGuard, canAccessProjectGuard("R")],
       schema: {

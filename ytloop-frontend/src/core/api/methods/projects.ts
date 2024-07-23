@@ -34,6 +34,11 @@ export const editProject = (projectId: Project["id"], dto: EditProjectDto) =>
 export const forkProject = (projectId: Project["id"]) =>
   ky.post(`projects/${projectId}/fork`).json<ProjectWithLoops>();
 
+export const getProjectPermission = (projectId: Project["id"]) =>
+  ky
+    .get(`projects/${projectId}/permission`)
+    .json<{ permission: ProjectPermission | null }>();
+
 export const deleteProject = (
   projectId: Project["id"],
   dto: CreateProjectDto
