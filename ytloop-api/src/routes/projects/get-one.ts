@@ -6,6 +6,7 @@ import { projectIdSchema } from "../../utils/route-params-schemas/index.js";
 const getOneProject: FastifyPluginAsyncZod = async (fastify) => {
   const projectService = fastify.diContainer.resolve("projectService");
   const loopService = fastify.diContainer.resolve("loopService");
+  const inviteService = fastify.diContainer.resolve("inviteService");
 
   fastify.get(
     "/:projectId",
@@ -23,8 +24,18 @@ const getOneProject: FastifyPluginAsyncZod = async (fastify) => {
       }
 
       const loops = await loopService.getLoops(project.id);
+      const invite = request.session?.userId
+        ? await inviteService.getUserProjectInvite(
+            request.session?.userId,
+            project.id
+          )
+        : null;
 
-      return reply.send({ project, loops });
+      return reply.send({
+        project,
+        loops,
+        permission: invite?.permission ?? null,
+      });
     }
   );
 };

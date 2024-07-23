@@ -37,7 +37,7 @@ const ProjectScreen: FC<{ project: Project; loops: Loop[] }> = ({
 
   // TODO implement
   const isLocalProject = useIsLocalProject();
-  const canEditProject = useCanEditRemoteProject();
+  const canEditProject = useCanEditProject();
 
   const project = useAtomValue(projectAtom)!;
 

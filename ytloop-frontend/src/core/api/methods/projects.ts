@@ -1,4 +1,4 @@
-import { Loop, Project, ProjectCode } from "@/core/models";
+import { Loop, Project, ProjectCode, ProjectPermission } from "@/core/models";
 import { ky } from "../uitls/ky";
 
 type CreateProjectDto = {
@@ -21,7 +21,9 @@ type ProjectWithLoops = {
 };
 
 export const getProject = (projectId: Project["id"]) =>
-  ky.get(`projects/${projectId}`).json<ProjectWithLoops>();
+  ky
+    .get(`projects/${projectId}`)
+    .json<ProjectWithLoops & { permission: ProjectPermission | null }>();
 
 export const createProject = (dto: CreateProjectDto) =>
   ky.post("projects", { json: dto }).json<{ project: Project }>();
