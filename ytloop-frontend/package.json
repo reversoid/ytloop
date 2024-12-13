@@ -1,0 +1,49 @@
+{
+  "name": "ytloop-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@nextui-org/react": "^2.3.6",
+    "@nextui-org/theme": "^2.2.6",
+    "@tabler/icons-react": "^3.3.0",
+    "@tanstack/react-query": "^5.50.1",
+    "color-hash": "^2.0.2",
+    "framer-motion": "^11.2.0",
+    "jotai": "^2.8.0",
+    "ky": "^1.4.0",
+    "nanoid": "^5.0.7",
+    "next": "14.2.3",
+    "next-themes": "^0.3.0",
+    "qs": "^6.12.1",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-hook-form": "^7.52.1",
+    "react-input-mask": "^2.0.4",
+    "react-player": "^2.16.0",
+    "use-mask-input": "^3.3.7",
+    "usehooks-ts": "^3.1.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.13",
+    "@tanstack/eslint-plugin-query": "^5.50.1",
+    "@types/color-hash": "^2.0.0",
+    "@types/node": "^20",
+    "@types/qs": "^6.9.15",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@types/react-input-mask": "^3.0.5",
+    "daisyui": "^4.11.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.3",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}

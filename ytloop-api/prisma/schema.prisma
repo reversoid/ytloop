@@ -1,0 +1,114 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_URL")
+}
+
+model User {
+  id String @id @map("id") @db.VarChar(10)
+
+  email        String   @unique @map("email") @db.VarChar(255)
+  username     String   @map("username") @db.VarChar(32)
+  passwordHash String   @map("password_hash") @db.VarChar(80)
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  projects    Project[]
+  invitations ProjectInvite[]
+  sessions    Session[]
+
+  @@map("users")
+}
+
+model Session {
+  id        String   @id @map("id") @db.Text()
+  userId    String   @map("user_id") @db.VarChar(10)
+  expiresAt DateTime @map("expires_at") @db.Timestamptz()
+
+  user User @relation(references: [id], fields: [userId], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model Project {
+  id String @id @map("id") @db.VarChar(10)
+
+  name        String   @map("name") @db.VarChar(64)
+  description String?  @map("description") @db.VarChar(512)
+  videoId     String   @map("video_id") @db.VarChar(32)
+  bpm         Int?     @map("bpm") @db.SmallInt
+  videoSpeed  Decimal? @map("video_speed") @db.Decimal(3, 2)
+  isPrivate   Boolean  @default(false) @map("is_private") @db.Boolean
+
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz()
+
+  userId String @map("user_id") @db.VarChar(10)
+
+  invites ProjectInvite[]
+  user    User            @relation(fields: [userId], references: [id])
+  loops   Loop[]
+
+  code ProjectCode?
+
+  @@map("projects")
+}
+
+model ProjectCode {
+  code       String             @map("code") @db.VarChar(16)
+  permission ProjectPermissions @map("permission")
+
+  Project   Project @relation(fields: [projectId], references: [id])
+  projectId String  @id @unique @map("project_id") @db.VarChar(10)
+
+  @@map("project_codes")
+}
+
+model ProjectInvite {
+  id        String   @id @map("id") @db.VarChar(10)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  projectId String @map("project_id") @db.VarChar(10)
+  userId    String @map("user_id") @db.VarChar(10)
+
+  acceptedAt DateTime? @map("accepted_at") @db.Timestamptz()
+  rejectedAt DateTime? @map("rejected_at") @db.Timestamptz()
+
+  permission ProjectPermissions @map("permission")
+
+  user    User    @relation(fields: [userId], references: [id])
+  project Project @relation(fields: [projectId], references: [id])
+
+  @@unique([userId, projectId])
+  @@map("project_invites")
+}
+
+enum ProjectPermissions {
+  R
+  RW
+  FULL
+
+  @@map("project_permissions")
+}
+
+model Loop {
+  id Int @map("id") @db.Integer
+
+  name        String  @map("name") @db.VarChar(64)
+  description String? @map("description") @db.VarChar(512)
+  fromTimeMs  Int?    @map("from_time_ms") @db.Integer
+  toTimeMs    Int?    @map("to_time_ms") @db.Integer
+  bpm         Int?    @map("bpm") @db.SmallInt
+
+  projectId String @map("project_id") @db.VarChar(10)
+
+  project Project @relation(fields: [projectId], references: [id])
+
+  @@id([projectId, id])
+  @@map("loops")
+}
